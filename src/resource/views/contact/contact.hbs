@@ -1,0 +1,106 @@
+{{> header}}
+{{>navbar}}
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Liên Hệ Hỗ Trợ </h1>
+
+    </div><!-- End Page Title -->
+
+    <section class="section contact">
+
+        <div class="row gy-4">
+            <div class="col-xl-6">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="info-box card">
+                            <i class="bi bi-geo-alt"></i>
+                            <h3>Địa chỉ</h3>
+                            <p>Số 35, ngách 93/15, phố Yên Sở </br> Quận Hoàng Mai, thành phố Hà Nội</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="info-box card">
+                            <i class="bi bi-telephone"></i>
+                            <h3>Số điện thoại</h3>
+                            <p> 0839 882 883</p><br><p></p><br><p></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="info-box card">
+                            <i class="bi bi-envelope"></i>
+                            <h3>Email </h3>
+                            <p>info@example.com</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="info-box card">
+                            <i class="bi bi-clock"></i>
+                            <h3>Mở cửa</h3>
+                            <p>8:00AM - 5:00PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-6">
+                <div class="card p-4">
+                    <form action="forms/contact.php" method="post" class="php-email-form">
+                        <div class="row gy-4">
+
+                            <div class="col-md-6">
+                                <input type="text" name="name" class="form-control" placeholder="Tên của bạn"
+                                    id="sendername" required>
+                            </div>
+
+                            <div class="col-md-6 ">
+                                <input type="text" class="form-control" name="email" placeholder="Số điện thoại"
+                                    id="sdt" required>
+                            </div>
+
+                            <div class="col-md-12">
+                                <input type="email" class="form-control" name="subject" placeholder="Email" id="replyto"
+                                    required>
+                            </div>
+
+                            <div class="col-md-12">
+                                <textarea class="form-control" name="message" rows="6" placeholder="Nội dung" style="color: rgb(0, 0, 0);"
+                                    id="message" required></textarea>
+                            </div>
+                        </div>
+                    </form>
+                    <br>
+                    <div class="col-md-4 mx-auto">   
+                              
+                        <button type="type" class="btn btn-primary" onclick="Lienhe()">Gửi thông tin</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main><!-- End #main -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+    const message = document.getElementById('sent-message')
+    function Lienhe() {
+        (function () {
+            emailjs.init("Wzp9TzBJKe-KQO-Tx"); // Account Public Key
+        })();
+        var params = {
+            sendername: document.querySelector('#sendername').value,
+            //   subject: document.querySelector('#subject').value,
+
+            sdt: document.querySelector('#sdt').value,
+            replyto: document.querySelector('#replyto').value,
+            message: document.querySelector('#message').value,
+        };
+        var serviceID = "service_9c5p6fm"; // Email Service ID
+        var templateID = "template_rf3pnkz"; // Email Template ID
+
+        emailjs.send(serviceID, templateID, params)
+            .then(res => {
+                message.innerHTML = 'Gửi thông tin thành công'
+            })
+            .catch();
+    }
+</script>

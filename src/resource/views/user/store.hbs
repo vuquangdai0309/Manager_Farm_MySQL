@@ -1,0 +1,87 @@
+{{> header}}
+{{>navbar}}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Quản lý tài khoản </h1>
+    </div><!-- End Page Title -->
+    <section class="section profile">
+        <div class="row">
+            <div class="col-xl-4">
+                <div class="card">
+                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                        <img src="/img/User_icon_2.svg.png" alt="Profile" class="rounded-circle">
+                        <span></span>
+                        <h2 id="userlogin"></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Tên tài khoản </th>
+                            <th>Email</th>
+                            <th>Quyền sử dụng </th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each data}}
+                        <tr>
+                            <td>{{this.username}}</td>
+                            <td>{{this.email}}</td>
+                            <td>{{this.role}}</td>
+                            <td><a> <i class="bi bi-trash3" data-bs-toggle="modal" data-bs-target="#delete-work-modal"
+                                        data-id="{{this._id}}" style="color: red;"></i></a></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+    </section>
+</main>
+
+<div id="delete-work-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xóa tài khoản này</h5>
+                {{!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                --}}
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa tài khoản này không ?</p>
+            </div>
+            <div class=" modal-footer mx-auto">
+                <button id="btn-delete-calendar" type="button" class="btn btn-danger">Đồng ý xóa</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- form delete --}}
+<form name="delete-calendar-form" method="POST"></form>
+<script>
+    //get name user
+    var getUser = JSON.parse(localStorage.getItem('User'))
+    var message = document.getElementById('message')
+    var user = document.getElementById('userlogin')
+    user.innerHTML = getUser
+    // method delete 
+    const exampleModal = document.getElementById('delete-work-modal')
+    exampleModal.addEventListener('show.bs.modal', event => {
+        var deleteForm = document.forms['delete-calendar-form']
+        var btnDeleteCalendar = document.getElementById('btn-delete-calendar')
+        const button = event.relatedTarget
+        //get id from button delete
+        const recipient = button.getAttribute('data-id')
+
+        btnDeleteCalendar.onclick = function () {
+            deleteForm.action = '/user/' + recipient + '?_method=DELETE'
+            deleteForm.submit()
+        }
+    })
+</script>

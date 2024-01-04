@@ -1,0 +1,84 @@
+{{> header}}
+{{>navbar}}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Chỉnh sửa - Thực địa </h1><br>
+    </div><!-- End Page Title -->
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    <!-- Reports -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Thực địa - cánh đồng</h5>
+                                <form id="event-form" method="POST" action="/canhdong/{{canhdong._id}}?_method=PUT">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Tên vùng
+                                                    trồng:</label>
+                                                <select class="form-select" aria-label="Default select example"
+                                                    id="showMapId" ShowMapId="{{canhdong.map_id}}" name="map_id">
+                                                    {{#each map}}
+                                                    <option value="{{this._id}}">{{this.namearea}}</option>
+                                                    {{/each}}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Loại giống
+                                                    cây:</label><br>
+                                                <input type="text" class="form-control" id="giongcay" name="giongcay"
+                                                    value="{{canhdong.giongcay}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Ngày bắt đầu:
+                                                </label><br>
+                                                <input type="date" class="form-control" id="ngaybatdau"
+                                                    name="ngaybatdau" value="{{canhdong.ngaybatdau}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Ngày kết
+                                                    thúc:</label><br>
+                                                <input type="date" class="form-control" id="ngayketthuc"
+                                                    name="ngayketthuc" value="{{canhdong.ngayketthuc}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class=" w-25 mx-auto">
+                                        <button type="submit" class="btn btn-primary">Chỉnh sửa</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<script>
+    var showMapId = document.getElementById('showMapId')
+    var getAttrMapId = showMapId.getAttribute('ShowMapId')
+    console.log(getAttrMapId)
+    function showSelected(showElement, value) {
+        valueFromDatabase = value
+        // Lấy tham chiếu đến element select
+        var selectElement = showElement
+
+        // Duyệt qua từng option trong select
+        for (var i = 0; i < selectElement.options.length; i++) {
+            // So sánh giá trị của option với giá trị từ database
+            if (selectElement.options[i].value === valueFromDatabase) {
+                // Đặt thuộc tính selected cho option tương ứng
+                selectElement.options[i].selected = true;
+                break; // Dừng vòng lặp nếu đã tìm thấy giá trị
+            }
+        }
+    }
+    showSelected(showMapId, getAttrMapId)
+</script>

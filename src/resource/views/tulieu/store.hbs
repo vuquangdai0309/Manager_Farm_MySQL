@@ -1,0 +1,216 @@
+{{> header}}
+{{>navbar}}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Thực địa </h1><br>
+        <button class="btn btn-primary w-25" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            data-bs-whatever="@mdo">Thêm mới </button><br><br>
+    </div><!-- End Page Title -->
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    <!-- Reports -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Thực địa - cánh đồng</h5>
+
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Tên tiêu đề</th>
+                                            <th>Hình ảnh</th>
+                                            <th>Nội dung</th>
+                                            <th>Ngày tạo</th>
+                                            <th colspan="2">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each data}}
+                                        <tr class="center-button">
+                                            <td>{{sum @index 1}}</td>
+                                            <td>{{this.title}}</td>
+                                            <td><img src="/{{this.image}}" alt="" style="width:150px"></td>
+                                            <td><button type="button" class="btn btn-success"><a
+                                                        href="/tulieu/{{this._id}}/detail" style="color: aliceblue;">Xem
+                                                        chi
+                                                        tiết</a></button></td>
+                                            <td>{{this.date}}</td>
+                                            <td> <a href="/tulieu/{{this._id}}/edit"><i class="bi bi-pencil"
+                                                        style="color: rgb(7, 255, 56);"></i></a></td>
+                                            <td><a> <i class="bi bi-trash3" data-bs-toggle="modal"
+                                                        data-bs-target="#delete-work-modal" data-id="{{this._id}}"
+                                                        style="color: red;"></i></a></td>
+                                        </tr>
+                                        {{else}}
+                                        <tr>
+                                            <td colspan="9" class="text-center">
+                                                Không tìm thấy từ khóa nào !
+                                            </td>
+                                        </tr>
+                                        {{/each }}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-12 center">
+                                <div class=" ">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination">
+                                            {{#if pagination.prev}}
+                                            <li class="page-item">
+                                                <a class="page-link" href="/tulieu/store?page={{pagination.prev}}"
+                                                    aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                            {{/if}}
+
+                                            {{#each pagination.pages}}
+                                            <li class="page-item {{#if this.active}}active{{/if}}">
+                                                <a class="page-link"
+                                                    href="/tulieu/store?page={{this.number}}">{{this.number}}</a>
+                                            </li>
+                                            {{/each}}
+
+                                            {{#if pagination.next}}
+                                            <li class="page-item">
+                                                <a class="page-link" href="/tulieu/store?page={{pagination.next}}"
+                                                    aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                            {{/if}}
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-add ">
+                <div class="modal-content " style="width:150%">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Thêm Mới</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/tulieu/store/creat" method="POST">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Tên bài viết:</label>
+                                        <input type="text" class="form-control" id="title" name="title">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Hình ảnh:
+                                            <img id="imagePreview" src="/img/click.jpg" alt="Preview" width="50px">
+                                        </label><br>
+                                        <input type="file" class="form-control" id="image" name="image"
+                                            style="display: none;">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Nội dung
+                                        </label><br>
+                                        <div id="editor" style="min-height: 300px;"></div>
+                                    </div>
+                                </div>
+                            </div><br>
+                        </form>
+                        <div class=" w-25 mx-auto">
+                            <button type="submit" class="btn btn-primary" onclick="onclickBaiViet()">Thêm mới</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {{!-- modal thêm --}}
+
+
+    {{!-- delete form --}}
+    {{!-- Confirm Delete Works --}}
+    <div id="delete-work-modal" class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xóa Bản Ghi </h5>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xóa bản ghi này không ?</p>
+                </div>
+                <div class="modal-footer mx-auto">
+                    <button id="btn-delete-item" type="button" class="btn btn-danger">Đồng ý xóa</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{{!-- form delete --}}
+<form name="delete-item-form" method="POST"></form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/egue02dpzhq0z79z5vgtt0hnr0hyffh4kf4toro78vjgv85f/tinymce/6/tinymce.min.js"
+    referrerpolicy="origin"></script>
+<script src="/js/tinymce.js"></script>
+<script>
+    // method delete 
+    const exampleModal = document.getElementById('delete-work-modal')
+    exampleModal.addEventListener('show.bs.modal', event => {
+        var deleteForm = document.forms['delete-item-form']
+        var btnDeleteitem = document.getElementById('btn-delete-item')
+        const button = event.relatedTarget
+        //get id from button delete
+        const recipient = button.getAttribute('data-id')
+
+        btnDeleteitem.onclick = function () {
+            deleteForm.action = '/tulieu/' + recipient + '?_method=DELETE'
+            deleteForm.submit()
+        }
+    })
+</script>
+<script>
+    tinymceAdd()
+    var img = document.getElementById('image')
+    var imagePreview = document.getElementById('imagePreview')
+    // Khi click vào ảnh, chuyển sự kiện click đến trường nhập file
+    imagePreview.addEventListener('click', function () {
+        img.click();
+    });
+    // change ảnh khi chọn
+    img.addEventListener('change', function () {
+        if (img.files && img.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+            };
+            reader.readAsDataURL(img.files[0]);
+        }
+    });
+    // thêm bài viết
+    function onclickBaiViet() {
+        var tinymceHtmlContent = tinymce.get('editor').getContent()
+        var title = document.getElementById('title').value
+        const file = img.files[0]
+
+        if (file && title && tinymceHtmlContent) {
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('title', title);
+            formData.append('editor', tinymceHtmlContent);
+            fetch('/tulieu/store/creat', {
+                method: 'POST',
+                body: formData,
+            }).then(() => {
+                window.location.replace('/tulieu/store')
+            })
+        }
+    }
+</script>

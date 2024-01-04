@@ -1,0 +1,115 @@
+{{> header}}
+{{>navbar}}
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Chỉnh sửa lịch làm việc </h1>
+    </div><!-- End Page Title -->
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Recent Activity -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" id="currentYear"> </h5>
+                        <div>
+                            <div class="add-event-form">
+                                <br>
+                                <form action="/tulieu/store/creat" method="POST">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label"><strong>Tên bài
+                                                        viết:</strong></label>
+                                                <input type="text" class="form-control" id="title" name="title"
+                                                    value="{{data.title}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label"><strong>Hình
+                                                        ảnh:</strong>
+                                                    <img id="imagePreview" src="/{{data.image}}"
+                                                        UrlImage="{{data.image}}" alt="Preview" width="100px">
+                                                </label><br>
+                                                <input type="file" class="form-control" id="image" name="image"
+                                                    style="display: none;">
+                                            </div>
+                                        </div>
+                                    </div> <br>
+                                    <div class="form-group">
+                                        <input type="hidden" id="content" value="{{data.content}}">
+                                        <label for="recipient-name" class="col-form-label"><strong>Nội dung</strong>
+                                        </label><br>
+                                        <div id="editor" style="min-height: 300px;"></div>
+                                    </div>
+                            </div>
+                        </div><br>
+                        </form>
+                        <div id="getcontent" style="display: none;" getid="{{data._id}}"></div>
+                        <div class=" w-25 mx-auto">
+                            <button type="submit" class="btn btn-primary" onclick="onclickEdit()">Lưu lại</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main><!-- End #main -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/egue02dpzhq0z79z5vgtt0hnr0hyffh4kf4toro78vjgv85f/tinymce/6/tinymce.min.js"
+    referrerpolicy="origin"></script>
+<script src="/js/tinymce.js"></script>
+<script>
+    var img = document.getElementById('image')
+    var imagePreview = document.getElementById('imagePreview')
+    //get url image
+    var UrlImage = imagePreview.getAttribute('UrlImage')
+    //lấy nội dung
+    const getcontent = document.getElementById('getcontent')
+    const content = document.getElementById('content').value
+    getcontent.innerHTML = content
+    var contentWithHTML = document.getElementById('getcontent').innerHTML;
+    //getid
+    const getid = getcontent.getAttribute('getid')
+    //Edit content
+    tinymceFuntions(contentWithHTML)
+
+    // Khi click vào ảnh, chuyển sự kiện click đến trường nhập file
+    imagePreview.addEventListener('click', function () {
+        img.click();
+
+    });
+    // change ảnh khi chọn
+    img.addEventListener('change', function () {
+        if (img.files && img.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+            };
+            reader.readAsDataURL(img.files[0]);
+        }
+    });
+
+    function onclickEdit() {
+        var tinymceHtmlContent = tinymce.get('editor').getContent()
+        var title = document.getElementById('title').value
+        const file = img.files[0]
+        //if you selected file
+        if ( title && tinymceHtmlContent) {
+            const formData = new FormData();
+            formData.append('image', file);
+            // formData.append('id', getid);
+            formData.append('imageurl', UrlImage);
+            formData.append('title', title);
+            formData.append('editor', tinymceHtmlContent);
+            fetch(`/tulieu/${getid}`, {
+                method: 'PUT',
+                body: formData,
+            })
+                .then(() => {
+                    window.location.replace('/tulieu/store')
+                })
+        }
+    }
+</script>

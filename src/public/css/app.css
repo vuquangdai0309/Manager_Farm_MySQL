@@ -1,0 +1,114 @@
+@charset "UTF-8";
+a {
+  text-decoration: none !important; }
+
+table {
+  border-collapse: collapse;
+  width: 100%; }
+
+table,
+th,
+td {
+  border: 1px solid #ccc; }
+
+th,
+td {
+  padding: 5px;
+  text-align: center; }
+
+th {
+  background-color: #f2f2f2; }
+
+td:hover {
+  background-color: #e0e0e0;
+  align-items: center; }
+
+#nextMonth {
+  background-color: transparent;
+  border: none;
+  cursor: pointer; }
+
+#beforeMonth {
+  background-color: transparent;
+  border: none;
+  cursor: pointer; }
+
+.box-center {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  text-align: center; }
+
+.event-title {
+  float: left; }
+
+.main-form {
+  width: 900px; }
+
+.form {
+  margin: auto; }
+
+.title {
+  text-align: center;
+  padding-top: 20px; }
+
+.btn {
+  width: 100%;
+  font-weight: 400; }
+
+.form-group.invalid .form-control {
+  border-color: #f33a58; }
+
+.form-group.invalid .form-message {
+  color: #f33a58; }
+
+.form-message {
+  font-size: 13px; }
+
+.message-error {
+  color: #f33a58; }
+
+.message-success {
+  color: #52ff7d; }
+
+#message {
+  color: red; }
+
+#CityList {
+  list-style-type: none;
+  padding: 0;
+  position: absolute;
+  z-index: 1;
+  cursor: pointer;
+  margin-top: 10px;
+  background-color: #fbfbfb;
+  border-radius: 5px;
+  width: 10%;
+  color: #056cbd; }
+
+.CityItem {
+  margin-bottom: 10px;
+  padding: 10px; }
+
+#image-container img {
+  width: 100%;
+  height: auto;
+  height: 250px;
+  /* Kích thước tối đa chiều cao của hình ảnh */ }
+
+.leaflet-div-icon {
+  background-color: #5f91ff !important;
+  border-radius: 50%; }
+
+.card:hover {
+  transform: scale(1.001);
+  /* Phóng to 1.001 lần khi hover */ }
+
+.card {
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out; }
+
+.center {
+  display: flex;
+  justify-content: center; }

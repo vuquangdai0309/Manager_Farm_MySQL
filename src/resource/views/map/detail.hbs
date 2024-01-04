@@ -1,0 +1,50 @@
+{{> header}}
+{{>navbar}}
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Bản đồ</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row ">
+                    <!-- Reports -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="map" style="width: 100%; height: 70vh;"></div> <!-- End Line Chart -->
+                            </div>
+                        </div>
+                    </div><!-- End Reports -->
+                </div>
+            </div><!-- End Left side columns -->
+        </div>
+    </section>
+</main><!-- End #main -->
+{{> footer}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Khởi tạo bản đồ Leaflet
+        var map = L.map('map').setView([51.505, -0.09], 13);
+
+        // Thêm một lớp bản đồ (ví dụ: OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+        }).addTo(map);
+        // Tạo một hình chữ nhật giả sử là khu vực bạn muốn phóng to
+        var rectangle = L.rectangle([
+            [51.49, -0.1],
+            [51.5, -0.08]
+        ]).addTo(map);
+
+        // Phóng to vào khu vực của hình chữ nhật
+        map.fitBounds(rectangle.getBounds());
+
+    })
+</script>

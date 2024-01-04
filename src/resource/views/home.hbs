@@ -1,0 +1,118 @@
+{{> header}}
+{{>navbar}}
+<style>
+
+</style>
+<main id="main" class="main">
+    <div class="pagetitle">
+        <div class="row">
+            <div class="col-md 6">
+                <h1>Tổng quan  </h1>              
+            </div>
+            <div class="col-md 6">
+                <input type="text" class="form-control" id="searchInput" oninput="searchCitys()"
+                    placeholder="Nhập thành phố của bạn   ..." style=" width:80%">
+                <ul id="CityList"></ul>
+            </div>
+        </div>
+
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="row">
+            <!-- Left side columns -->
+            <div class="col-lg-8">
+                <div class="row">
+                    <!-- Reports -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title" id="chartTemperature"> </h5>
+
+                                <!-- Line Chart -->
+                                <canvas id="myChart" style="width:100%;"></canvas>
+
+                                <!-- End Line Chart -->
+                            </div>
+                        </div>
+                    </div><!-- End Reports -->
+
+                    <!-- Recent Sales -->
+                    <div class="col-12">
+                        <div class="card recent-sales overflow-auto">
+                            <div class="card-body">
+                                <h5 class="card-title">Độ ẩm</h5>
+                                <canvas id="HumidtyChart" style="width:100%;"></canvas>
+                            </div>
+
+                        </div>
+                    </div><!-- End Recent Sales -->
+
+                    <!-- Top Selling -->
+                    <div class="col-12">
+                        <div class="card top-selling overflow-auto">
+                            <div class="card-body pb-0">
+                                <h5 class="card-title">Các loại cây trồng </h5>
+                                <canvas id="loaicay" style="width:100%;"></canvas>
+
+                            </div>
+                        </div>
+                    </div><!-- End Top Selling -->
+                </div>
+            </div><!-- End Left side columns -->
+            <!-- Right side columns -->
+            <div class="col-lg-4">
+                <!-- Recent Activity -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" id="weatherDay">Thời tiết trong ngày</h5>
+                        <section>
+                            <div class="row d-flex justify-content-center align-items-center ">
+                                <div class="col-md-12 col-lg-12">
+
+                                    <div class="card  text-white">
+                                        <div class="bg-image">
+                                            {{!-- <img
+                                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-weather/draw1.webp"
+                                                class="card-img" alt="weather" style="height: 100%;" /> --}}
+                                            <div id="image-container"></div>
+                                            <div class="mask" style="background-color: rgba(190, 216, 232, .5);">
+                                            </div>
+                                        </div>
+                                        <div class="card-img-overlay text-dark ">
+                                            <h4 class="mb-0" id="city"></h4>
+                                            <p class="display-2 my-2" id="temperature"></p>
+                                            <p class="mb-2">Độ ẩm: <strong id="humidity"></strong></p>
+                                            <p class="mb-2">Tốc độ gió: <strong id="windSpeed"></strong></p>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </section>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body pb-0">
+                        <h5 class="card-title">Cánh đồng </h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body pb-0">
+                        <h5 class="card-title">Công việc </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{{> footer}}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/js/temperature.js"></script>
+
+<script>
+
+</script>
