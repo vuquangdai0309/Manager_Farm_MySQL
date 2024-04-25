@@ -93,3 +93,31 @@ function tinymceAdd() {
         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
     });
 }
+
+function tinymceAddProduct() {
+
+    tinymce.init({
+        selector: '#editor',
+        plugins: 'table',
+
+        toolbar: 'undo redo | table',
+
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+    });
+}
+
+function tinymceFuntionsProduct(data) {
+
+    tinymce.init({
+        selector: '#editor',
+        plugins: ' table',
+
+        toolbar: 'undo redo | table',
+
+        init_instance_callback: function (editor) {
+            // Load dữ liệu vào trình soạn thảo khi nó được khởi tạo
+            editor.setContent(data);
+        },
+
+    });
+}

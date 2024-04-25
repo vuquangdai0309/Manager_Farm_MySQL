@@ -2,7 +2,7 @@
 {{>navbar}}
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Chi tiết bài viết: {{data.title}} </h1><br>
+        <h1> Bài viết: {{data.title}} </h1><br>
         <a href="/tulieu"> <i class="bi bi-arrow-left-circle-fill" style="font-size:24px"> </i></a>
     </div><!-- End Page Title -->
     <section class="section dashboard">
@@ -21,9 +21,9 @@
         </div>
     </section>
 </main>
+{{> footer}}
 <script>
     const getcontent = document.getElementById('getcontent')
     const content = document.getElementById('content').value
     getcontent.innerHTML = content
 </script>
-{{>footer}}

@@ -1,11 +1,12 @@
 const Map = require('../models/Map')
 const MapCenter = require('../models/MapCenter')
+const NhatKySanXuat = require('../models/NhatKySanXuat')
 var jwt = require('jsonwebtoken');
 class MapController {
     index(req, res, next) {
         let token = req.cookies.tkvungtrong
         let par = jwt.verify(token, 'mk')
-        MapCenter.getAllCenters(par._id,(err, onedata) => {
+        MapCenter.getAllCenters(par._id, (err, onedata) => {
             if (err) {
                 console.log('Lỗi truy vấn', err)
                 return
@@ -21,7 +22,6 @@ class MapController {
             })
         })
     }
-
     // thêm bản ghi
     store(req, res, next) {
         //   console.log(req.body)
@@ -50,7 +50,6 @@ class MapController {
     setview(req, res, next) {
         res.render('map/setview')
     }
-
     // lưu khu vực bạn muốn hiển thị
     savemapcenter(req, res, next) {
         try {
@@ -125,10 +124,16 @@ class MapController {
         Map.deleteMap(Id_map, (err, data) => {
             if (err) {
                 console.log('Lỗi truy vấn', err)
-                return
             }
             else {
-                res.redirect('back')
+                NhatKySanXuat.deleteWork_With_Map(Id_map, (err) => {
+                    if (err) {
+                        console.log('Lỗi truy vấn', err)
+                    }
+                    else {
+                        res.redirect('back')
+                    }
+                })
             }
         })
     }
@@ -139,11 +144,10 @@ class MapController {
                 console.log('lỗi truy vấn', err)
             }
             else {
-                res.render('calendar/edit', { map: map[0] })
+                res.render('nhatkysanxuat/edit', { map: map[0] })
             }
         })
     }
-
 }
 
 module.exports = new MapController

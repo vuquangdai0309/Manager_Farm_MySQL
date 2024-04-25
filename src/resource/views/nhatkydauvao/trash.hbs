@@ -1,0 +1,187 @@
+{{> header}}
+{{>navbar}}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>Nhật ký theo dõi nguyên liệu đầu vào đã xóa</h1>
+                <a href="/nhatkydauvao"> <i class="bi bi-arrow-left-circle-fill" style="font-size:24px"> </i></a>
+            </div>
+        </div>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="card-body">
+            <h5>Danh sách đã xóa</h5>
+            <form action="/nhatkydauvao/handle-form-actions-trash" method="POST">
+                <div class="select-all d-flex ">
+                    <div class="form-group w-25 mx-2">
+                        <select class="form-control" style="text-align: center;" name="action" required>
+                            <option value="">-----Hành động-----</option>
+                            <option value="restore">Khôi phục</option>
+                            <option value="delete">Xóa bản ghi</option>
+
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-success mr-5 btn-check-all-submit " disabled>Thực
+                            hiện</button>
+                    </div>
+
+                </div>
+        </div>
+
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th rowspan="2"> <label><input type="checkbox" value="" id="checkbox-all">
+                        </label></th>
+                    <th rowspan="2">Vụ mùa</th>
+                    <th rowspan="2">Giống cây</th>
+                    <th rowspan="2">Thời gian mua/ sản xuất</th>
+                    <th rowspan="2">Tên nguyên vật liệu</th>
+                    <th rowspan="2">Số lượng</th>
+                    <th rowspan="2">Tên và địa chỉ mua vật tư</th>
+                    <th rowspan="2">Hạn sử dụng</th>
+
+                    <th colspan="3">Đối với vật tư tự sản xuất,ghi thêm thông tin sau</th>
+                    <th rowspan="2">Chỉnh sửa</th>
+                    <th rowspan="2">Xóa bỏ</th>
+                </tr>
+                <tr>
+                    <th>Nguyên liệu sản xuất</th>
+                    <th>Phương pháp xử lý</th>
+                    <th>Hóa chất xử lý</th>
+
+                </tr>
+            </thead>
+            {{#each nhatkydauvao}}
+            <tbody>
+                <tr>
+                    <th>
+                        <div class="checkbox">
+                            <label><input type="checkbox" id="checkboxId" name="workIds"
+                                    value="{{this.nhatkydauvao_id }}"></label>
+                        </div>
+                    </th>
+                    <td>{{this.vumua}}</td>
+
+                    <td>{{this.giongcay}}</td>
+                    <td>{{this.thoigian}} </td>
+                    <td>{{this.nguyenvatlieu}}</td>
+                    <td>{{this.soluong}}</td>
+                    <td>{{this.tenvadiachi}}</td>
+                    <td>{{this.hansudung}}</td>
+                    <td>{{this.nguyenlieusanxuat}}</td>
+                    <td>{{this.phuongphapxuly}}</td>
+                    <td>{{this.hoachatxuly}}</td>
+
+                    <td> <a href="/nhatkydauvao/{{this.nhatkydauvao_id }}/edit"><i class="bi bi-pencil"
+                                style="color: rgb(7, 255, 56);"></i></a></td>
+                    <td><a> <i class="bi bi-trash3" data-bs-toggle="modal" data-bs-target="#delete-work-modal"
+                                data-id="{{this.nhatkydauvao_id }}" style="color: red;"></i></a>
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="15" class="text-center">
+                        Không có bản ghi nào !
+                    </td>
+                </tr>
+            </tbody>
+            {{/each}}
+        </table>
+
+        <div class="col-lg-12 center">
+            <div class="">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        {{#if pagination.prev}}
+                        <li class="page-item">
+                            <a class="page-link" onclick="changePage({{pagination.prev}})" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {{/if}}
+                        {{#each pagination.pages as |page|}}
+                        {{#if page.active}}
+                        <li class="page-item active">
+                            <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
+                        </li>
+                        {{else if page.isDots }}
+
+                        {{else}}
+                        <li class="page-item ">
+                            <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
+                        </li>
+                        {{/if}}
+                        {{/each}}
+
+                        {{#if pagination.next}}
+                        <li class="page-item">
+                            <a class="page-link" onclick="changePage({{pagination.next}})" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        {{/if}}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </section>
+    </form>
+
+
+
+    {{!-- delete form --}}
+    {{!-- Confirm Delete Works --}}
+    <div id="delete-work-modal" class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xóa vĩnh viễn</h5>
+                    {{!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    --}}
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xóa nhật ký này không ?</p>
+                </div>
+                <div class="modal-footer ">
+                    <button id="btn-delete-item" type="button" class="btn btn-danger"
+                        style="float: right; width:100px">Đồng ý
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        style="float: right; width:100px">Thoát</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{!-- Confirm edit works --}}
+</main>
+{{> footer}}
+{{!-- form delete --}}
+<form name="delete-item-form" method="POST"></form>
+<script src="/js/checkbox.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+    function changePage(page) {
+        window.location.href = `/nhatkydauvao/trash?page=${page}`;
+    }
+    // method delete 
+    const exampleModal = document.getElementById('delete-work-modal')
+    exampleModal.addEventListener('show.bs.modal', event => {
+        var deleteForm = document.forms['delete-item-form']
+        var btnDeleteitem = document.getElementById('btn-delete-item')
+        const button = event.relatedTarget
+        //get id from button delete
+        const recipient = button.getAttribute('data-id')
+
+        btnDeleteitem.onclick = function () {
+            deleteForm.action = '/nhatkydauvao/' + recipient + '/destroy?_method=DELETE'
+            deleteForm.submit()
+        }
+    })
+</script>

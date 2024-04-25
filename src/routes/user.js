@@ -41,7 +41,7 @@ router.get('/logout', (req, res) => {
     res.redirect('/user/login')
 })
 //delete
-router.delete('/:id', CheckController.checkoutManager, UserController.delete)
+router.post('/:id/delete', CheckController.checkoutManager, UserController.delete)
 
 //get all user 
 router.get('/', CheckController.checkoutManager, UserController.getAllUser)

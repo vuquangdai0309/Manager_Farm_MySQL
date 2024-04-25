@@ -55,10 +55,7 @@ function Validator(options) {
                       return value;
                   }, {})
                   options.onSubmit(formList)
-
-              }
-              
-              
+              } 
           }
         //   var jsonDanhSachDangKy = JSON.stringify(formList);
         //       localStorage.setItem("DanhSachDKY", jsonDanhSachDangKy)

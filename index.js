@@ -7,6 +7,7 @@ const path = require('path');
 const route = require('./src/routes')
 const db = require('./src/config/db')
 const striptags = require('striptags');
+const { getDataForTempalte } = require('./src/app/middlewares/getDataForTemplates')
 //change mathod
 const methodOverride = require('method-override')
 //const setCommonData = require('./src/app/middlewares/setDataVuMua')
@@ -37,8 +38,15 @@ app.engine('hbs', handlebars.engine({
       }
       return description;
     },
-    formatNumber:function(number){
+    formatNumber: function (number) {
       return number.toLocaleString();
+    },
+    formatDate: function (dateString) {
+      const parts = dateString.split('-');
+      if (parts.length === 3) {
+        return parts[2] + '-' + parts[1] + '-' + parts[0];
+      }
+      return dateString;
     }
   }
 }));
@@ -50,6 +58,7 @@ app.use('/uploads', express.static('uploads'))
 //https://www.youtube.com/watch?v=YWyuzXyLg68
 //change method
 app.use(methodOverride('_method'))
+app.use(getDataForTempalte)
 //routes init
 route(app)
 //HTTP LOGGER

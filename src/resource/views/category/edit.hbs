@@ -1,0 +1,33 @@
+{{> header}}
+{{>navbar}}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Chỉnh sửa danh mục </h1>
+    </div><!-- End Page Title -->
+    <section class="section dashboard mx-auto" style="width: 30%;">
+        <!-- Recent Activity -->
+        <div class="card">
+            <div class="card-body ">
+                <h5 class="card-title" id="currentYear"> </h5>
+                <div>
+                    <div class="add-event-form">
+                        <form action="/category/{{data.slug}}?_method=PUT" method="POST">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label"><strong>Tên danh mục:
+                                    </strong></label>
+                                <input type="text" class="form-control" id="title" name="title" value="{{data.title}}">
+                            </div>
+                            <br>
+                            <div class=" w-25 " style="float: right;">
+                                <button type="submit" class="btn btn-primary">Lưu
+                                    lại</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</main><!-- End #main -->
+{{> footer}}

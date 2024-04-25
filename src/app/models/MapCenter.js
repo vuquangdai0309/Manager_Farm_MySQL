@@ -1,11 +1,11 @@
 const connection = require('../../config/db/index')
 const CenterModel = {
     getAllCenters: (idUser, callback) => {
-        const query = 'SELECT * FROM centers WHERE id_user = ?';
+        const query = 'SELECT * FROM centers WHERE id_user = ? AND is_deleted = 0';
         connection.query(query, idUser, callback);
     },
     getCenterLimitOne: (idUser, callback) => {
-        const query = 'SELECT * FROM centers WHERE id_user = ? LIMIT 1';
+        const query = 'SELECT * FROM centers WHERE id_user = ? AND is_deleted = 0 LIMIT 1';
         connection.query(query, idUser, callback);
     },
     updateCenter: (CenterId, IdUser, Center, callback) => {

@@ -2,14 +2,46 @@ const Account = require('../models/Account')
 var jwt = require('jsonwebtoken');
 class UserController {
     getAllUser(req, res) {
-        Account.getAllUser((err, data) => {
+        const page = parseInt(req.query.page) || 1; // Trang hiện tại
+        const pageSize = 10; // Kích thước trang
+        const startIndex = (page - 1) * pageSize;
+        const endIndex = page * pageSize;
+        Account.countAccount((err, count) => {
             if (err) {
-                res.status(500).json({ error: 'Internal Server Error' });
-                return;
-            } else {
-                res.render('user/store', { data })
+                console.log('lỗi truy vấn', err)
+            }
+            else {
+                Account.getAllUser((err, results) => {
+                    if (err) {
+                        res.status(500).json({ error: 'Internal Server Error' });
+                        return;
+                    } else {
+                        const totalPages = Math.ceil(results.length / pageSize);
+                        const pages = Array.from({ length: totalPages }, (_, index) => {
+                            return {
+                                number: index + 1,
+                                active: index + 1 === page,
+                                isDots: index + 1 > 5
+                            };
+                        });
+                        const paginatedData = results.slice(startIndex, endIndex);
+                        // Chuẩn bị dữ liệu để truyền vào template
+                        const viewData = {
+                            data: paginatedData,
+                            count: count[0],
+                            pagination: {
+                                prev: page > 1 ? page - 1 : null,
+                                next: endIndex < results.length ? page + 1 : null,
+                                pages: pages,
+                            },
+                        };
+
+                        res.render('user/store', viewData)
+                    }
+                })
             }
         })
+
     }
     index(req, res) {
         res.render('user/login')
@@ -33,6 +65,9 @@ class UserController {
                         token: token,
                         getUser: account,
                     })
+                }
+                else {
+                    res.json({ message_error: 'Sai tên đăng nhập hoặc mật khẩu' })
                 }
             }
         })
@@ -79,7 +114,7 @@ class UserController {
     //[POST] change pass
     changepass(req, res, next) {
 
-        var token = req.cookies.token
+        var token = req.cookies.tkvungtrong
         var id_token = jwt.verify(token, 'mk')
         // lấy id dựa vào verify token
         const idUser = id_token._id

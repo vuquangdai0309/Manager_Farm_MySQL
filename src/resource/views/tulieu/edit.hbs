@@ -1,9 +1,9 @@
 {{> header}}
 {{>navbar}}
 <main id="main" class="main">
-
     <div class="pagetitle">
-        <h1>Chỉnh sửa lịch làm việc </h1>
+        <h1>Chỉnh sửa tư liệu</h1>
+         <a href="/tulieu/store"> <i class="bi bi-arrow-left-circle-fill" style="font-size:24px"> </i></a>
     </div><!-- End Page Title -->
     <section class="section dashboard">
         <div class="row">
@@ -23,6 +23,16 @@
                                                         viết:</strong></label>
                                                 <input type="text" class="form-control" id="title" name="title"
                                                     value="{{data.title}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label"><strong>Danh mục:
+                                                    </strong></label>
+                                                <select class="form-select" id="category"
+                                                    show-value="{{data.category_id}}">
+                                                    {{#each category}}
+                                                    <option value="{{this._id}}">{{this.title}}</option>
+                                                    {{/each}}
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -56,9 +66,12 @@
         </div>
     </section>
 </main><!-- End #main -->
+{{> footer}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+{{!--
 <script src="https://cdn.tiny.cloud/1/egue02dpzhq0z79z5vgtt0hnr0hyffh4kf4toro78vjgv85f/tinymce/6/tinymce.min.js"
-    referrerpolicy="origin"></script>
+    referrerpolicy="origin"></script> --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"> </script>
 <script src="/js/tinymce.js"></script>
 <script>
     var img = document.getElementById('image')
@@ -90,18 +103,39 @@
             reader.readAsDataURL(img.files[0]);
         }
     });
+    //  tự động chọn category
+    var showcategory = document.getElementById('category')
+    var getAttrCategory = showcategory.getAttribute('show-value')
+    function showSelected(showElement, value) {
+        valueFromDatabase = value
+        // Lấy tham chiếu đến element select
+        var selectElement = showElement
 
+        // Duyệt qua từng option trong select
+        for (var i = 0; i < selectElement.options.length; i++) {
+            // So sánh giá trị của option với giá trị từ database
+            if (selectElement.options[i].value === valueFromDatabase) {
+                // Đặt thuộc tính selected cho option tương ứng
+                selectElement.options[i].selected = true;
+                break; // Dừng vòng lặp nếu đã tìm thấy giá trị
+            }
+        }
+    }
+    showSelected(showcategory, getAttrCategory)
+    // submit Edit
     function onclickEdit() {
         var tinymceHtmlContent = tinymce.get('editor').getContent()
         var title = document.getElementById('title').value
+        var category = document.getElementById('category').value
         const file = img.files[0]
         //if you selected file
-        if ( title && tinymceHtmlContent) {
+        if (title && tinymceHtmlContent) {
             const formData = new FormData();
             formData.append('image', file);
             // formData.append('id', getid);
             formData.append('imageurl', UrlImage);
             formData.append('title', title);
+            formData.append('category_id', category);
             formData.append('editor', tinymceHtmlContent);
             fetch(`/tulieu/${getid}`, {
                 method: 'PUT',

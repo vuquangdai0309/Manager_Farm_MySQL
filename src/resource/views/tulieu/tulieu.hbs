@@ -2,50 +2,85 @@
 {{>navbar}}
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Tư Liệu - Tin Tức</h1><br>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <h1>Tư Liệu - Tin Tức
+                </h1>
+            </div>
+            <div class="col-md-6 mb-3">
+                <form id="searchForm" method="GET" action="/tulieu">
+                    <div class="form-group">
+                        <select class="form-select w-50" id="category" name="search" aria-label="Default select example"
+                            show-value="{{searchItem}}">
+                            <option value="">Tổng hợp các tin tức</option>
+                            {{#each category}}
+                            <option value="{{this._id}}">{{this.title}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <button type="submit" id="btn" class="btn btn-primary" style="display: none;">Tìm kiếm</button>
+                </form>
+
+            </div>
+        </div>
     </div><!-- End Page Title -->
     <section class="section dashboard">
         <div class="row">
             <div class="col-lg-8">
                 {{#each data}}
                 <!-- Card with an image on left -->
-                <div class="card mb-3" >
+                <div class="card mb-3">
                     <div class="row ">
                         <div class="col-md-3">
                             <img src="/{{this.image}}" class="img-fluid rounded-start" alt="..."
-                                style="width: 275px;height:150px">
+                                style="width: 90%;height:150px ;object-fit: cover;">
                         </div>
                         <div class="col-md-9">
                             <div class="card-body">
                                 <h5 class="card-title" style="font-weight: 700; color:#012970">{{this.title}}</h5>
                                 <p class="card-text">{{{truncateDescription this.content}}}</p>
-                                <a href="/tulieu/{{this.slug}}/detail/client" style="color: gray;"> Xem Thêm <i class="bi bi-arrow-right"></i></a>
+                                <a href="/tulieu/{{this.slug}}/detail/client" style="color: gray;"> Xem Thêm <i
+                                        class="bi bi-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
                 </div><!-- End Card with an image on left -->
+                {{else}}
+                <tr>
+                    <P> Hiện chưa có bài viết nào về danh mục này !</P>
+
+
+                </tr>
                 {{/each}}
                 <div class="col-lg-12 center">
-                    <div class=" ">
+                    <div class="">
                         <nav aria-label="Page navigation">
                             <ul class="pagination">
                                 {{#if pagination.prev}}
                                 <li class="page-item">
-                                    <a class="page-link" href="/tulieu?page={{pagination.prev}}" aria-label="Previous">
+                                    <a class="page-link" onclick="changePage({{pagination.prev}})"
+                                        aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
                                 {{/if}}
-
-                                {{#each pagination.pages}}
-                                <li class="page-item {{#if this.active}}active{{/if}}">
-                                    <a class="page-link" href="/tulieu/?page={{this.number}}">{{this.number}}</a>
+                                {{#each pagination.pages as |page|}}
+                                {{#if page.active}}
+                                <li class="page-item active">
+                                    <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
                                 </li>
+                                {{else if page.isDots }}
+
+                                {{else}}
+                                <li class="page-item ">
+                                    <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
+                                </li>
+                                {{/if}}
                                 {{/each}}
 
                                 {{#if pagination.next}}
                                 <li class="page-item">
-                                    <a class="page-link" href="/tulieu?page={{pagination.next}}" aria-label="Next">
+                                    <a class="page-link" onclick="changePage({{pagination.next}})" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
@@ -55,6 +90,7 @@
                     </div>
                 </div>
             </div>
+            {{#if data}}
             <div class="col-lg-4">
                 <div class="card">
                     <img src="/img/tintuc2.jpg" class="card-img-top" alt="...">
@@ -64,8 +100,42 @@
 
                 </div><!-- End Card with an image on top -->
             </div>
+            {{else}}
+            <div></div>
+            {{/if}}
+
         </div>
-
-
     </section>
 </main>
+{{> footer}}
+<!-- index.html -->
+
+<script>
+    var showcategory = document.getElementById('category')
+    var getAttrCategory = showcategory.getAttribute('show-value')
+    function showSelected(showElement, value) {
+        valueFromDatabase = value
+        // Lấy tham chiếu đến element select
+        var selectElement = showElement
+
+        // Duyệt qua từng option trong select
+        for (var i = 0; i < selectElement.options.length; i++) {
+            // So sánh giá trị của option với giá trị từ database
+            if (selectElement.options[i].value === valueFromDatabase) {
+                // Đặt thuộc tính selected cho option tương ứng
+                selectElement.options[i].selected = true;
+                break; // Dừng vòng lặp nếu đã tìm thấy giá trị
+            }
+        }
+    }
+    showSelected(showcategory, getAttrCategory)
+    function changePage(page) {
+        window.location.href = `/tulieu?page=${page}&search=${getAttrCategory}`;
+    }
+    // sự kiện click button
+    $(document).ready(function () {
+        $('#category').change(function () {
+            $('#btn').click()
+        });
+    });
+</script>

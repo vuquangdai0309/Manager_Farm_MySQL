@@ -9,7 +9,7 @@
     <section class="section dashboard">
         <div class="row">
             <div class="col-lg-3">
-                <a href="/map/setview"><button class="btn btn-success">Chọn khu vực khác </button></a><br><br>
+                <a href="/map/setview"><button class="btn btn-success">Chọn khu vực hiển thị </button></a><br><br>
                 <!-- Recent Activity -->
                 <div class="card">
                     <div class="card-body">
@@ -26,8 +26,9 @@
                                 <div id="message"></div>
                             </div>
                         </form>
-                        <div class="box-center mt-4">
-                            <button class="btn btn-primary w-50 " id="btnsave" type="submit">Lưu</button>
+                        <div class=" mt-4">
+                            <button class="btn btn-primary " id="btnsave" type="submit"
+                                style=" width:80px;float: right;">Lưu</button>
                         </div>
                         <br><br>
 
@@ -51,9 +52,9 @@
         <div class="row">
             <div class="col-md-12">
                 <table class="table table-bordered ">
-                    <thead>
+                    <thead style="text-align: center;">
                         <tr>
-                            <th>Khu vực</th>
+                            <th>Vùng trồng</th>
                             <th>Diện tích</th>
                             <th>Hành động</th>
                         </tr>
@@ -63,7 +64,6 @@
                         <tr>
                             <td>{{this.namearea}}</td>
                             <td>{{formatNumber this.areaMeter}} m2</td>
-                            <td></td>
                             <td><a> <i class="bi bi-trash3" data-bs-toggle="modal" data-bs-target="#delete-work-modal"
                                         data-id="{{this._id}}" style="color: red;"></i></a></td>
                         </tr>
@@ -71,7 +71,6 @@
                     </tbody>
                 </table>
             </div>
-
         </div>
     </section>
 </main><!-- End #main -->
@@ -100,8 +99,6 @@
     </section>
 </main><!-- End #main -->
 {{/unless}}
-
-
 <div id="delete-work-modal" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -113,9 +110,13 @@
             <div class="modal-body">
                 <p>Bạn có chắc chắn muốn xóa khu vực này không ?</p>
             </div>
-            <div class=" modal-footer mx-auto">
-                <button id="btn-delete-calendar" type="button" class="btn btn-danger">Đồng ý xóa</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+            <div class=" modal-footer ">
+                <button id="btn-delete-calendar" type="button" class="btn btn-danger"
+                    style="float: right; width:100px">Đồng
+                    ý
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    style="float: right; width:100px">Thoát</button>
             </div>
         </div>
     </div>
@@ -141,7 +142,6 @@
         }
     })
 </script>
-
 <script>
     btnsave = document.getElementById('btnsave')
     message = document.getElementById('message')
@@ -266,9 +266,6 @@
                 }
             }
             else {
-
-
-
                 //tính diện tích
                 const areaMeter = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
                 const area = areaMeter.toFixed(2)
@@ -289,7 +286,7 @@
                             data: {
                                 area: area,
                                 type: type,
-                                namearea: `Khu vực: ${input}`,
+                                namearea: `Vùng trồng: ${input}`,
                                 coordinates: parseLocalpolygon
                             }
                         })
@@ -335,7 +332,7 @@
                     onEachFeature: function (feature, layer) {
                         // Bind Popup với nội dung từ thuộc tính "name" của đối tượng GeoJSON
 
-                        layer.bindPopup(`<b> ${feature.properties.name} </br> ${feature.properties.area} </b>`);
+                        layer.bindPopup(`<b> ${feature.properties.name} </b>`);
                     }
                 }).addTo(map);
 
@@ -344,6 +341,4 @@
         loadData()
         // get data từ localstorage sau đó gán stateData
     });
-
-
 </script>

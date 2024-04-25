@@ -1,19 +1,19 @@
 {{> header}}
 {{>navbar}}
-<style>
-
-</style>
 <main id="main" class="main">
     <div class="pagetitle">
         <div class="row">
-            <div class="col-md 6">
-                <h1>Tổng quan  </h1>              
+            <div class="col-lg-2">
+                <h1>Tổng quan </h1> {{title}}
             </div>
-            <div class="col-md 6">
+            <div class="col-lg-3">
                 <input type="text" class="form-control" id="searchInput" oninput="searchCitys()"
                     placeholder="Nhập thành phố của bạn   ..." style=" width:80%">
                 <ul id="CityList"></ul>
             </div>
+
+
+
         </div>
 
     </div><!-- End Page Title -->
@@ -49,15 +49,7 @@
                     </div><!-- End Recent Sales -->
 
                     <!-- Top Selling -->
-                    <div class="col-12">
-                        <div class="card top-selling overflow-auto">
-                            <div class="card-body pb-0">
-                                <h5 class="card-title">Các loại cây trồng </h5>
-                                <canvas id="loaicay" style="width:100%;"></canvas>
 
-                            </div>
-                        </div>
-                    </div><!-- End Top Selling -->
                 </div>
             </div><!-- End Left side columns -->
             <!-- Right side columns -->
@@ -96,12 +88,14 @@
                 </div>
                 <div class="card">
                     <div class="card-body pb-0">
-                        <h5 class="card-title">Cánh đồng </h5>
+                        <h5 class="card-title">Nhật ký theo dõi nguyên liệu đầu vào: <strong>
+                                {{countNLDV.CountNLDV}}</strong> bản ghi</h5>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body pb-0">
-                        <h5 class="card-title">Công việc </h5>
+                        <h5 class="card-title">Nhật ký quy trình sản xuất: <strong> {{countNLSX.CountNLSX}}</strong> bản ghi
+                        </h5>
                     </div>
                 </div>
             </div>

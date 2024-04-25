@@ -19,7 +19,12 @@ class CheckController {
                         res.redirect('/user/login')
                     }
                     else {
-                        if (results[0].role >= 0) {
+                        if (results[0].role === 0) {
+                            res.locals.done = false;
+                            next()
+                        }
+                        else if (results[0].role >= 1) {
+                            res.locals.done = true;
                             next()
                         }
                         else {
@@ -49,6 +54,7 @@ class CheckController {
                     }
                     else {
                         if (results[0].role >= 1) {
+                            res.locals.done = true;
                             next()
                         }
                         else {
