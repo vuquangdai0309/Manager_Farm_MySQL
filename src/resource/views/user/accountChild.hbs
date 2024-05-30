@@ -1,0 +1,114 @@
+{{> header}}
+{{>navbar}}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Quản lý tài khoản </h1>
+    </div><!-- End Page Title -->
+    <section class="section profile">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="card">
+                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                        <div style="float: right;">
+                            <p>Số lượng người dùng :<strong> {{count.count}}</strong></p>
+                        </div>
+                        <img src="/img/User_icon_2.svg.png" alt="Profile" class="rounded-circle">
+                        <span></span>
+                        <h2 id="userlogin"></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-body" style=" overflow-x: auto;">
+                        <div class="pagetitle mb-4">
+                            <h1>Danh sách các tài khoản</h1>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên tài khoản</th>
+                                    <th>Tên đăng nhập</th>
+                                    <th>Email</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Chức vụ</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each data}}
+                                <tr>
+                                    <td>{{sum @index 1}}</td>
+                                    <td>{{this.fullname}}</td>
+                                    <td>{{this.username}}</td>
+                                    <td>{{this.email}}</td>
+                                    <td>{{this.phone}}</td>
+                                    <td>{{this.address}}</td>
+                                    <td>{{this.nameRole}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                        <div class="col-lg-12 center">
+                            <div class="">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination">
+                                        {{#if pagination.prev}}
+                                        <li class="page-item">
+                                            <a class="page-link" onclick="changePage({{pagination.prev}})"
+                                                aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        {{/if}}
+                                        {{#each pagination.pages as |page|}}
+                                        {{#if page.active}}
+                                        <li class="page-item active">
+                                            <a class="page-link"
+                                                onclick="changePage({{this.number}})">{{this.number}}</a>
+                                        </li>
+                                        {{else if page.isDots }}
+                                        {{else}}
+                                        <li class="page-item ">
+                                            <a class="page-link"
+                                                onclick="changePage({{this.number}})">{{this.number}}</a>
+                                        </li>
+                                        {{/if}}
+                                        {{/each}}
+
+                                        {{#if pagination.next}}
+                                        <li class="page-item">
+                                            <a class="page-link" onclick="changePage({{pagination.next}})"
+                                                aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                        {{/if}}
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </div>
+    </section>
+</main>
+{{> footer}}
+<script>
+    function changePage(page) {
+        window.location.href = `/user/manage-account?page=${page}`;
+    }
+</script>
+<script>
+    //get name user
+    var getUser = JSON.parse(localStorage.getItem('User'))
+    var message = document.getElementById('message')
+    var user = document.getElementById('userlogin')
+    user.innerHTML = getUser
+   
+</script>

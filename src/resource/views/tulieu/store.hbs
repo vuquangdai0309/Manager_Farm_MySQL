@@ -1,29 +1,33 @@
 {{> header}}
 {{>navbar}}
 <main id="main" class="main">
-    <div class="pagetitle">
-        <h1>Quản lý tư liệu </h1><br>
-
-    </div><!-- End Page Title -->
     <section class="section dashboard">
         <div class="row">
-            <div class="col-lg-12">
-                <div class="row">
+            <div class="card">
+                <div class="card-body" style=" overflow-x: auto;">
                     <!-- Reports -->
                     <div class="col-12">
-
-                        <h5>Bảng tư liệu</h5>
-                        <button class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#exampleModal"
-                            data-bs-whatever="@mdo" style=" width:200px; float:left">Thêm mới </button><br><br>
-                        <table class="table table-bordered">
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <div class="pagetitle">
+                                    <h1>Quản lý tin tức </h1>
+                                </div><!-- End Page Title -->
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                    data-bs-whatever="@mdo" style=" width:200px; float:right">Thêm mới </button>
+                            </div>
+                        </div>
+                        <table class="table table-bordered" style="font-size: 12px;">
                             <thead>
                                 <tr>
                                     <th>STT</th>
                                     <th>Tên tiêu đề</th>
                                     <th>Danh mục</th>
                                     <th>Hình ảnh</th>
-                                    <th>Nội dung</th>
+
                                     <th>Ngày tạo</th>
+                                    <th>Nội dung</th>
                                     <th colspan="2">Hành động</th>
                                 </tr>
                             </thead>
@@ -33,13 +37,14 @@
                                     <td>{{sum @index 1}}</td>
                                     <td>{{this.title}}</td>
                                     <td>{{this.name_category}}</td>
-                                    <td><img src="/{{this.image}}" alt="" style="width:150px"></td>
-                                    <td><button type="button" class="btn btn-success"><a
-                                                href="/tulieu/{{this._id}}/detail" style="color: aliceblue;">Xem
-                                                chi
-                                                tiết</a></button></td>
+                                    <td><img src="/{{this.image}}" alt="" class="img-icon"></td>
                                     <td>{{this.date}}</td>
-                                    <td> <a href="/tulieu/{{this._id}}/edit"><i class="bi bi-pencil"
+                                    <td><a href="/document/{{this._id}}/detail" style="color: rgb(53, 244, 28);">Xem
+                                            chi
+                                            tiết</a>
+                                    </td>
+
+                                    <td> <a href="/document/{{this._id}}/edit"><i class="bi bi-pencil"
                                                 style="color: rgb(7, 255, 56);"></i></a></td>
                                     <td><a> <i class="bi bi-trash3" data-bs-toggle="modal"
                                                 data-bs-target="#delete-work-modal" data-id="{{this._id}}"
@@ -62,7 +67,7 @@
                                 <ul class="pagination">
                                     {{#if pagination.prev}}
                                     <li class="page-item">
-                                        <a class="page-link" href="/tulieu/store?page={{pagination.prev}}"
+                                        <a class="page-link" href="/document/store?page={{pagination.prev}}"
                                             aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
@@ -72,13 +77,13 @@
                                     {{#each pagination.pages}}
                                     <li class="page-item {{#if this.active}}active{{/if}}">
                                         <a class="page-link"
-                                            href="/tulieu/store?page={{this.number}}">{{this.number}}</a>
+                                            href="/document/store?page={{this.number}}">{{this.number}}</a>
                                     </li>
                                     {{/each}}
 
                                     {{#if pagination.next}}
                                     <li class="page-item">
-                                        <a class="page-link" href="/tulieu/store?page={{pagination.next}}"
+                                        <a class="page-link" href="/document/store?page={{pagination.next}}"
                                             aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
@@ -90,55 +95,60 @@
 
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl ">
-                <div class="modal-content ">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Thêm Mới</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="/tulieu/store/creat" method="POST">
-                            <div class="row">
-                                <div class="col-md-12">
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-xl ">
+                        <div class="modal-content ">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Thêm Mới</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/document/store/creat" method="POST">
                                     <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label for="recipient-name" class="col-form-label">Tên bài viết:</label>
-                                            <input type="text" class="form-control" id="title" name="title" required>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label for="recipient-name" class="col-form-label">Tên bài
+                                                        viết:</label>
+                                                    <input type="text" class="form-control" id="title" name="title"
+                                                        required>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label for="recipient-name" class="col-form-label">Danh mục:</label>
+                                                    <select class="form-select" id="category_id" name="category_id">
+                                                        {{#each category}}
+                                                        <option value="{{this._id}}">{{this.title}}</option>
+                                                        {{/each}}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Hình ảnh:
+                                                    <img id="imagePreview" src="/img/click.jpg" alt="Preview"
+                                                        width="50px">
+                                                </label><br>
+                                                <input type="file" class="form-control" id="image" name="image"
+                                                    style="display: none;">
+                                            </div>
                                         </div>
-                                        <div class="form-group col-md-6">
-                                            <label for="recipient-name" class="col-form-label">Danh mục:</label>
-                                            <select class="form-select" id="category_id" name="category_id">
-                                                {{#each category}}
-                                                <option value="{{this._id}}">{{this.title}}</option>
-                                                {{/each}}
-                                            </select>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Nội dung
+                                                </label><br>
+                                                <div id="editor" style="min-height: 300px;"></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <br>
-                                    <div class="form-group">
-                                        <label for="recipient-name" class="col-form-label">Hình ảnh:
-                                            <img id="imagePreview" src="/img/click.jpg" alt="Preview" width="50px">
-                                        </label><br>
-                                        <input type="file" class="form-control" id="image" name="image"
-                                            style="display: none;">
-                                    </div>
+                                    </div><br>
+                                </form>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary"
+                                        style="width:250px;float:right;margin-left:20px" onclick="onclickBaiViet()">Thêm
+                                        mới</button>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="recipient-name" class="col-form-label">Nội dung
-                                        </label><br>
-                                        <div id="editor" style="min-height: 300px;"></div>
-                                    </div>
-                                </div>
-                            </div><br>
-                        </form>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary"
-                                style="width:250px;float:right;margin-left:20px" onclick="onclickBaiViet()">Thêm
-                                mới</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -146,10 +156,8 @@
         </div>
     </section>
     {{!-- modal thêm --}}
-
-
     {{!-- delete form --}}
-    {{!-- Confirm Delete Works --}}
+    {{!-- Confirm Delete nhatkysanxuat --}}
     <div id="delete-work-modal" class="modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -187,7 +195,7 @@
         const recipient = button.getAttribute('data-id')
 
         btnDeleteitem.onclick = function () {
-            deleteForm.action = '/tulieu/' + recipient + '?_method=DELETE'
+            deleteForm.action = '/document/' + recipient + '?_method=DELETE'
             deleteForm.submit()
         }
     })
@@ -223,11 +231,11 @@
             formData.append('title', title);
             formData.append('category_id', category_id);
             formData.append('editor', tinymceHtmlContent);
-            fetch('/tulieu/store/creat', {
+            fetch('/document/store/creat', {
                 method: 'POST',
                 body: formData,
             }).then(() => {
-                window.location.replace('/tulieu/store')
+                window.location.replace('/document/store')
             })
         }
     }

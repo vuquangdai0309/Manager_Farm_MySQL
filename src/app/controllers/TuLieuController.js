@@ -5,7 +5,7 @@ const { generateUniqueSlug } = require('../middlewares/autoSlug')
 class TuLieuController {
     index(req, res) {
         const page = parseInt(req.query.page) || 1; // Trang hiện tại
-        const pageSize = 8; // Kích thước trang
+        const pageSize = 12; // Kích thước trang
         const startIndex = (page - 1) * pageSize;
         const endIndex = page * pageSize;
         const searchItem = req.query.search || ''

@@ -1,0 +1,468 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet">
+{{> header}}
+{{>navbar}}
+<main id="main" class="main">
+    <div class="card">
+        <div class="card-body" style=" overflow-x: auto;">
+            <div class="pagetitle">
+                <div class="row">
+                    <div class="col-6">
+                        <h1>Danh sách lô hàng</h1>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-primary" style="width: 100px; float:right ;margin-right:50px"
+                            data-bs-toggle="modal" data-bs-target="#exampleModal">Thêm
+                            Mới</button>
+                    </div>
+                </div>
+            </div><!-- End Page Title -->
+
+            <section class="section dashboard">
+                <div class="row header d-flex align-items-center justify-content-center"
+                    style="box-shadow:none !important">
+
+                    <div class="col-6">
+                        <div class="search-bar">
+                            <form class="search-form d-flex align-items-center" method="GET" action="/shipment/store">
+                                <input type="text" id="inputSearch" name="name" placeholder="Tên lô hàng..."
+                                    title="Enter search keyword" value="{{searchShipment}}">
+                                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+                            </form>
+                        </div><!-- End Search Bar -->
+                    </div>
+                </div>
+                <table class="table table-bordered mt-3 text-center" style="font-size: 12px;">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+
+                            <th>Code</th>
+                            <th>Tên lô hàng</th>
+                            <th>Sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Ngày sản xuất </th>
+                            <th>Hạn sử dụng</th>
+                            <th>Logo</th>
+                            <th>Mã QR</th>
+                            <th>Thông tin</th>
+                            <th colspan="2">Chỉnh sửa</th>
+                    </thead>
+                    {{#each data}}
+                    <tbody>
+                        <tr>
+                            <td>{{sum @index 1}}</td>
+
+                            <td>{{this.code}}</td>
+                            <td>{{this.nameShipment}}</td>
+                            <td>{{this.nameProduct}}</td>
+                            <td>{{this.quantity}} {{this.unit}}</td>
+                            <td>{{this.startDate}}</td>
+                            <td>{{this.endDate}}</td>
+
+                            <td><img src="/{{this.logo}}" alt="" class="img-icon"></td>
+                            <td><i class="bi bi-qr-code" onclick="GenerateQR('{{this._id}}','{{this.nameShipment}}')"
+                                    style="font-size: 24px; color:rgb(47, 47, 140)"></i>
+
+                            </td>
+                            <td><a href="/shipment/search?code={{this.code}}"><i class="bi bi-link "
+                                        style="font-size: 24px;color:rgb(47, 47, 140)"></i></a></td>
+
+                            <td> <i class="bi bi-pencil" style="color: rgb(7, 255, 56);" data-bs-toggle="modal"
+                                    data-bs-target="#editModal{{this._id}}"></i></td>
+                            <td><a> <i class="bi bi-trash3" data-bs-toggle="modal" data-bs-target="#delete-work-modal"
+                                        data-id="{{this._id }}" style="color: red;"></i></a>
+                            </td>
+                            <div class="modal fade" id="editModal{{this._id}}" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog  modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Chỉnh sửa lô hàng </h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="add-event-form">
+                                                <label class="event-title" id="getIdData_{{this._id}}"
+                                                    data="{{this._id}}">Chọn ảnh
+                                                    nền
+                                                </label><br>
+                                                <div class="col-12 mt-4 mb-5">
+                                                    <div class="row justify-content-center horizontal-list-edit">
+                                                        <div class="col-2">
+                                                            <button class="color-gray-creat btn-background"
+                                                                data="/img/banner/tea1.jpg"
+                                                                id="buttonEdit1{{this._id}}"><img class="img-background"
+                                                                    src="/img/banner/tea1.jpg" alt=""
+                                                                    srcset=""></button>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <button class="color-gray-creat btn-background"
+                                                                data="/img/banner/tea2.jpg"
+                                                                id="buttonEdit2{{this._id}}"><img class="img-background"
+                                                                    src="/img/banner/tea2.jpg" alt=""
+                                                                    srcset=""></button>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <button class="color-gray-creat btn-background"
+                                                                data="/img/banner/tea3.jpg"
+                                                                id="buttonEdit3{{this._id}}"><img class="img-background"
+                                                                    src="/img/banner/tea3.jpg" alt=""
+                                                                    srcset=""></button>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <button class="color-gray-creat btn-background"
+                                                                data="/img/banner/tea4.jpg"
+                                                                id="buttonEdit4{{this._id}}"><img class="img-background"
+                                                                    src="/img/banner/tea4.jpg" alt=""
+                                                                    srcset=""></button>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <button class="color-gray-creat btn-background"
+                                                                data="/img/banner/tea5.jpg"
+                                                                id="buttonEdit5{{this._id}}"><img class="img-background"
+                                                                    src="/img/banner/tea5.jpg" alt=""
+                                                                    srcset=""></button>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                                <form action="/shipment/{{this._id}}/update?_method=PUT" method="POST"
+                                                    enctype="multipart/form-data">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div
+                                                                        class="form-group d-flex justify-content-center">
+                                                                        <div
+                                                                            class="image-item rounded-circle overflow-hidden">
+                                                                            <img id="imagePreview_{{this._id}}"
+                                                                                data="{{this._id}}" src="/{{this.logo}}"
+                                                                                alt="Preview"
+                                                                                style="width: 100%; height: 100%; object-fit: cover;">
+                                                                        </div>
+                                                                    </div>
+                                                                    <input type="text" name="imageUrl"
+                                                                        value="{{this.logo}}" hidden>
+                                                                    <input type="file" class="form-control"
+                                                                        id="image_{{this._id}}" name="logo"
+                                                                        style="display: none;">
+                                                                    <span class="center mt-4 mb-4">Chọn logo</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <div class="row mb-4">
+                                                                <div class="col-4">
+                                                                    <label class="event-title">Code</label>
+                                                                    <input type="text" class="form-control" id="code"
+                                                                        name="code" value="{{this.code}}" required
+                                                                        readonly>
+                                                                </div>
+                                                                <div class="col-8">
+                                                                    <label class="event-title">Sản phẩm
+                                                                    </label>
+                                                                    <select
+                                                                        class="js-example-disabled-results form-select"
+                                                                        aria-label="Default select example"
+                                                                        name="product_id"
+                                                                        id="product_id{{this.product_id}}"
+                                                                        show-value='{{this.product_id}}'>
+
+                                                                        {{#each ../products}}
+                                                                        <option value="{{this.sanpham_id}}">
+                                                                            {{this.title}} </option>
+                                                                        {{/each}}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group mb-4">
+                                                                <label class="event-title">Tên lô hàng </label>
+                                                                <input type="text" class="form-control" id=""
+                                                                    name="nameShipment" value="{{this.nameShipment}}"
+                                                                    required>
+                                                            </div>
+                                                            <div class="row mb-4">
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                        <label class="event-title">Số lượng </label>
+                                                                        <input type="number" class="form-control"
+                                                                            id="quantity" name="quantity"
+                                                                            value="{{this.quantity}}" required>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                        <label class="event-title">Đơn vị</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="unit" name="unit" value="{{this.unit}}"
+                                                                            required>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                        <label class="event-title">Ngày sản xuất</label>
+                                                                        <input type="date" class="form-control"
+                                                                            id="unit" name="startDate"
+                                                                            value="{{this.startDate}}" required>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                        <label class="event-title">Hạn sử dụng</label>
+                                                                        <input type="date" class="form-control"
+                                                                            id="unit" name="endDate"
+                                                                            value="{{this.endDate}}" required>
+                                                                    </div>
+                                                                </div>
+                                                                {{!-- background --}}
+                                                                <input type="hidden" id="selectedButtonValueEdit"
+                                                                    name="background" value="{{this.background}}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer mt-3">
+                                                            <button type="submit" class="btn btn-primary mt-4 mb-4"
+                                                                style="width:200px;float:right">Chỉnh sửa
+                                                            </button>
+                                                        </div>
+
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </tr>
+                        {{else}}
+                        <tr>
+                            <td colspan="15" class="text-center">
+                                Không có bản ghi nào !
+                            </td>
+                        </tr>
+                    </tbody>
+                    {{/each}}
+                </table>
+                <div class="row">
+                    <div class="col-6">
+                        <form action="/shipment/store" method="GET">
+                            <label for="recordsPerPage">Bản ghi trên mỗi trang: </label>
+                            <select id="recordsPerPage" class="custom-select w-auto" name="recordsPerPage"
+                                show-value="{{recordsPerPage}}">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="40">40</option>
+                                <option value="50">50</option>
+                            </select>
+                            <button id="submit" style="display: none;">click</button>
+                        </form>
+
+                    </div>
+                    <div class="col-6 ">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+
+                                {{#if pagination.prev}}
+                                <li class="page-item">
+                                    <a class="page-link" onclick="changePage({{pagination.prev}})"
+                                        aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                {{/if}}
+                                {{#each pagination.pages as |page|}}
+                                {{#if page.active}}
+                                <li class="page-item active">
+                                    <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
+                                </li>
+                                {{else if page.isDots }}
+
+                                {{else}}
+                                <li class="page-item ">
+                                    <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
+                                </li>
+                                {{/if}}
+                                {{/each}}
+
+                                {{#if pagination.next}}
+                                <li class="page-item">
+                                    <a class="page-link" onclick="changePage({{pagination.next}})" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                {{/if}}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+{{!-- form thêm --}}
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm lô hàng </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="add-event-form">
+                    <label class="event-title">Chọn ảnh nền </label><br>
+                    <div class="col-12 mt-4 mb-5">
+                        <div class="row justify-content-center horizontal-list">
+                            <div class="col-2">
+                                <button class="color-gray-creat btn-background" data="/img/banner/tea1.jpg"
+                                    id="button1"><img class="img-background" src="/img/banner/tea1.jpg" alt=""
+                                        srcset=""></button>
+                            </div>
+                            <div class="col-2">
+                                <button class="color-gray-creat btn-background" data="/img/banner/tea2.jpg"
+                                    id="button2"><img class="img-background" src="/img/banner/tea2.jpg" alt=""
+                                        srcset=""></button>
+                            </div>
+                            <div class="col-2">
+                                <button class="color-gray-creat btn-background" data="/img/banner/tea3.jpg"
+                                    id="button3"><img class="img-background" src="/img/banner/tea3.jpg" alt=""
+                                        srcset=""></button>
+                            </div>
+                            <div class="col-2">
+                                <button class="color-gray-creat btn-background" data="/img/banner/tea4.jpg"
+                                    id="button4"><img class="img-background" src="/img/banner/tea4.jpg" alt=""
+                                        srcset=""></button>
+                            </div>
+                            <div class="col-2">
+                                <button class="color-gray-creat btn-background" data="/img/banner/tea5.jpg"
+                                    id="button5"><img class="img-background" src="/img/banner/tea5.jpg" alt=""
+                                        srcset=""></button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <form action="/shipment/creat" method="POST" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group d-flex justify-content-center">
+                                            <div class="image-item rounded-circle overflow-hidden">
+                                                <img id="imagePreview" src="/img/logo-item.jpg" alt="Preview"
+                                                    style="width: 100%; height: 100%; object-fit: cover;">
+                                            </div>
+                                        </div>
+                                        <input type="file" class="form-control" id="image" name="logo"
+                                            style="display: none;" required>
+                                        <span class="center mt-4 mb-4">Chọn logo</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="row mb-4">
+                                    <div class="col-4">
+                                        <label class="event-title">Code</label>
+                                        <input type="text" class="form-control" id="code" name="code" value="{{code}}"
+                                            required readonly>
+                                    </div>
+                                    <div class="col-8">
+                                        <label class="event-title">Sản phẩm</label>
+                                        <select class="js-example-disabled-results form-select"
+                                            aria-label="Default select example" name="product_id" required>
+                                            <option value="">Lựa chọn sản phẩm</option>
+                                            {{#each products}}
+                                            <option value="{{this.sanpham_id}}">{{this.title}} </option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label class="event-title">Tên lô hàng </label>
+                                    <input type="text" class="form-control" id="" name="nameShipment" required>
+                                </div>
+                                <div class="row mb-4">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="event-title">Số lượng </label>
+                                            <input type="number" class="form-control" id="quantity" name="quantity"
+                                                required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="event-title">Đơn vị</label>
+                                            <input type="text" class="form-control" id="unit" name="unit" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="event-title">Ngày sản xuất</label>
+                                            <input type="date" class="form-control" id="unit" name="startDate" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="event-title">Hạn sử dụng</label>
+                                            <input type="date" class="form-control" id="unit" name="endDate" required>
+                                        </div>
+                                    </div>
+                                    {{!-- background --}}
+                                    <input type="hidden" id="selectedButtonValue" name="background" value=" " required>
+                                </div>
+                            </div>
+                            <div class="modal-footer mt-3">
+                                <button type="submit" class="btn btn-primary mt-4 mb-4"
+                                    style="width:200px;float:right">Thêm mới
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{{!-- delete form --}}
+
+<div id="delete-work-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xóa lô hàng</h5>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa lô hàng này không ?</p>
+            </div>
+            <div class="modal-footer ">
+                <button id="btn-delete-item" type="button" class="btn btn-danger" style="float: right; width:100px">Đồng
+                    ý
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    style="float: right; width:100px">Thoát</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{!-- Confirm edit nhatkysanxuat --}}
+
+{{> footer}}
+{{!-- form delete --}}
+<form name="delete-item-form" method="POST"></form>
+<script src="/js/checkbox.js"></script>
+<script src="/js/validate.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"> </script>
+<script src="/js/tinymce.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+<script src="/js/shipment.js"></script>

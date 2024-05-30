@@ -3,14 +3,13 @@ const router = express.Router()
 const CategoryController = require('../app/controllers/CategoryController')
 const CheckController = require('../app/middlewares/checkout')
 // render ra bảng tư liệu
-router.post('/store/creat', CheckController.checkout, CategoryController.creat)
+router.post('/store/creat', CheckController.checkoutAdmin, CategoryController.creat)
 // render ra bảng tư liệu
-router.use('/store', CheckController.checkoutManager, CategoryController.storeCategory)
-//form edit
-router.get('/:slug/edit', CheckController.checkout, CategoryController.edit)
+router.use('/store', CheckController.checkoutAdmin, CategoryController.storeCategory)
+
 //update
-router.put('/:slug', CheckController.checkout, CategoryController.update)
+router.put('/:slug', CheckController.checkoutAdmin, CategoryController.update)
 // delete
-router.post('/:id/delete', CheckController.checkout, CategoryController.delete)
+router.post('/:id/delete', CheckController.checkoutAdmin, CategoryController.delete)
 
 module.exports = router

@@ -4,7 +4,7 @@ const { generateUniqueSlug } = require('../middlewares/autoSlug')
 class TuLieuController {
     storeCategory(req, res) {
         const page = parseInt(req.query.page) || 1; // Trang hiện tại
-        const pageSize = 5; // Kích thước trang
+        const pageSize = 12; // Kích thước trang
         const startIndex = (page - 1) * pageSize;
         const endIndex = page * pageSize;
         Category.getAllCategories((err, data) => {
@@ -50,21 +50,21 @@ class TuLieuController {
             }
         })
     }
-    edit(req, res) {
-        const BaiVietSlug = req.params.slug
-        Category.getCategoryBySlug(BaiVietSlug, (err, data) => {
-            if (err) {
-                console.error('Lỗi truy vấn:', err);
-                res.status(500).send('Internal Server Error');
-            } else {
-                if (data.length === 0) {
-                    res.status(404).send(' not found');
-                } else {
-                    res.render('category/edit', { data: data[0] })
-                }
-            }
-        })
-    }
+    // edit(req, res) {
+    //     const BaiVietSlug = req.params.slug
+    //     Category.getCategoryBySlug(BaiVietSlug, (err, data) => {
+    //         if (err) {
+    //             console.error('Lỗi truy vấn:', err);
+    //             res.status(500).send('Internal Server Error');
+    //         } else {
+    //             if (data.length === 0) {
+    //                 res.status(404).send(' not found');
+    //             } else {
+    //                 res.render('category/edit', { data: data[0] })
+    //             }
+    //         }
+    //     })
+    // }
     update(req, res) {
         const BaiVietSlug = req.params.slug
         Category.getCategoryBySlug(BaiVietSlug, (err, data) => {

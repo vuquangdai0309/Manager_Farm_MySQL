@@ -4,10 +4,7 @@
 {{> header}}
 {{>navbar}}
 <main id="main" class="main">
-    <div class="pagetitle">
-        <h1>Nhật ký quá trình sản xuất</h1>
-        <a href="/nhatkysanxuat/storeList"> <i class="bi bi-arrow-left-circle-fill" style="font-size:24px"> </i></a>
-    </div><!-- End Page Title -->
+
     <section class="section dashboard">
         <div class="row">
             <div class="col-lg-12">
@@ -15,59 +12,80 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="add-event-form">
-                            <h4>Chỉnh sửa nhật ký</h4>
-                            <form id="event-form" method="POST" action="/nhatkysanxuat/{{data.works_id}}?_method=PUT">
+                            <div class="pagetitle mb-4">
+                                <h1>Nhật ký quá trình sản xuất</h1>
+                                <a href="/production-process-log/storeList"> <i class="bi bi-arrow-left-circle-fill"
+                                        style="font-size:24px">
+                                    </i></a>
+                            </div><!-- End Page Title -->
+                            <form id="event-form" method="POST"
+                                action="/production-process-log/{{data.nhatkysanxuat_id}}?_method=PUT">
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <label class="event-title">Vụ Mùa</label>
-                                        <select class="js-example-disabled-results form-select"
-                                            aria-label="Default select example" name="vumua_id" id="vumua_id"
-                                            show-value="{{data.vumua_id}}">
-                                            {{#each vumua}}
-                                            <option value="{{this._id}}">{{this.vumua}}</option>
-                                            {{/each}}
-                                        </select><br><br>
-                                        <div class="form-group">
-                                            <label class="event-title">Tên công việc</label>
-                                            <input type="text" class="form-control" id="event-title" name="title"
-                                                value="{{data.title}}" required>
-                                        </div><br>
-                                        <div class="row">
+                                        <div class="row mb-4">
                                             <div class="col-lg-6">
                                                 <label class="event-title">Giống cây</label>
-                                                <select id="selectedGiongCay"
+                                                <select id="selectedTree"
                                                     class="js-example-disabled-results form-select"
-                                                    aria-label="Default select example" name="giongcay_id"
-                                                    show-value="{{data.giongcay_id}}">
-                                                    {{#each giongcay}}
-                                                    <option value="{{this._id}}">{{this.giongcay}}</option>
+                                                    aria-label="Default select example" name="tree_id"
+                                                    show-value="{{data.tree_id}}" required>
+                                                    {{#each tree}}
+                                                    <option value="{{this._id}}">{{this.nameTree}}</option>
                                                     {{/each}}
-                                                </select><br>
+                                                </select>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="event-title">Vụ mùa</label>
+                                                <select id="selectedSeason"
+                                                    class="js-example-disabled-results form-select"
+                                                    aria-label="Default select example" name="season_id"
+                                                    id="selectedSeason" show-value="{{data.season_id}}" required>
+                                                    {{#each season}}
+                                                    <option value="{{this._id}}">{{this.nameSeason}}</option>
+                                                    {{/each}}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-4">
+                                            <div class="col-6">
+                                                <label class="event-title">Năm</label>
+                                                <select id="selectedYear"
+                                                    class="js-example-disabled-results form-select"
+                                                    aria-label="Default select example" name="year_id"
+                                                    show-value="{{data.year_id}}" required>
+                                                    {{#each year}}
+                                                    <option value="{{this._id}}">{{this.year}}</option>
+                                                    {{/each}}
+                                                </select>
                                             </div>
                                             <div class="col-lg-6">
                                                 <label class="event-title">Tên nguyên vật liệu</label>
                                                 <select id="selectedNguyenLieu"
                                                     class="js-example-disabled-results form-select"
                                                     aria-label="Default select example" name="nguyenvatlieu_id"
-                                                    show-value="{{data.nguyenvatlieu_id}}">
+                                                    show-value="{{data.nguyenvatlieu_id}}" required>
                                                     {{#each nguyenvatlieu}}
                                                     <option value="{{this._id}}">{{this.name}}</option>
                                                     {{/each}}
                                                 </select>
                                             </div>
                                         </div>
-                                        <br>
-                                        <label class="event-title">Khu vực trồng (lô/thửa)</label>
-                                        <select id="selectedArea" class="js-example-disabled-results form-select"
-                                            aria-label="Default select example" name="map_id"
-                                            show-value="{{data.map_id}}">
-                                            {{#each map}}
-                                            <option value="{{this._id}}">{{this.namearea}}</option>
-                                            {{/each}}
-                                        </select>
-                                        <br>
-                                        <br>
-                                        <div class="row">
+                                        <div class="form-group mb-4">
+                                            <label class="event-title">Khu vực trồng (lô/thửa)</label>
+                                            <select id="selectedArea" class="js-example-disabled-results form-select"
+                                                aria-label="Default select example" name="map_id"
+                                                show-value="{{data.map_id}}" required>
+                                                {{#each map}}
+                                                <option value="{{this._id}}">{{this.namearea}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label class="event-title">Tên công việc</label>
+                                            <input type="text" class="form-control" id="event-title" name="title"
+                                                value="{{data.title}}" required>
+                                        </div>
+                                        <div class="row mb-4">
                                             <div class="form-group col-lg-6">
                                                 <label class="event-title">Thời gian bắt đầu</label>
                                                 <input type="date" class="form-control" id="event-start" name="start"
@@ -81,49 +99,42 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
-                                        <div class="row">
+                                        <div class="row mb-4">
                                             <div class="form-group col-lg-6">
                                                 <label class="event-title">Nồng độ pha/bón</label>
                                                 <input type="text" class="form-control" id="nongdo" name="nongdo"
                                                     value="{{data.nongdo}}" required>
                                             </div>
-                                            <br>
                                             <div class="form-group col-lg-6">
                                                 <label class="event-title">Tổng lượng sử dụng</label>
                                                 <input type="text" class="form-control" id="luongsudung"
                                                     value="{{data.luongsudung}}" name="luongsudung" required>
                                             </div>
                                         </div>
-                                        <br>
-                                        <div class="form-group">
+                                        <div class="form-group mb-4">
                                             <label class="event-title">Thời gian cách ly</label>
                                             <input type="text" class="form-control" id="thoigiancachly"
                                                 value="{{data.thoigiancachlythuoc}}" name="thoigiancachly" required>
                                         </div>
-                                        <br>
-                                        <div class="form-group">
+                                        <div class="form-group mb-4">
                                             <label for="exampleFormControlTextarea1">Mục đích sử dụng</label>
                                             <input class="form-control" id="mucdich" name="mucdich"
                                                 value="{{data.mucdich}}" rows="3" required>
                                         </div>
-                                        <br>
-                                        <div class="form-group">
+
+                                        <div class="form-group mb-4">
                                             <label class="event-title">Thiết bị sử dụng</label>
                                             <input type="text" class="form-control" id="thietbi" name="thietbi"
                                                 value="{{data.thietbi}}" required>
                                         </div>
-                                        <br>
-                                        <div class="form-group">
-                                            <label class="event-title">Vệ sinh dụng cụ trước và sau khi sử dụng
+                                        <div class="form-check form-switch mb-4">
+                                            <input class="form-check-input" type="checkbox" id="vesinhdungcu"
+                                                name="vesinhdungcu" value="Đúng" data-value="{{data.vesinhdungcu}}">
+                                            <label class="form-check-label" for="mySwitch">Vệ sinh dụng cụ trước và sau
+                                                khi
+                                                sử dụng
                                                 (Đ/K)</label>
-                                            <select class="form-select" aria-label="Default select example"
-                                                name="vesinhdungcu" id="vesinhdungcu"
-                                                show-value="{{data.vesinhdungcu}}">
-                                                <option value="Đ">Đúng</option>
-                                                <option value="K">Không</option>
-                                            </select>
                                         </div>
-                                        <br>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -150,109 +161,14 @@
     $(document).ready(function () {
         $('.js-example-disabled-results').select2();
     });
-
-    let showGiongCayId = $('#selectedGiongCay');
-    let getAttrGiongCayId = showGiongCayId.attr('show-value');
-
-    let showVuMuaId = $('#vumua_id');
-    let getAttrVuMuaId = showVuMuaId.attr('show-value');
-
-    let showAreaId = $('#selectedArea');
-    let getAttrAreaId = showAreaId.attr('show-value');
-
-    let showNguyenLieuId = $('#selectedNguyenLieu');
-    let getAttrNguyenLieuId = showNguyenLieuId.attr('show-value');
-
-    let showVSDCId = $('#vesinhdungcu');
-    let getAttrVSDCId = showVSDCId.attr('show-value');
-
-    function showSelected(showElement, value) {
-        let valueFromDatabase = value;
-        let selectElement = showElement;
-
-        selectElement.find('option').each(function () {
-            if ($(this).val() === valueFromDatabase) {
-                $(this).prop('selected', true);
-                return false; // Dừng vòng lặp nếu đã tìm thấy giá trị
-            }
-        });
-    }
-
-    showSelected(showGiongCayId, getAttrGiongCayId)
-    showSelected(showVuMuaId, getAttrVuMuaId)
-    showSelected(showAreaId, getAttrAreaId)
-    showSelected(showNguyenLieuId, getAttrNguyenLieuId)
-    showSelected(showVSDCId, getAttrVSDCId)
-
-
-
-    let selectedGiongCay = showGiongCayId.val();
-    let selectedNguyenLieu = showNguyenLieuId.val();
-    let selectedArea = showAreaId.val();
-
-    fetchGiongCay(selectedGiongCay, function (nguyenLieu) {
-        selectedNguyenLieu = nguyenLieu;
-        fetchData(selectedGiongCay, selectedNguyenLieu, selectedArea);
-    });
-    showGiongCayId.on('change', function () {
-        selectedGiongCay = showGiongCayId.val();
-        selectedNguyenLieu = showGiongCayId.val();
-        showNguyenLieuId.empty()
-        // Khi select thay đổi, gọi lại fetchData với giá trị mới
-        fetchGiongCay(selectedGiongCay, function (nguyenLieu) {
-            selectedNguyenLieu = nguyenLieu;
-            fetchData(selectedGiongCay, selectedNguyenLieu, selectedArea);
-        });
-    });
-    showNguyenLieuId.on('change', function () {
-        const selectedNguyenLieu = showNguyenLieuId.val();
-
-        // Khi select thay đổi, gọi lại fetchData với giá trị mới
-        fetchData(selectedGiongCay, selectedNguyenLieu, selectedArea);
-    });
-    selectedAreaElement.on('change', function () {
-        selectedArea = selectedAreaElement.val();
-
-        // Khi select thay đổi, gọi lại fetchData với giá trị mới
-        fetchData(selectedGiongCay, selectedNguyenLieu, selectedArea);
-    });
-
-    function fetchData(option1, option2, option3) {
-        fetch(`/nguyenvatlieu/getData/${option1}/${option2}/${option3}`)
-            .then(response => response.json())
-            .then(data => {
-                const match = (data.data.lieuluong).match(/[\d\.,]+/);;
-                var donVi = (data.data.lieuluong).match(/[^\d\s,]+/);
-
-                var number = parseFloat(match[0].replace(',', '.'));
-
-                // Cập nhật giá trị của các ô input sau khi nhận dữ liệu từ server
-                $('#thoigiancachly').val(data.data.thoigiancachlythuoc);
-                $('#nongdo').val(data.data.nongdo);
-                $('#luongsudung').val((number * (data.map.areaMeter / 10000)).toFixed(2) + ` ${donVi[0]}`);
-                $('#mucdich').val(data.data.mucdich);
-                $('#thietbi').val(data.data.thietbi);
-                // Cập nhật các ô input khác nếu cần
-            })
-            .catch(error => console.error('Error:', error));
-    }
-    // Khi trang được tải lên, gọi fetchData để lấy dữ liệu ban đầu
-
-    function fetchGiongCay(option, callback) {
-        fetch(`/nguyenvatlieu/getGiongCay/${option}`)
-            .then(response => response.json())
-            .then(data => {
-                // showNguyenLieuId.empty();
-
-                // Lặp qua mảng dữ liệu và thêm mỗi phần tử vào phần tử select
-                $.each(data, function (index, nguyenvatlieu) {
-                    var optionElement = $('<option>'); // Tạo một phần tử option mới
-                    optionElement.val(nguyenvatlieu._id); // Thiết lập giá trị của option
-                    optionElement.text(nguyenvatlieu.name); // Thiết lập nội dung văn bản của option
-                    showNguyenLieuId.append(optionElement); // Thêm option vào phần tử select
-                });
-                callback(showNguyenLieuId.val());
-            })
-    }
-
+    document.addEventListener("DOMContentLoaded", function () {
+        var checkbox = document.getElementById('vesinhdungcu');
+        if (checkbox.getAttribute('data-value') === 'Đúng') {
+            checkbox.checked = true;
+        } else {
+            checkbox.checked = false;
+        }
+    })
 </script>
+<script src="/js/LoadContentNhatKy.js"></script>
+<script src="/js/inputSelectNhatKy.js"></script>

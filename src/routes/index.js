@@ -7,19 +7,23 @@ const TulieuRouter = require('./tulieu')
 const CategoryRouter = require('./category')
 const NhatKyDauVaoRouter = require('./nhatkydauvao')
 const NguyenVatLieuRouter = require('./nguyenvatlieu')
-const TruyXuatNguonGoc = require('./truyxuatnguongoc')
+const Product = require('./product')
+const Tree = require('./tree')
+const Season = require('./season')
+const Shipment = require('./shipment')
 function route(app) {
-    app.use('/nhatkysanxuat', NhatKySanXuatRouter)
+    app.use('/production-process-log', NhatKySanXuatRouter)
     app.use('/user', UserRouter)
     app.use('/map', MapRouter)
-    app.use('/tulieu', TulieuRouter)
+    app.use('/document', TulieuRouter)
     app.use('/category', CategoryRouter)
-    app.use('/nhatkydauvao', NhatKyDauVaoRouter)
-    app.use('/nguyenvatlieu', NguyenVatLieuRouter)
-    app.use('/truyxuatnguongoc', TruyXuatNguonGoc)
+    app.use('/input-material-tracking-log', NhatKyDauVaoRouter)
+    app.use('/materials', NguyenVatLieuRouter)
+    app.use('/product', Product)
+    app.use('/tree', Tree)
+    app.use('/season', Season)
+    app.use('/shipment', Shipment)
     app.use('/', HomeRouter)
-  
-
 }
 
 module.exports = route;

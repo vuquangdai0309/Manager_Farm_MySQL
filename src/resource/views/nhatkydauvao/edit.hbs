@@ -4,10 +4,7 @@
 {{> header}}
 {{>navbar}}
 <main id="main" class="main">
-    <div class="pagetitle">
-        <h1>Nhật ký theo dõi nguyên vật liệu đầu vào </h1>
-        <a href="/nhatkydauvao"> <i class="bi bi-arrow-left-circle-fill" style="font-size:24px"> </i></a>
-    </div><!-- End Page Title -->
+
     <section class="section dashboard">
         <div class="row">
             <div class="col-lg-12">
@@ -15,94 +12,127 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="add-event-form">
-                            <h4>Chỉnh sửa nhật ký</h4>
+                            <div class="pagetitle mb-4">
+                                <h1>Chỉnh sửa nhật ký theo dõi nguyên vật liệu đầu vào </h1>
+                                <a href="/input-material-tracking-log"> <i class="bi bi-arrow-left-circle-fill"
+                                        style="font-size:24px"> </i></a>
+                            </div><!-- End Page Title -->
                             <form id="event-form" method="POST"
-                                action="/nhatkydauvao/{{data.nhatkydauvao_id}}?_method=PUT">
+                                action="/input-material-tracking-log/{{data.nhatkydauvao_id}}?_method=PUT">
                                 <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <label class="event-title">Vụ Mùa</label>
-                                                <select class="js-example-disabled-results form-select"
-                                                    aria-label="Default select example" name="vumua_id" id="vumua_id"
-                                                    show-value="{{data.vumua_id}}">
-                                                    {{#each vumua}}
-                                                    <option value="{{this._id}}">{{this.vumua}}</option>
+                                    <div class="col-6">
+                                        <div class="row mb-4">
+                                            <div class="col-6">
+                                                <label class="event-title">Giống cây</label>
+                                                <select id="selectedTree"
+                                                    class="js-example-disabled-results form-select"
+                                                    aria-label="Default select example" name="tree_id"
+                                                    show-value="{{data.tree_id}}" required>
+                                                    {{#each tree}}
+                                                    <option value="{{this._id}}">{{this.nameTree}}</option>
                                                     {{/each}}
                                                 </select>
                                             </div>
-                                            <div class="col-lg-6">
-                                                <label class="event-title">Giống cây</label>
-                                                <select id="selectedGiongCay"
-                                                    class="js-example-disabled-results form-select"
-                                                    aria-label="Default select example" name="giongcay_id"
-                                                    show-value="{{data.giongcay_id}}">
-                                                    {{#each giongcay}}
-                                                    <option value="{{this._id}}">{{this.giongcay}}</option>
+                                            <div class="col-6">
+                                                <label class="event-title">Vụ Mùa</label>
+                                                <select class="js-example-disabled-results form-select"
+                                                    aria-label="Default select example" name="season_id"
+                                                    id="selectedSeason" show-value="{{data.season_id}}" required>
+                                                    {{#each season}}
+                                                    <option value="{{this._id}}">{{this.nameSeason}}</option>
                                                     {{/each}}
-                                                </select><br>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-lg-6">
+                                        <div class="row mb-4">
+                                            <div class="col-6">
+                                                <label class="event-title">Năm</label>
+                                                <select id="selectedYear"
+                                                    class="js-example-disabled-results form-select"
+                                                    aria-label="Default select example" name="year_id"
+                                                    show-value="{{data.year_id}}" required>
+                                                    {{#each year}}
+                                                    <option value="{{this._id}}">{{this.year}}</option>
+                                                    {{/each}}
+                                                </select>
+                                            </div>
+                                            <div class="col-6">
                                                 <label class="event-title">Tên nguyên vật liệu</label>
                                                 <select id="selectedNguyenLieu"
                                                     class="js-example-disabled-results form-select"
                                                     aria-label="Default select example" name="nguyenvatlieu_id"
-                                                    show-value="{{data.nguyenvatlieu_id}}">
+                                                    show-value="{{data.nguyenvatlieu_id}}" required>
                                                     {{#each nguyenvatlieu}}
                                                     <option value="{{this._id}}">{{this.name}}</option>
                                                     {{/each}}
                                                 </select>
                                             </div>
-                                            <div class="col-lg-6">
+                                        </div>
+                                        <div class="form-group  mb-4">
+                                            <label class="event-title">Vùng trồng</label>
+                                            <select id="selectedArea" class="js-example-disabled-results form-select"
+                                                aria-label="Default select example" name="map_id"
+                                                show-value="{{data.map_id}}" required>
+                                                {{#each map}}
+                                                <option value="{{this._id}}">{{this.namearea}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+                                        <div class="row mb-4">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label class="event-title">Số lượng </label>
+                                                    <input type="text" class="form-control" id="event-start"
+                                                        name="soluong" value="{{data.soluong}}" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
                                                 <label class="event-title">Thời gian mua/ sản xuất </label>
                                                 <input type="date" class="form-control" id="event-start" name="thoigian"
                                                     value="{{{formatDate data.thoigian}}}" required>
                                             </div>
                                         </div>
-                                        <br>
-                                        <div class="form-group">
-                                            <label class="event-title">Số lượng </label>
-                                            <input type="text" class="form-control" id="event-start" name="soluong"
-                                                value="{{data.soluong}}" required>
-                                        </div><br>
-                                        <div class="form-group">
+
+                                        <div class="form-group mb-4">
                                             <label class="event-title">Tên và địa chỉ mua vật tư </label>
                                             <input type="text" class="form-control" id="event-start" name="tenvadiachi"
                                                 value="{{data.tenvadiachi}}" required>
-                                        </div><br>
-                                        <div class="form-group">
+                                        </div>
+                                        <div class="form-group mb-4">
                                             <label class="event-title">Hạn sử dụng </label>
                                             <input type="date" class="form-control" id="event-start" name="hansudung"
                                                 value="{{{formatDate data.hansudung}}}" required>
                                         </div>
 
                                     </div>
-                                    <div class="col-lg-6">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: red;">Đối với
+                                    <div class="col-6">
+                                        <h1 class="modal-title fs-5 mb-4" id="exampleModalLabel" style="color: red;">Đối
+                                            với
                                             vật
                                             tư tự sản xuất, ghi
                                             thêm thông tin sau</h1>
-                                        <br>
-                                        <div class="form-group">
+
+                                        <div class="form-group mb-4">
                                             <label class="event-title">Nguyên liệu sản xuất</label>
                                             <input type="text" class="form-control" id="nguyenlieusanxuat"
                                                 name="nguyenlieusanxuat" value="{{data.nguyenlieusanxuat}}">
                                         </div>
-                                        <br>
-                                        <div class="form-group">
+
+                                        <div class="form-group mb-4">
                                             <label for="exampleFormControlTextarea1">Phương pháp xử lý</label>
                                             <input type="text" class="form-control" id="event-end" name="phuongphapxuly"
                                                 value="{{data.phuongphapxuly}}">
                                         </div>
-                                        <br>
-                                        <div class="form-group">
+                                        <div class="form-group mb-4">
                                             <label class="event-title">Hóa chất xử lý</label>
                                             <input type="text" class="form-control" id="event-end" name="hoachatxuly"
                                                 value="{{data.hoachatxuly}}">
                                         </div>
-
+                                        <div class="form-group mb-4">
+                                            <label class="event-title">Người xử lý</label>
+                                            <input type="text" class="form-control" id="event-end" name="nguoixuly"
+                                                value="{{data.nguoixuly}}">
+                                        </div>
                                     </div>
                                 </div>
                                 <br>
@@ -130,70 +160,6 @@
     $(document).ready(function () {
         $('.js-example-disabled-results').select2();
     });
-    var showGiongCayId = document.getElementById('selectedGiongCay')
-    var getAttrGiongCayId = showGiongCayId.getAttribute('show-value')
-
-    var showVuMuaId = document.getElementById('vumua_id')
-    var getAttrVuMuaId = showVuMuaId.getAttribute('show-value')
-
-    var showNguyenLieuId = document.getElementById('selectedNguyenLieu')
-    var getAttrNguyenLieuId = showNguyenLieuId.getAttribute('show-value')
-    console.log(getAttrNguyenLieuId)
-
-    function showSelected(showElement, value) {
-        valueFromDatabase = value
-        // Lấy tham chiếu đến element select
-        var selectElement = showElement
-
-        // Duyệt qua từng option trong select
-        for (var i = 0; i < selectElement.options.length; i++) {
-            // So sánh giá trị của option với giá trị từ database
-            if (selectElement.options[i].value === valueFromDatabase) {
-                // Đặt thuộc tính selected cho option tương ứng
-                selectElement.options[i].selected = true;
-                break; // Dừng vòng lặp nếu đã tìm thấy giá trị
-            }
-        }
-    }
-
-    showSelected(showGiongCayId, getAttrGiongCayId)
-    showSelected(showVuMuaId, getAttrVuMuaId)
-    showSelected(showNguyenLieuId, getAttrNguyenLieuId)
-
-    const selectedGiongCayElement = $('#selectedGiongCay');
-    const selectedNguyenLieuElement = $('#selectedNguyenLieu');
-    let selectedGiongCay = selectedGiongCayElement.val();
-    let selectedNguyenLieu = selectedNguyenLieuElement.val();
-    fetchGiongCay(selectedGiongCay, function (nguyenLieu) {
-        selectedNguyenLieu = nguyenLieu;
-
-    });
-    selectedGiongCayElement.on('change', function () {
-        selectedGiongCay = selectedGiongCayElement.val();
-        selectedNguyenLieu = selectedGiongCayElement.val();
-        selectedNguyenLieuElement.html('');
-        // Khi select thay đổi, gọi lại fetchData với giá trị mới
-        fetchGiongCay(selectedGiongCay, function (nguyenLieu) {
-            selectedNguyenLieu = nguyenLieu;
-
-        });
-    });
-    function fetchGiongCay(option, callback) {
-        fetch(`/nguyenvatlieu/getGiongCay/${option}`)
-            .then(response => response.json())
-            .then(data => {
-
-
-                // Lặp qua mảng dữ liệu và thêm mỗi phần tử vào phần tử select
-                $.each(data, function (index, nguyenvatlieu) {
-                    var optionElement = $('<option>'); // Tạo một phần tử option mới
-                    optionElement.val(nguyenvatlieu._id); // Thiết lập giá trị của option
-                    optionElement.text(nguyenvatlieu.name); // Thiết lập nội dung văn bản của option
-                    selectedNguyenLieuElement.append(optionElement); // Thêm option vào phần tử select
-                });
-                callback(selectedNguyenLieuElement.val());
-            })
-
-    }
-
 </script>
+<script src="/js/LoadContentNhatKy.js"></script>
+<script src="/js/inputSelectNhatKy.js"></script>

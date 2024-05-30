@@ -1,9 +1,10 @@
 const Account = require('../models/Account')
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
+const Role = require('../models/Role')
 class UserController {
     getAllUser(req, res) {
         const page = parseInt(req.query.page) || 1; // Trang hiện tại
-        const pageSize = 10; // Kích thước trang
+        const pageSize = 12; // Kích thước trang
         const startIndex = (page - 1) * pageSize;
         const endIndex = page * pageSize;
         Account.countAccount((err, count) => {
@@ -58,12 +59,12 @@ class UserController {
                 if (results.length > 0) {
                     const account = results[0]
                     //tạo token cho Id
-                    var token = jwt.sign({ _id: account._id }, 'mk')
-                    // var par = jwt.verify(token, 'mk')
+                    var token = jwt.sign({ _id: account._id }, process.env.SECRET)
+                    // var par = jwt.verify(token, process.env.SECRET)
                     res.json({
                         message: 'Đăng nhập thành công',
                         token: token,
-                        getUser: account,
+                        getUser: account.fullname,
                     })
                 }
                 else {
@@ -74,13 +75,28 @@ class UserController {
     }
     //[get] register
     renderRegister(req, res) {
-        res.render('user/register')
+        Role.getAllRole((err, roles) => {
+            if (err) {
+                console.log("Lỗi truy vấn", err)
+            }
+            Account.getAllAccountManager((err, accounts) => {
+                if (err) {
+                    console.log("Lỗi truy vấn", err)
+                }
+                else {
+                    res.render('user/register', { roles, accounts })
+                }
+            })
+
+        })
+
     }
     //[post] form register
     register(req, res, next) {
         var email = req.body.email
         var username = req.body.username
         var password = req.body.password
+        console.log(req.body)
         //  console.log(password)
         Account.getAccountByNameorEmail(username, email, (err, results) => {
             if (err) {
@@ -88,19 +104,15 @@ class UserController {
                 return;
             }
             if (results.length > 0) {
-                res.json({ message: 'Tài khoản đã tồn tại', })
+                res.json({ message_error: 'Tài khoản đã tồn tại', })
             }
             else {
-                Account.addAccount({
-                    username: username,
-                    email: email,
-                    password: password
-                }, (err, results) => {
+                Account.addAccount(req.body, (err, results) => {
                     if (err) {
-                        console.log('Lỗi thêm tài khoản ', err)
+                        console.log('Lỗi truy vấn', err)
                     }
                     else {
-                        res.json({ message: 'Đăng kí thành công' })
+                        res.json({ message_success: 'Đăng kí thành công' })
                     }
                 })
 
@@ -115,7 +127,7 @@ class UserController {
     changepass(req, res, next) {
 
         var token = req.cookies.tkvungtrong
-        var id_token = jwt.verify(token, 'mk')
+        var id_token = jwt.verify(token, process.env.SECRET)
         // lấy id dựa vào verify token
         const idUser = id_token._id
         //mật khẩu hiện tại
@@ -223,10 +235,47 @@ class UserController {
                 console.log('Lỗi truy vấn', err)
                 return
             }
+
             else {
                 res.redirect('back')
             }
         })
+    }
+    getAllAccountChild(req, res) {
+        var token = req.cookies.tkvungtrong
+        var id_token = jwt.verify(token, process.env.SECRET)
+        const page = parseInt(req.query.page) || 1; // Trang hiện tại
+        const pageSize = 12; // Kích thước trang
+        const startIndex = (page - 1) * pageSize;
+        const endIndex = page * pageSize;
+        Account.getAllAccountChildById(id_token._id, (err, results) => {
+            if (err) {
+                console.log('Lỗi truy vấn', err)
+            }
+            else {
+                const totalPages = Math.ceil(results.length / pageSize);
+                const pages = Array.from({ length: totalPages }, (_, index) => {
+                    return {
+                        number: index + 1,
+                        active: index + 1 === page,
+                        isDots: index + 1 > 5
+                    };
+                });
+                const paginatedData = results.slice(startIndex, endIndex);
+                // Chuẩn bị dữ liệu để truyền vào template
+                const viewData = {
+                    data: paginatedData,
+                    count: results[0],
+                    pagination: {
+                        prev: page > 1 ? page - 1 : null,
+                        next: endIndex < results.length ? page + 1 : null,
+                        pages: pages,
+                    },
+                };
+                res.render('user/accountChild', viewData)
+            }
+        })
+
     }
 }
 

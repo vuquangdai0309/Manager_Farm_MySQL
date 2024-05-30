@@ -2,51 +2,65 @@
 
     <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-item">
-            <a class="nav-link nav-creat  collapsed" id="1" href="/">
+            <a class="nav-link nav-creat collapsed" href="/">
                 <i class="bi bi-grid"></i>
                 <span>Tổng quan</span>
             </a>
         </li><!-- End Dashboard Nav -->
         <li class="nav-item">
-            <a class="nav-link nav-creat collapsed" id="2" href="/map ">
-                <i class="bi bi-pin-map" ></i>
+            <a class="nav-link nav-creat collapsed" href="/map">
+                <i class="bi bi-pin-map"></i>
                 <span>Vùng trồng</span>
             </a>
         </li><!-- End Dashboard Nav -->
         <li class="nav-item">
-            <a class="nav-link nav-creat collapsed" id="5" href="/nhatkydauvao">
-                <i class="bi bi-calendar-plus" ></i>
+            <a class="nav-link nav-creat collapsed" href="/input-material-tracking-log">
+                <i class="bi bi-calendar-plus"></i>
                 <span>Nhật ký nguyên liệu đầu vào</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link nav-creat collapsed" id="4" href="/nhatkysanxuat">
-                <i class="bi bi-calendar-date" ></i>
+            <a class="nav-link nav-creat collapsed" href="/production-process-log">
+                <i class="bi bi-calendar-date"></i>
                 <span>Nhật ký sản xuất</span>
             </a>
         </li><!-- End Dashboard Nav -->
         <li class="nav-item">
-            <a class="nav-link nav-creat collapsed" id="3" href="/tulieu">
-                <i class="bi bi-card-list" ></i>
+            <a class="nav-link nav-creat collapsed" href="/document">
+                <i class="bi bi-card-list"></i>
                 <span>Tư liệu - Tin tức</span>
             </a>
         </li><!-- End Dashboard Nav -->
         <li class="nav-item">
-            <a class="nav-link nav-creat collapsed" id="10" href="/truyxuatnguongoc/quan-ly">
-                <i class="bi bi-qr-code" ></i>
-                <span>Truy xuất nguồn gốc</span>
+            <a class="nav-link nav-creat collapsed" href="/product/management">
+                <i class="bi bi-boxes"></i>
+                <span>Quản lý sản phẩm</span>
             </a>
         </li><!-- End Dashboard Nav -->
         <li class="nav-item">
-            <a class="nav-link nav-creat collapsed" id="8" href="/contact">
+            <a class="nav-link nav-creat collapsed" href="/shipment/store">
+                <i class="bi bi-truck"></i>
+                <span>Quản lý lô hàng</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
+        <li class="nav-item">
+            <a class="nav-link nav-creat collapsed" href="/contact">
                 <i class="bi bi-question-circle"></i>
                 <span>Hỗ trợ</span>
             </a>
         </li><!-- End F.A.Q Page Nav -->
-       
         {{#if done}}
-        <li class="nav-heading">Dành cho quản trị viên </li>
+        <li class="nav-heading">Quản lý</li>
+        <li class="nav-item">
+            <a class="nav-link nav-creat collapsed" href="/user/manage-account">
+                <i class="bi bi-person-fill-lock" style="color: black;"></i>
+                <span>Quản lý tài khoản</span>
+            </a>
+        </li>
+        {{/if}}
 
+        {{#if doneAdmin}}
+        <li class="nav-heading">Dành cho quản trị viên </li>
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-person-fill-lock" style="color: black;"></i><span>Quản trị viên</span><i
@@ -54,22 +68,47 @@
             </a>
             <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li class="nav-item">
-                    <a class="nav-link nav-creat collapsed" id="6" href="/user">
+                    <a class="nav-link nav-creat collapsed" href="/user">
                         <i class="bi bi-circle"></i>
                         <span>Quản lý tài khoản</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-creat collapsed" href="/user/register">
+                        <i class="bi bi-circle"></i>
+                        <span>Đăng ký tài khoản</span>
+                    </a>
+                </li>
 
                 <li class="nav-item">
-                    <a class="nav-link nav-creat collapsed" id="7" href="/tulieu/store">
+                    <a class="nav-link nav-creat collapsed" href="/document/store">
                         <i class="bi bi-circle"></i>
                         <span>Quản lý tin tức</span>
                     </a>
                 </li><!-- End Dashboard Nav -->
                 <li class="nav-item">
-                    <a class="nav-link nav-creat collapsed" id="9" href="/category/store">
+                    <a class="nav-link nav-creat collapsed" href="/category/store">
                         <i class="bi bi-circle"></i>
                         <span>Quản lý danh mục </span>
+                    </a>
+                </li><!-- End Dashboard Nav -->
+                <li class="nav-item">
+                    <a class="nav-link nav-creat collapsed" href="/tree/store">
+                        <i class="bi bi-circle"></i>
+                        <span>Quản lý giống cây </span>
+                    </a>
+                </li><!-- End Dashboard Nav -->
+                <li class="nav-item">
+                    <a class="nav-link nav-creat collapsed" href="/season/store">
+                        <i class="bi bi-circle"></i>
+                        <span>Quản lý vụ mùa </span>
+                    </a>
+                </li><!-- End Dashboard Nav -->
+                <li class="nav-item">
+                    <a class="nav-link nav-creat collapsed" href="/materials/store">
+                        <i class="bi bi-circle"></i>
+                        <span>Quản lý nguyên vật
+                            liệu </span>
                     </a>
                 </li><!-- End Dashboard Nav -->
             </ul>
@@ -79,30 +118,3 @@
     </ul>
 </aside><!-- End Sidebar-->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var navLinks = document.querySelectorAll('.nav-creat');
-
-        navLinks.forEach(function (link) {
-            link.addEventListener('click', function (event) {
-                event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
-
-                //var isCollapsed = this.classList.contains('collapsed');
-                var linkId = this.getAttribute('id');
-                localStorage.setItem('collapsedState', linkId);
-
-                // Thêm hoặc xoá lớp 'collapsed' cho liên kết được click
-                this.classList.toggle('collapsed');
-
-                // Thực hiện chuyển trang
-                var href = this.getAttribute('href');
-                window.location.href = href;
-            });
-        });
-        // Khôi phục trạng thái từ localStorage khi trang được tải lại
-        var storedCollapsedState = localStorage.getItem('collapsedState');
-        const id = document.getElementById(storedCollapsedState)
-        id.classList.remove('collapsed')
-
-    });
-</script>

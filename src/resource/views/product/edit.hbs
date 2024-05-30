@@ -1,0 +1,130 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet">
+{{> header}}
+{{>navbar}}
+<main id="main" class="main">
+    <div class="card">
+        <div class="card-body" style=" overflow-x: auto;">
+            <div class="pagetitle">
+                <div class="row">
+                    <div class="col-md-5">
+                        <h1>Chỉnh sửa sản phẩm</h1>
+                    </div>
+                </div>
+            </div><!-- End Page Title -->
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="event-title">Giống cây</label>
+                            <select id="tree_id" class="js-example-disabled-results form-select"
+                                aria-label="Default select example" show-value="{{data.tree_id}}">
+                                {{#each tree}}
+                                <option value="{{this._id}}">{{this.nameTree}}</option>
+                                {{/each}}
+                            </select><br>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="event-title">Vụ mùa</label>
+                            <select id="season_id" class="js-example-disabled-results form-select"
+                                aria-label="Default select example" name="season_id" show-value="{{data.season_id}}">
+                                {{#each season}}
+                                <option value="{{this._id}}">{{this.nameSeason}}</option>
+                                {{/each}}
+                            </select><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="event-title">Năm</label>
+                            <select id="year_id" class="js-example-disabled-results form-select"
+                                aria-label="Default select example" show-value="{{data.year_id}}">
+                                {{#each year}}
+                                <option value="{{this._id}}">{{this.year}}</option>
+                                {{/each}}
+                            </select><br>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="event-title">Khu vườn</label>
+                            <select id="map_id" class="js-example-disabled-results form-select"
+                                aria-label="Default select example" name="map_id" show-value="{{data.map_id}}">
+                                {{#each maps}}
+                                <option value="{{this._id}}">{{this.namearea}}</option>
+                                {{/each}}
+                            </select><br>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label class="event-title">Tên sản phẩm </label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{data.title}}" required>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label class="event-title">Đơn vị sản xuất </label>
+                        <input type="text" class="form-control" id="productionUnit" name="productionUnit"
+                            value="{{data.productionUnit}}" required>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label class="event-title">Số điện thoại</label>
+                        <input type="text" class="form-control" id="phone" name="phone" value="{{data.phone}}">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Email</label>
+                        <input type="text" class="form-control" id="email" name="email" value="{{data.email}}">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label class="event-title">Đia chỉ</label>
+                        <input type="text" class="form-control" id="address" name="address" value="{{data.address}}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="form-group d-flex justify-content-center">
+                            <div class="image-item rounded-circle overflow-hidden">
+                                <img id="imagePreview" UrlImage="{{data.image}}" src="/{{data.image}}" alt="Preview"
+                                    style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <input type="file" class="form-control" id="image" name="image" style="display: none;">
+                            <input type="text" class="form-control" id="imageurl" name="imageurl" style="display: none;"
+                                value="{{data.image}}">
+                        </div>
+                        <span>Hình ảnh</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="hidden" id="content" value="{{data.content}}">
+                <label for="recipient-name" class="col-form-label"><strong>Nội dung</strong>
+                </label><br>
+                <div id="editor" style="min-height: 300px;"></div>
+                <div id="getcontent" style="display: none;" getid="{{data.sanpham_id}}"></div>
+            </div>
+            <span id="message" style="color:red; float:right"></span>
+            <br>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="onclickItem()"
+                    style="width:250px;float:right;margin-left:20px">Chỉnh sửa
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+{{> footer}}
+{{!-- form delete --}}
+<form name="delete-item-form" method="POST"></form>
+<script src="/js/checkbox.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"> </script>
+<script src="/js/tinymce.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+<script src="/js/inputSelect2.js"></script>
+<script src="/js/editProduct.js"></script>

@@ -5,7 +5,7 @@ var jwt = require('jsonwebtoken');
 class MapController {
     index(req, res, next) {
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
         MapCenter.getAllCenters(par._id, (err, onedata) => {
             if (err) {
                 console.log('Lỗi truy vấn', err)
@@ -30,7 +30,7 @@ class MapController {
         const type = req.body.type
         const area = req.body.area
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
         Map.addMap({
             id_user: par._id,
             areaMeter: area,
@@ -57,7 +57,7 @@ class MapController {
             const lng = req.body.lng;
             const zoomLevel = req.body.zoomLevel
             let token = req.cookies.tkvungtrong
-            let par = jwt.verify(token, 'mk')
+            let par = jwt.verify(token, process.env.SECRET)
             // Sử dụng findOne để lấy sản phẩm đầu tiên từ cơ sở dữ liệu
             MapCenter.getCenterLimitOne(par._id, (err, results) => {
                 if (err) {
@@ -108,7 +108,7 @@ class MapController {
     // load map
     loadMap(req, res, next) {
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
         Map.getAllMaps(par._id, (err, data) => {
             if (err) {
                 console.log('Lỗi truy vấn', err)
@@ -126,20 +126,13 @@ class MapController {
                 console.log('Lỗi truy vấn', err)
             }
             else {
-                NhatKySanXuat.deleteWork_With_Map(Id_map, (err) => {
-                    if (err) {
-                        console.log('Lỗi truy vấn', err)
-                    }
-                    else {
-                        res.redirect('back')
-                    }
-                })
+                res.redirect('back')
             }
         })
     }
     edit(req, res, next) {
         const Id_map = req.params.id
-        Map.getWorkById(Id_map, (err, map) => {
+        Map.getNhatKySanXuatById(Id_map, (err, map) => {
             if (err) {
                 console.log('lỗi truy vấn', err)
             }

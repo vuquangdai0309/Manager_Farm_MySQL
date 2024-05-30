@@ -3,50 +3,37 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet">
 {{> header}}
 {{>navbar}}
-
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Nhật ký quá trình sản xuất </h1>
-    </div><!-- End Page Title -->
-    <section class="section dashboard">
         <div class="row">
-            <div class="col-md-2">
-                <!-- Recent Activity -->
-                <div class="card">
-                    <div class="card-body" style="text-align: center; ">
-                        <h5 class="card-title" id="currentYear"> </h5>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal">
-                                    Thêm nhật ký
-                                </button>
-                                <br>
-                                <br>
-                                <a href="/nhatkysanxuat/storeList"> <button type="button" class="btn btn-success">Danh
-                                        sách nhật ký</button> </a>
-
-                            </div>
-                        </div>
-                        <br>
+            <div class="col-6">
+                <h1>Nhật ký quá trình sản xuất </h1>
+            </div>
+            <div class="col-6">
+                <div class="row justify-content-end">
+                    <div class="col-md-4 mb-3">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            Thêm nhật ký
+                        </button>
                     </div>
-                </div><!-- End Recent Activity -->
-
-            </div><!-- End Right side columns -->
-            <!-- Left side columns -->
-            <div class="col-md-10">
-                <div class="row">
-                    <!-- Reports -->
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="calendar"></div>
-                            </div>
-                        </div>
+                    <div class="col-md-4 ">
+                        <a href="/production-process-log/storeList">
+                            <button type="button" class="btn btn-success">Danh
+                                sách nhật ký</button>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
+    </div><!-- End Page Title -->
+    <section class="section dashboard">
+        <div class="card">
+            <div class="card-body">
+                <div id="calendar"></div>
+            </div>
+        </div>
+
     </section>
     {{!-- models thêm --}}
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -61,51 +48,58 @@
                         <form id="event-form" method="POST">
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <label class="event-title">Vụ Mùa</label>
-                                    <select class="js-example-disabled-results form-select"
-                                        aria-label="Default select example" name="vumua_id">
-                                        {{#each vumua}}
-                                        <option value="{{this._id}}">{{this.vumua}}</option>
-                                        {{/each}}
-                                    </select><br><br>
-                                    <div class="form-group">
-                                        <label class="event-title">Tên công việc</label>
-                                        <input type="text" class="form-control" id="event-title" name="title" required>
-                                    </div><br>
-                                    <div class="row">
+                                    <div class="row mb-3">
                                         <div class="col-lg-6">
                                             <label class="event-title">Giống cây</label>
-                                            <select id="selectedGiongCay"
-                                                class="js-example-disabled-results form-select"
-                                                aria-label="Default select example" name="giongcay_id">
-                                                {{#each giongcay}}
-                                                <option value="{{this._id}}">{{this.giongcay}}</option>
+                                            <select id="selectedTree" class="js-example-disabled-results form-select"
+                                                aria-label="Default select example" name="tree_id" required>
+                                                <option value="">Chọn giống cây</option>
+                                                {{#each tree}}
+                                                <option value="{{this._id}}">{{this.nameTree}}</option>
                                                 {{/each}}
-                                            </select><br>
+                                            </select>
                                         </div>
                                         <div class="col-lg-6">
                                             <label class="event-title">Tên nguyên vật liệu</label>
-
                                             <select id="selectedNguyenLieu"
                                                 class="js-example-disabled-results form-control"
-                                                name="nguyenvatlieu_id">
-                                                {{#each nguyenvatlieu}}
-                                                <option value="{{this._id}}">{{this.name}}</option>
+                                                name="nguyenvatlieu_id" required>
+            
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <label class="event-title">Vụ mùa theo giống cây</label>
+                                            <select id="selectedSeason" class="js-example-disabled-results form-select"
+                                                aria-label="Default select example" name="season_id" required>
+                                            </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="event-title">Năm</label>
+                                            <select class="js-example-disabled-results form-select"
+                                                aria-label="Default select example" name="year_id" required>
+                                                {{#each year}}
+                                                <option value="{{this._id}}">{{this.year}}</option>
                                                 {{/each}}
                                             </select>
                                         </div>
                                     </div>
-                                    <br>
-                                    <label class="event-title">Khu vực trồng (lô/thửa)</label>
-                                    <select id="selectedArea" class=" js-example-disabled-results form-select"
-                                        aria-label="Default select example" name="map_id">
-                                        {{#each map}}
-                                        <option value="{{this._id}}">{{this.namearea}}</option>
-                                        {{/each}}
-                                    </select>
-                                    <br>
-                                    <br>
-                                    <div class="row">
+                                    <div class="form-group mb-3">
+                                        <label class="event-title">Khu vực trồng (lô/thửa)</label>
+                                        <select id="selectedArea" class=" js-example-disabled-results form-select"
+                                            aria-label="Default select example" name="map_id" required>
+                                            {{#each map}}
+                                            <option value="{{this._id}}">{{this.namearea}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group mb-3">
+                                        <label class="event-title">Tên công việc</label>
+                                        <input type="text" class="form-control" id="event-title" name="title" required>
+                                    </div>
+                                    <div class="row mb-3">
                                         <div class="form-group col-lg-6">
                                             <label class="event-title">Thời gian bắt đầu</label>
                                             <input type="date" class="form-control" id="event-start" name="start"
@@ -147,16 +141,14 @@
                                         <input type="text" class="form-control" id="thietbi" name="thietbi" required>
                                     </div>
                                     <br>
-                                    <div class="form-group">
-                                        <label class="event-title">Vệ sinh dụng cụ trước và sau khi sử dụng
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="mySwitch"
+                                            name="vesinhdungcu" value="Đúng" checked>
+                                        <label class="form-check-label" for="mySwitch">Vệ sinh dụng cụ trước và sau khi
+                                            sử dụng
                                             (Đ/K)</label>
-                                        <select class="form-select" aria-label="Default select example"
-                                            name="vesinhdungcu">
-                                            <option value="Đ">Đúng</option>
-                                            <option value="K">Không</option>
-                                        </select>
                                     </div>
-                                    <br>
+
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -167,37 +159,9 @@
                         </form>
                     </div>
                 </div>
-                {{!-- <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div> --}}
             </div>
         </div>
     </div>
-
-    {{!-- delete form --}}
-    <form name="delete-calendar-form" method="POST"></form>
-
-    {{!-- Confirm Delete Works --}}
-    <div id="delete-work-modal" class="modal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Xóa Lịch Làm Việc</h5>
-                    {{!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    --}}
-                </div>
-                <div class="modal-body">
-                    <p>Bạn có chắc chắn muốn xóa lịch làm việc này không ?</p>
-                </div>
-                <div class="modal-footer">
-                    <button id="btn-delete-calendar" type="button" class="btn btn-danger">Đồng ý xóa</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{!-- Confirm edit works --}}
 </main>
 {{> footer}}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -215,20 +179,7 @@
         });
     });
     // method delete 
-    const exampleModal = document.getElementById('delete-work-modal')
-    exampleModal.addEventListener('show.bs.modal', event => {
 
-        var deleteForm = document.forms['delete-calendar-form']
-        var btnDeleteCalendar = document.getElementById('btn-delete-calendar')
-        const button = event.relatedTarget
-        //get id from button delete
-        const recipient = button.getAttribute('data-id')
-
-        btnDeleteCalendar.onclick = function () {
-            deleteForm.action = '/nhatkysanxuat/' + recipient + '?_method=DELETE'
-            deleteForm.submit()
-        }
-    })
     //Show calendar
     function formatDate(dateString) {
         const parts = dateString.split('-');
@@ -240,7 +191,7 @@
     function Onclick() {
 
         $.ajax({
-            url: '/nhatkysanxuat/store',
+            url: '/production-process-log/store',
             type: 'GET',
 
         }).then(data => {
@@ -262,7 +213,7 @@
                 calendar.render();
 
             }
-            LoadData(data.works.map(obj => {
+            LoadData(data.nhatkysanxuat.map(obj => {
                 return {
                     title: obj.title,
                     start: formatDate(obj.start),
@@ -275,86 +226,6 @@
                 console.log(err)
             })
     }
-
     Onclick()
 </script>
-
-<script>
-
-    const selectedGiongCayElement = $('#selectedGiongCay');
-    const selectedNguyenLieuElement = $('#selectedNguyenLieu');
-    const selectedAreaElement = $('#selectedArea');
-
-
-    let selectedGiongCay = selectedGiongCayElement.val();
-    let selectedNguyenLieu = selectedNguyenLieuElement.val();
-    let selectedArea = selectedAreaElement.val();
-
-    fetchGiongCay(selectedGiongCay, function (nguyenLieu) {
-        selectedNguyenLieu = nguyenLieu;
-        fetchData(selectedGiongCay, selectedNguyenLieu, selectedArea);
-    });
-    selectedGiongCayElement.on('change', function () {
-        selectedGiongCay = selectedGiongCayElement.val();
-        selectedNguyenLieu = selectedGiongCayElement.val();
-
-        // Khi select thay đổi, gọi lại fetchData với giá trị mới
-        fetchGiongCay(selectedGiongCay, function (nguyenLieu) {
-            selectedNguyenLieu = nguyenLieu;
-            fetchData(selectedGiongCay, selectedNguyenLieu, selectedArea);
-        });
-    });
-    selectedNguyenLieuElement.on('change', function () {
-        const selectedNguyenLieu = selectedNguyenLieuElement.val();
-
-        // Khi select thay đổi, gọi lại fetchData với giá trị mới
-        fetchData(selectedGiongCay, selectedNguyenLieu, selectedArea);
-    });
-    selectedAreaElement.on('change', function () {
-        selectedArea = selectedAreaElement.val();
-
-        // Khi select thay đổi, gọi lại fetchData với giá trị mới
-        fetchData(selectedGiongCay, selectedNguyenLieu, selectedArea);
-    });
-
-    function fetchData(option1, option2, option3) {
-        fetch(`/nguyenvatlieu/getData/${option1}/${option2}/${option3}`)
-            .then(response => response.json())
-            .then(data => {
-                const match = (data.data.lieuluong).match(/[\d\.,]+/);;
-                var donVi = (data.data.lieuluong).match(/[^\d\s,]+/);
-
-                var number = parseFloat(match[0].replace(',', '.'));
-
-                // Cập nhật giá trị của các ô input sau khi nhận dữ liệu từ server
-                $('#thoigiancachly').val(data.data.thoigiancachlythuoc);
-                $('#nongdo').val(data.data.nongdo);
-                $('#luongsudung').val((number * (data.map.areaMeter / 10000)).toFixed(2) + ` ${donVi[0]}`);
-                $('#mucdich').val(data.data.mucdich);
-                $('#thietbi').val(data.data.thietbi);
-                // Cập nhật các ô input khác nếu cần
-            })
-            .catch(error => console.error('Error:', error));
-    }
-    // Khi trang được tải lên, gọi fetchData để lấy dữ liệu ban đầu
-
-    function fetchGiongCay(option, callback) {
-        fetch(`/nguyenvatlieu/getGiongCay/${option}`)
-            .then(response => response.json())
-            .then(data => {
-                selectedNguyenLieuElement.empty();
-
-                // Lặp qua mảng dữ liệu và thêm mỗi phần tử vào phần tử select
-                $.each(data, function (index, nguyenvatlieu) {
-                    var optionElement = $('<option>'); // Tạo một phần tử option mới
-                    optionElement.val(nguyenvatlieu._id); // Thiết lập giá trị của option
-                    optionElement.text(nguyenvatlieu.name); // Thiết lập nội dung văn bản của option
-                    selectedNguyenLieuElement.append(optionElement); // Thêm option vào phần tử select
-                });
-                callback(selectedNguyenLieuElement.val());
-            })
-
-    }
-
-
-</script>
+<script src="/js/inputSelectNhatKy.js"></script>

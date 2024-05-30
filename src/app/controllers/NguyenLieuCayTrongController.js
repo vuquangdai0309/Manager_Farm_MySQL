@@ -1,18 +1,77 @@
 
 const NguyenVatLieu = require('../models/NguyenVatLieu')
-const GiongCay = require('../models/GiongCay')
 const Map = require('../models/Map')
+const Season = require('../models/Season')
 var jwt = require('jsonwebtoken');
 class nguyenlieucaytrongModle {
 
+    store(req, res) {
+        const page = parseInt(req.query.page) || 1; // Trang hiện tại
+        const pageSize = 20; // Kích thước trang
+        const startIndex = (page - 1) * pageSize;
+        const endIndex = page * pageSize;
+        const search = req.query.name || '';
+
+        NguyenVatLieu.getAllNguyenLieuBySearch(search, (err, data) => {
+            if (err) {
+                console.log('Lỗi truy vấn', err)
+            }
+            else {
+                const totalPages = Math.ceil(data.length / pageSize);
+                const pages = Array.from({ length: totalPages }, (_, index) => {
+                    return {
+                        number: index + 1,
+                        active: index + 1 === page,
+                        isDots: index + 1 > 5
+                    };
+                });
+                const paginatedData = data.slice(startIndex, endIndex);
+                const viewData = {
+                    results: paginatedData,
+
+                    search: search,
+                    recordsPerPage: pageSize,
+                    pagination: {
+                        prev: page > 1 ? page - 1 : null,
+                        next: endIndex < data.length ? page + 1 : null,
+                        pages: pages,
+                    },
+                };
+                res.render("nguyenvatlieu/store", viewData)
+            }
+        })
+
+    }
+    creat(req, res) {
+        NguyenVatLieu.creatNguyenLieu(req.body, (err, results) => {
+            if (err) {
+                console.log('Lỗi truy vấn', err)
+            }
+            else {
+                res.redirect("back")
+            }
+        })
+    }
+    update(req, res) {
+        const id = req.params.id
+
+        NguyenVatLieu.updateNguyenLieu(id, req.body, (err, results) => {
+            if (err) {
+                console.log('Lỗi truy vấn', err)
+            }
+            else {
+                res.redirect("back")
+            }
+        })
+    }
     getData(req, res) {
-        const giongcay_id = req.params.giongcay_id
+        //   const tree_id = req.params.tree_id
         const nguyenlieu_id = req.params.nguyenlieu_id
         const map_id = req.params.map_id
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
 
-        NguyenVatLieu.findNguyenLieuCayTrong(giongcay_id, nguyenlieu_id, (err, results) => {
+        NguyenVatLieu.findNguyenLieuCayTrong(nguyenlieu_id, (err, results) => {
             if (err) {
                 console.log('Lỗi truy vấn', err)
             }
@@ -21,6 +80,7 @@ class nguyenlieucaytrongModle {
                     if (err) {
                         console.log('Lỗi truy vấn ', err)
                     } else {
+
                         res.json({
                             data: results[0],
                             map: result[0]
@@ -30,16 +90,21 @@ class nguyenlieucaytrongModle {
             }
         })
     }
-    getGiongCay(req, res) {
-        const giongcay_id = req.params.giongcay_id
+    getTree(req, res) {
+        const tree_id = req.params.tree_id
 
-        NguyenVatLieu.getGiongCayById(giongcay_id, (err, results) => {
+        NguyenVatLieu.getAllNguyenLieu((err, nguyenvatlieu) => {
             if (err) {
                 console.log('Lỗi truy vấn', err)
             }
-            else {
-                res.json(results)
-            }
+            Season.getSeasonbyTree(tree_id, (err, season) => {
+                if (err) {
+                    console.log('Lỗi truy vấn', err)
+                } else {
+                    res.json({ nguyenvatlieu, season })
+                }
+            })
+
         })
     }
 }

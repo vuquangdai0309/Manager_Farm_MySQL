@@ -41,6 +41,6 @@ router.post('/:id/restore', CheckController.checkout, LichController.restore)
 router.post('/generatePdf', CheckController.checkout, LichController.generatePdf)
 
 //  thêm bản ghi
-router.post('/', CheckController.checkout, LichController.addWork)
+router.post('/', CheckController.checkout, LichController.addNhatKySanXuat)
 
 module.exports = router

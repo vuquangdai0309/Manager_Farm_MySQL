@@ -1,7 +1,7 @@
 const mysql = require('mysql2');
 
 const connection = mysql.createPool({
-  host: 'localhost',
+  host: 'localhost', 
   user: 'root',
   password: '',
   database: 'farm_data',

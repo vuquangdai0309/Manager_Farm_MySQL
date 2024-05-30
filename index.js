@@ -7,21 +7,19 @@ const path = require('path');
 const route = require('./src/routes')
 const db = require('./src/config/db')
 const striptags = require('striptags');
+require('dotenv').config();
 const { getDataForTempalte } = require('./src/app/middlewares/getDataForTemplates')
 //change mathod
 const methodOverride = require('method-override')
-//const setCommonData = require('./src/app/middlewares/setDataVuMua')
+//const setCommonData = require('./src/app/middlewares/setDataSeason')
 var cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
-
 //cookies
 app.use(cookieParser())
 
-app.use(express.static(path.join(__dirname, 'src\\public')))
-app.use(express.urlencoded({
-  extended: true
-}))
+app.use(express.static(path.join(__dirname, 'src/public')))
+
 app.use(express.json())
 //monggooes
 db.connection;
@@ -51,12 +49,10 @@ app.engine('hbs', handlebars.engine({
   }
 }));
 app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'src\\resource\\views'));
+app.set('views', path.join(__dirname, 'src/resource/views'));
 //đường dẫn đến file ảnh
 app.use('/uploads', express.static('uploads'))
-//app.use(setCommonData)
-//https://www.youtube.com/watch?v=YWyuzXyLg68
-//change method
+
 app.use(methodOverride('_method'))
 app.use(getDataForTempalte)
 //routes init

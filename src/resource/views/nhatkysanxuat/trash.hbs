@@ -1,180 +1,189 @@
 {{> header}}
 {{>navbar}}
 <main id="main" class="main">
-    <div class="pagetitle">
-        <div class="row">
-            <div class="col-md-4">
-                <h1>Thùng rác nhật ký sản xuất </h1>
-                <a href="/nhatkysanxuat/storeList"> <i class="bi bi-arrow-left-circle-fill" style="font-size:24px"> </i></a>
-            </div>
+    <div class="card">
+        <div class="card-body" style=" overflow-x: auto;">
+            <div class="pagetitle">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h1>Thùng rác nhật ký sản xuất </h1>
+                        <a href="/production-process-log/storeList"> <i class="bi bi-arrow-left-circle-fill"
+                                style="font-size:24px"> </i></a>
+                    </div>
 
-        </div>
-    </div><!-- End Page Title -->
-    <form action="/nhatkysanxuat/handle-form-actions-trash" method="POST">
-        <section class="section dashboard">
-            <div class="row">
-                <div class="col-md-12">
+                </div>
+            </div><!-- End Page Title -->
+            <form action="/production-process-log/handle-form-actions-trash" method="POST">
+                <section class="section dashboard">
                     <div class="row">
-                        <!-- Reports -->
-                        <div class="col-12">
-                           
-                                <div class="card-body">
-                                    <h5>Danh sách đã xóa</h5>
-                                    <div class="select-all d-flex ">
-                                        <div class="form-group w-25 mx-2">
-                                            <select class="form-control" style="text-align: center;" name="action"
-                                                required>
-                                                <option value="">-----Hành động-----</option>
-                                                <option value="restore">Khôi phục</option>
-                                                <option value="delete">Xóa bản ghi</option>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <!-- Reports -->
+                                <div class="col-12">
 
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <button type="submit" class="btn btn-success mr-5 btn-check-all-submit "
-                                                disabled>Thực hiện</button>
-                                        </div>
+                                    <div class="card-body">
+                                        <h5>Danh sách đã xóa</h5>
+                                        <div class="select-all d-flex ">
+                                            <div class="form-group w-25 mx-2">
+                                                <select class="form-control" style="text-align: center;" name="action"
+                                                    required>
+                                                    <option value="">-----Hành động-----</option>
+                                                    <option value="restore">Khôi phục</option>
+                                                    <option value="delete">Xóa bản ghi</option>
 
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <button type="submit" class="btn btn-success mr-5 btn-check-all-submit "
+                                                    disabled>Thực hiện</button>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                </div>
 
-                                <table class="table table-bordered mt-3">
-                                    <thead>
-                                        <tr>
-                                            <th> <label><input type="checkbox" value="" id="checkbox-all"> </label></th>
-                                            <th>Vụ mùa</th>
-                                            <th>Tên công việc</th>
-                                            <th>Giống cây</th>
-                                            <th>Thời gian thực hiện</th>
-                                            <th>Tên nguyên vật liệu</th>
-                                            <th>Nồng độ pha/bón</th>
-                                            <th>Tổng lượng sử dụng</th>
-                                            <th>Thời gian cách ly</th>
-                                            <th>Mục đích sử dụng</th>
-                                            <th>Lô/Thửa</th>
-                                            <th>Thiết bị sử dụng</th>
-                                            <th>VS dụng cụ (Đ/K)</th>
-                                            <th>Khôi phục</th>
-                                            <th>Xóa bỏ</th>
-                                        </tr>
-                                    </thead>
-                                    {{#each works}}
-                                    <tbody>
-                                        <tr>
-                                            <th>
-                                                <div class="checkbox">
-                                                    <label><input type="checkbox" name="workIds"
-                                                            value="{{this.works_id}}"></label>
-                                                </div>
-                                            </th>
-                                            <td>{{this.vumua}}</td>
-                                            <td>{{this.title}}</td>
-                                            <td>{{this.giongcay}}</td>
-                                            <td>{{this.start}} đến {{this.end}}</td>
-                                            <td>{{this.nguyenvatlieu}}</td>
-                                            <td>{{this.nongdo}}</td>
-                                            <td>{{this.luongsudung}}</td>
-                                            <td>{{this.thoigiancachly}}</td>
-                                            <td>{{this.mucdich}}</td>
-                                            <td>{{this.namearea}}</td>
-                                            <td>{{this.thietbi}}</td>
-                                            <td>{{this.vesinhdungcu}}</td>
+                                    <table class="table table-bordered mt-3" style="font-size: 12px;">
+                                        <thead>
+                                            <tr>
+                                                <th> <label><input type="checkbox" value="" id="checkbox-all"> </label>
+                                                </th>
+                                                <th>Vụ mùa</th>
+                                                <th>Năm</th>
+                                                <th>Tên công việc</th>
+                                                <th>Giống cây</th>
+                                                <th>Thời gian thực hiện</th>
+                                                <th>Tên nguyên vật liệu</th>
+                                                <th>Nồng độ pha/bón</th>
+                                                <th>Tổng lượng sử dụng</th>
+                                                <th>Thời gian cách ly</th>
+                                                <th>Mục đích sử dụng</th>
+                                                <th>Lô/Thửa</th>
+                                                <th>Thiết bị sử dụng</th>
+                                                <th>VS dụng cụ (Đ/K)</th>
+                                                <th>Khôi phục</th>
+                                                <th>Xóa bỏ</th>
+                                            </tr>
+                                        </thead>
+                                        {{#each nhatkysanxuat}}
+                                        <tbody>
+                                            <tr>
+                                                <th>
+                                                    <div class="checkbox">
+                                                        <label><input type="checkbox" name="workIds"
+                                                                value="{{this.nhatkysanxuat_id}}"></label>
+                                                    </div>
+                                                </th>
+                                                <td>{{this.nameSeason}}</td>
+                                                <td>{{this.year}}</td>
+                                                <td>{{this.title}}</td>
+                                                <td>{{this.nameTree}}</td>
+                                                <td>{{this.start}} đến {{this.end}}</td>
+                                                <td>{{this.name}}</td>
+                                                <td>{{this.nongdo}}</td>
+                                                <td>{{this.luongsudung}}</td>
+                                                <td>{{this.thoigiancachly}}</td>
+                                                <td>{{this.mucdich}}</td>
+                                                <td>{{this.namearea}}</td>
+                                                <td>{{this.thietbi}}</td>
+                                                <td>{{this.vesinhdungcu}}</td>
 
-                                            <td> <a href=""><i class="btn-restore bi bi-arrow-clockwise"
-                                                        data-id="{{this.works_id}}"
-                                                        style="color: rgb(7, 255, 56);"></i></a></td>
-                                            <td><a> <i class="bi bi-trash3" data-bs-toggle="modal"
-                                                        data-bs-target="#delete-work-modal" data-id="{{this.works_id}}"
-                                                        style="color: red;"></i></a></td>
-                                        </tr>
-                                        {{else}}
-                                        <tr>
-                                            <td colspan="15" class="text-center">
-                                                Không có bản ghi nào !
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    {{/each}}
-                                </table>
-                            
-                            <div class="col-md-12 center">
-                                <div class="">
-                                    <nav aria-label="Page navigation">
-                                        <ul class="pagination">
-                                            {{#if pagination.prev}}
-                                            <li class="page-item">
-                                                <a class="page-link" onclick="changePage({{pagination.prev}})"
-                                                    aria-label="Previous">
-                                                    <span aria-hidden="true">&laquo;</span>
-                                                </a>
-                                            </li>
-                                            {{/if}}
-                                            {{#each pagination.pages as |page|}}
-                                            {{#if page.active}}
-                                            <li class="page-item active">
-                                                <a class="page-link"
-                                                    onclick="changePage({{this.number}})">{{this.number}}</a>
-                                            </li>
-                                            {{else if page.isDots }}
-
+                                                <td> <a href=""><i class="btn-restore bi bi-arrow-clockwise"
+                                                            data-id="{{this.nhatkysanxuat_id}}"
+                                                            style="color: rgb(7, 255, 56);"></i></a></td>
+                                                <td><a> <i class="bi bi-trash3" data-bs-toggle="modal"
+                                                            data-bs-target="#delete-work-modal"
+                                                            data-id="{{this.nhatkysanxuat_id}}" style="color: red;"></i></a>
+                                                </td>
+                                            </tr>
                                             {{else}}
-                                            <li class="page-item ">
-                                                <a class="page-link"
-                                                    onclick="changePage({{this.number}})">{{this.number}}</a>
-                                            </li>
-                                            {{/if}}
-                                            {{/each}}
+                                            <tr>
+                                                <td colspan="16" class="text-center">
+                                                    Không có bản ghi nào !
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        {{/each}}
+                                    </table>
 
-                                            {{#if pagination.next}}
-                                            <li class="page-item">
-                                                <a class="page-link" onclick="changePage({{pagination.next}})"
-                                                    aria-label="Next">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                </a>
-                                            </li>
-                                            {{/if}}
-                                        </ul>
-                                    </nav>
+                                    <div class="col-md-12 center">
+                                        <div class="">
+                                            <nav aria-label="Page navigation">
+                                                <ul class="pagination">
+                                                    {{#if pagination.prev}}
+                                                    <li class="page-item">
+                                                        <a class="page-link" onclick="changePage({{pagination.prev}})"
+                                                            aria-label="Previous">
+                                                            <span aria-hidden="true">&laquo;</span>
+                                                        </a>
+                                                    </li>
+                                                    {{/if}}
+                                                    {{#each pagination.pages as |page|}}
+                                                    {{#if page.active}}
+                                                    <li class="page-item active">
+                                                        <a class="page-link"
+                                                            onclick="changePage({{this.number}})">{{this.number}}</a>
+                                                    </li>
+                                                    {{else if page.isDots }}
+
+                                                    {{else}}
+                                                    <li class="page-item ">
+                                                        <a class="page-link"
+                                                            onclick="changePage({{this.number}})">{{this.number}}</a>
+                                                    </li>
+                                                    {{/if}}
+                                                    {{/each}}
+
+                                                    {{#if pagination.next}}
+                                                    <li class="page-item">
+                                                        <a class="page-link" onclick="changePage({{pagination.next}})"
+                                                            aria-label="Next">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                        </a>
+                                                    </li>
+                                                    {{/if}}
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+
+                </section>
+            </form>
+        </div>
+    </div>
+</main>
+{{!-- delete form --}}
+{{!-- Confirm Delete nhatkysanxuat --}}
+<div id="delete-work-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xóa vĩnh viễn</h5>
+                {{!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                --}}
             </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa nhật ký này không ?</p>
+            </div>
+            <div class="modal-footer ">
+                <button id="btn-delete-item" type="button" class="btn btn-danger" style="float: right; width:100px">Đồng
+                    ý
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    style="float: right; width:100px">Thoát</button>
 
-        </section>
-    </form>
-    {{!-- delete form --}}
-    {{!-- Confirm Delete Works --}}
-    <div id="delete-work-modal" class="modal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Xóa vĩnh viễn</h5>
-                    {{!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    --}}
-                </div>
-                <div class="modal-body">
-                    <p>Bạn có chắc chắn muốn xóa nhật ký này không ?</p>
-                </div>
-                <div class="modal-footer ">
-                    <button id="btn-delete-item" type="button" class="btn btn-danger"
-                        style="float: right; width:100px">Đồng ý
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        style="float: right; width:100px">Thoát</button>
-
-                </div>
             </div>
         </div>
     </div>
-    {{!-- Confirm edit works --}}
-</main>
-{{> footer}}
+</div>
 {{!-- form delete --}}
 <form name="delete-item-form" method="POST"></form>
 {{!-- form restore --}}
 <form name="restore-form" method="POST"></form>
+{{> footer}}
+
 
 <script src="/js/checkbox.js"></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
@@ -182,7 +191,7 @@
 
 <script>
     function changePage(page) {
-        window.location.href = `/nhatkysanxuat/trash?page=${page}`;
+        window.location.href = `/production-process-log/trash?page=${page}`;
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -197,15 +206,15 @@
             const recipient = button.getAttribute('data-id')
 
             btnDeleteitem.onclick = function () {
-                deleteForm.action = '/nhatkysanxuat/' + recipient + '/trash?_method=DELETE'
+                deleteForm.action = '/production-process-log/' + recipient + '/trash?_method=DELETE'
                 deleteForm.submit()
             }
         })
         restoreBtn.click(function (e) {
             e.preventDefault()
             var workId = $(this).data('id')
-            
-            restoreForm.action = '/nhatkysanxuat/' + workId + '/restore'
+
+            restoreForm.action = '/production-process-log/' + workId + '/restore'
             restoreForm.submit()
 
         })

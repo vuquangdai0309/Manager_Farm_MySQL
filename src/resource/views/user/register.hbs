@@ -1,114 +1,151 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <title>Login 10</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <link rel="stylesheet" href="/css/styleLogin.css">
-
-</head>
-
-<body class="img js-fullheight" style="background-image: url(/img/bg.jpg);">
-    <section class="ftco-section d-flex justify-content-center align-items-center">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6 text-center mb-5">
-                    <h2 class="heading-section">Tạo tài khoản</h2>
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-md-6 col-lg-4">
-                    <div class="login-wrap p-0">
-                        <h5 class="mb-4 text-center">Quản lý vùng trồng</h5>
-                        <form action="/user/register" method="POST" class="signin-form" id="form-1">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="username" id="username"
-                                    placeholder="Tên đăng nhập">
-                                <span class="form-message" id=""></span>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="email" id="email" placeholder="Email">
-                                <span class="form-message" id=""></span>
-                            </div>
-                            <div class="form-group">
-                                <input type="password" name="password" id="password" class="form-control"
-                                    placeholder="Mật khẩu">
-                                <span class="form-message" id=""></span>
-                            </div>
-                            <div class="form-group">
-                                <input type="password" id="confirmation" id="confirmation" class="form-control"
-                                    placeholder="Nhập lại mật khẩu">
-                                <span class="form-message" id=""></span>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="form-control btn btn-primary submit px-3">Đăng ký</button>
-                            </div>
-                            <div class="form-group text-center " >
-                                <div id="message" style="color: rgb(255, 255, 255);"></div>
-                            </div>
-                            <div class="form-group d-md-flex">
-                                <div class="w-50">
+{{> header}}
+{{>navbar}}
+<main id="main" class="main">
+    <section class="section dashboard">
+        <div class="card">
+            <div class="card-body">
+                <div class="pagetitle mb-4">
+                    <h1>Đăng ký tài khoản </h1>
+                </div><!-- End Page Title -->
+                <form action="/user/register" method="POST" id="form-1">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="row g-3">
+                                <div class="form-group col-12">
+                                    <label for="inputNanme4" class="form-label">Tên tài khoản</label>
+                                    <input type="text" class="form-control" id="fullname" name="fullname"
+                                        placeholder="Tên tài khoản...">
+                                    <span class="form-message" id=""></span>
                                 </div>
-                                <div class="w-50 text-md-right">
-                                    <a href="/user/login" style="color: #fff">Đăng nhập</a>
+                                <div class="form-group col-12">
+                                    <label for="inputEmail4" class="form-label">Tên đăng nhập</label>
+                                    <input type="text" class="form-control" name="username" id="username"
+                                        placeholder="Tên đăng nhập...">
+                                    <span class="form-message" id=""></span>
+                                </div>
+                                <div class="form-group col-12">
+                                    <label for="em" class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" id="email"
+                                        placeholder="Email...">
+                                    <span class="form-message" id=""></span>
+                                </div>
+                                <div class="form-group col-12">
+                                    <label for="" class="form-label">Số điện thoại</label>
+                                    <input type="number" class="form-control" id="phone" name="phone"
+                                        placeholder="Số điện thoại...">
+                                    <span class="form-message" id=""></span>
+                                </div>
+                                <div class="form-group col-12">
+                                    <label for="" class="form-label">Địa chỉ</label>
+                                    <input type="text" class="form-control" id="address" name="address"
+                                        placeholder="Địa chỉ...">
+                                    <span class="form-message" id=""></span>
                                 </div>
                             </div>
-                        </form>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row g-3 justify-content-end">
+                                <div class="form-group col-6">
+                                    <label for="inputEmail4" class="form-label">Phân quyền</label>
+                                    <select class="form-select" id="role_id" name="role_id">
+                                        {{#each roles}}
+                                        <option value="{{this._id}}">{{this.nameRole}}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+                                <div class="form-group col-6">
+                                    <label for="inputEmail4" class="form-label">Thuộc sự quản lý </label>
+                                    <select class="form-select" id="manageUser" name="manageUser">
+                                        {{#each accounts}}
+                                        <option value="{{this._id}}">{{this.fullname }}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+                                <div class="form-group col-12">
+                                    <label for="inputEmail4" class="form-label">Mật khẩu</label>
+                                    <input type="password" class="form-control" id="password" name="password"
+                                        placeholder="Nhập mật khẩu...">
+                                    <span class="form-message" id=""></span>
+                                </div>
+                                <div class="form-group col-12">
+                                    <label for="em" class="form-label">Nhập lại mật khẩu</label>
+                                    <input type="password" class="form-control" id="confirmation" name="confirmation"
+                                        placeholder="Nhập lại mật khẩu...">
+                                    <span class="form-message" id=""></span>
 
+                                </div>
+                                <div class="form-group col-12 mb-4">
+                                    <span id="message_success" style="color: rgb(0, 172, 0);"></span>
+                                    <span id="message_error" style="color: red;"></span>
+                                </div>
+                                <div class="form-group col-3">
+                                    <button type="submit" class="btn btn-success">Đăng ký</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
-        </div>
     </section>
-    <script src="/js/validate.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+</main>
+{{> footer}}
+<script src="/js/validate.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script>
+    var fromsubmit = document.forms['form-1']
+    const message_success = document.getElementById('message_success');
+    const message_error = document.getElementById('message_error');
+    Validator({
+        form: '#form-1',
+        selectform: '.form-group',
+        error: ".form-message",
+        rules: [
+            Validator.isRequired('#username'),
+            Validator.isRequired('#phone'),
+            Validator.isRequired('#address'),
+            Validator.isRequired('#fullname'),
+            //  Validator.isRequired('#file'),
+            Validator.isEmail('#email'),
+            Validator.isPassWord('#password', 8),
+            Validator.isConfirmation('#confirmation', function () {
+                return document.getElementById('password').value
+            })
+        ],
+        onSubmit: function (data) {
+            $.ajax({
+                url: '/user/register',
+                type: 'POST',
+                data: {
+                    fullname: $('#fullname').val(),
+                    username: $('#username').val(),
+                    phone: $('#phone').val(),
+                    email: $('#email').val(),
+                    address: $('#address').val(),
+                    role_id: $('#role_id').val(),
+                    manageUser: $('#manageUser').val(),
 
+                    //mã hóa mật khẩu trước khi gửi qua ajax
+                    password: CryptoJS.SHA256($('#password').val()).toString(),
 
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/js_login/main.js"></script>
-    <script>
-        var fromsubmit = document.forms['form-1']
-        const messageDiv = document.getElementById('message');
-        Validator({
-            form: '#form-1',
-            selectform: '.form-group',
-            error: ".form-message",
-            rules: [
-                Validator.isRequired('#username'),
-                //  Validator.isRequired('#file'),
-                Validator.isEmail('#email'),
-                Validator.isPassWord('#password', 8),
-                Validator.isConfirmation('#confirmation', function () {
-                    return document.getElementById('password').value
+                },
+            }).then(data => {
+                if (data.message_success) {
+
+                    message_success.innerHTML = data.message_success
+                    message_error.innerHTML = ''
+                }
+                else {
+
+                    message_error.innerHTML = data.message_error
+                    message_success.innerHTML = ''
+                }
+            })
+                .catch(err => {
+                    console.log(err)
                 })
-            ],
-            onSubmit: function (data) {
-                $.ajax({
-                    url: '/user/register',
-                    type: 'POST',
-                    data: {
-                        username: $('#username').val(),
-                        //mã hóa mật khẩu trước khi gửi qua ajax
-                        password: CryptoJS.SHA256($('#password').val()).toString(),
-                        email: $('#email').val(),
-                    },
-                }).then(data => {
-                    messageDiv.innerHTML = data.message
-                })
-                    .catch(err => {
-                        console.log(err)
-                    })
-            },
-        });
-    </script>
-</body>
-
-</html>
+        },
+    });
+</script>

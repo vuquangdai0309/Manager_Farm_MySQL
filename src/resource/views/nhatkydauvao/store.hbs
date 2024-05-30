@@ -4,280 +4,338 @@
 {{> header}}
 {{>navbar}}
 <main id="main" class="main">
-    <div class="pagetitle">
-        <div class="row">
-            <div class="col-md-5 mb-3 ">
-                <h1>Nhật ký theo dõi nguyên liệu đầu vào</h1>
-
-            </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-3 mb-3">
-                <form id="searchForm" method="GET" action="/nhatkydauvao">
-                    <div class="form-group">
-                        <select class=" form-select " id="giongcay" name="giongcay" aria-label="Default select example"
-                            show-value="{{searchgiongcay}}">
-                            <option value="">Chọn giống cây</option>
-                            {{#each giongcay}}
-                            <option value="{{this._id}}">{{this.giongcay}} </option>
-                            {{/each}}
-                        </select>
-                    </div>
-            </div>
-            <div class="col-md-3 mb-3">
+    <div class="card">
+        <div class="card-body" style=" overflow-x: auto;">
+            <div class="pagetitle">
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-6">
+                        <h1>Nhật ký theo dõi nguyên liệu đầu vào</h1>
+                    </div>
+                    <div class="col-6"> <button class="btn btn-primary mb-3" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal" style="width: 200px; float:right">Thêm
+                            Mới</button>
+                    </div>
+                </div>
+            </div>
+            <form id="searchForm" method="GET" action="/input-material-tracking-log">
+                <div class="row justify-content-center mb-4">
+                    <div class="col-md-2 ">
                         <div class="form-group">
-                            <select class=" form-select " id="vumua" name="vumua" aria-label="Default select example"
-                                show-value="{{searchvumua}}">
-                                <option value="">Vụ mùa</option>
-                                {{#each vumua}}
-                                <option value="{{this._id}}">{{this.vumua}}</option>
+                            <select class="form-select js-example-disabled-results" id="map_id" name="map"
+                                aria-label="Default select example" show-value="{{map}}">
+                                <option value="">Lô/thửa</option>
+                                {{#each DataMap}}
+                                <option value="{{this._id}}">{{this.namearea}} </option>
                                 {{/each}}
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <button type="submit" id="btn" class="btn btn-primary">Tìm kiếm</button>
+                    <div class="col-md-2 ">
+                        <div class="form-group">
+                            <select class="form-select js-example-disabled-results" id="tree_id" name="tree"
+                                aria-label="Default select example" show-value="{{tree}}">
+                                <option value="">Chọn giống cây</option>
+                                {{#each DataTree}}
+                                <option value="{{this._id}}">{{this.nameTree}} </option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 ">
+                        <div class="form-group">
+                            <select class="form-select js-example-disabled-results" id="season_id" name="season"
+                                aria-label="Default select example" show-value="{{season}}">
+                                <option value="">Chọn mùa</option>
+                                {{#each DataSeason}}
+                                <option value="{{this._id}}">{{this.nameSeason}} </option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 ">
+                        <div class="form-group">
+                            <select class="form-select js-example-disabled-results" id="year_id" name="year"
+                                aria-label="Default select example" show-value="{{year}}">
+                                <option value="">Năm</option>
+                                {{#each DataYear}}
+                                <option value="{{this._id}}">{{this.year}} </option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-1  ">
+                        <button type="submit" class="search"><i class="bi bi-search"></i></button>
                     </div>
                 </div>
-            </div>
             </form>
-        </div>
-    </div><!-- End Page Title -->
-
-    <section class="section dashboard">
-
-
-        <div class="card-body">
-            <div class="row">
-                <div class="col-6 mb-3"> <h5>Danh sách</h5></div>
-                <div class="col-6 mb-3"> <button class="btn btn-primary" style="width: 100px; float:right ;margin-right:50px"
-                data-bs-toggle="modal" data-bs-target="#exampleModal">Thêm
-                Mới</button></div>
-            </div>
-           
-
-            <form action="/nhatkydauvao/handle-form-actions" method="POST">
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <div class="row">
-                            <div class="col-6">
-                                <select class="form-control" style="text-align: center;" name="action" required>
-                                    <option value="">-----Hành động-----</option>
-                                    <option value="delete">Xóa bản ghi</option>
-                                </select>
+            <section class="section dashboard">
+                <form action="/input-material-tracking-log/handle-form-actions" method="POST">
+                    <div class="row">
+                        <div class="col-lg-6 mb-3">
+                            <div class="row">
+                                <div class="col-5">
+                                    <select class="form-control" style="text-align: center;" name="action" required>
+                                        <option value="">-----Hành động-----</option>
+                                        <option value="delete">Xóa bản ghi</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <button type="submit" class="btn btn-success mr-5 btn-check-all-submit "
+                                        disabled>Thực
+                                        hiện</button>
+                                </div>
                             </div>
-                            <div class="col-4">
-                                <button type="submit" class="btn btn-success mr-5 btn-check-all-submit " disabled>Thực
-                                    hiện</button>
-                            </div>
-                            <div class="col-2">
-                                <span><a href="/nhatkydauvao/trash" style="color:red ;font-size:24px; margin-left:20px">
-                                        <i class="bi bi-trash3"></i></a></span>
+                        </div>
+                        <div class="col-lg-6 mb-3">
+                            <div class="row justify-content-end">
+                                <div class="col-4">
+                                    <button id="generatePdfButton" class="btn btn-success btn-check-all-submit "
+                                        disabled>Xuất file PDF <i class="bi bi-box-arrow-in-down"></i></button>
+                                </div>
+                                <div class="col-1">
+                                    <span><a href="/input-material-tracking-log/trash"
+                                            style="color:red ;font-size:24px; ">
+                                            <i class="bi bi-trash3"></i></a>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <button id="generatePdfButton" class="btn btn-success btn-check-all-submit "
-                            style="width: 200px;" disabled>Xuất file PDF <i
-                                class="bi bi-box-arrow-in-down"></i></button>
-                    </div>
-                </div>
-        </div>
+                    <table class="table table-bordered mt-3" style="font-size: 12px;">
+                        <thead>
+                            <tr>
+                                <th rowspan="2"> <label><input type="checkbox" value="" id="checkbox-all">
+                                    </label></th>
+                                <th rowspan="2">Vùng trồng</th>
+                                <th rowspan="2">Vụ mùa</th>
+                                <th rowspan="2">Năm</th>
+                                <th rowspan="2">Giống cây</th>
+                                <th rowspan="2">Thời gian mua/ sản xuất</th>
+                                <th rowspan="2">Tên nguyên vật liệu</th>
+                                <th rowspan="2">Số lượng</th>
+                                <th rowspan="2">Tên và địa chỉ mua vật tư</th>
+                                <th rowspan="2">Hạn sử dụng</th>
+                                <th colspan="4">Đối với vật tư tự sản xuất,ghi thêm thông tin sau</th>
+                                <th rowspan="2">Chỉnh sửa</th>
+                                <th rowspan="2">Xóa bỏ</th>
+                            </tr>
+                            <tr>
+                                <th>Nguyên liệu sản xuất</th>
+                                <th>Phương pháp xử lý</th>
+                                <th>Hóa chất xử lý</th>
+                                <th>Người xử lý</th>
 
-        <table class="table table-bordered mt-3">
-            <thead>
-                <tr>
-                    <th rowspan="2"> <label><input type="checkbox" value="" id="checkbox-all">
-                        </label></th>
-                    <th rowspan="2">Vụ mùa</th>
-                    <th rowspan="2">Giống cây</th>
-                    <th rowspan="2">Thời gian mua/ sản xuất</th>
-                    <th rowspan="2">Tên nguyên vật liệu</th>
-                    <th rowspan="2">Số lượng</th>
-                    <th rowspan="2">Tên và địa chỉ mua vật tư</th>
-                    <th rowspan="2">Hạn sử dụng</th>
-                    <th colspan="3">Đối với vật tư tự sản xuất,ghi thêm thông tin sau</th>
-                    <th rowspan="2">Chỉnh sửa</th>
-                    <th rowspan="2">Xóa bỏ</th>
-                </tr>
-                <tr>
-                    <th>Nguyên liệu sản xuất</th>
-                    <th>Phương pháp xử lý</th>
-                    <th>Hóa chất xử lý</th>
+                            </tr>
+                        </thead>
+                        {{#each nhatkydauvao}}
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" id="checkboxId" name="workIds"
+                                                value="{{this.nhatkydauvao_id }}"></label>
+                                    </div>
+                                </th>
+                                <td>{{this.mapname}}</td>
+                                <td>{{this.nameSeason}}</td>
+                                <td>{{this.year}}</td>
+                                <td>{{this.nameTree}}</td>
+                                <td>{{this.thoigian}} </td>
+                                <td>{{this.name}}</td>
+                                <td>{{this.soluong}}</td>
+                                <td>{{this.tenvadiachi}}</td>
+                                <td>{{this.hansudung}}</td>
+                                <td>{{this.nguyenlieusanxuat}}</td>
+                                <td>{{this.phuongphapxuly}}</td>
+                                <td>{{this.hoachatxuly}}</td>
+                                <td>{{this.nguoixuly}}</td>
 
-                </tr>
-            </thead>
-            {{#each nhatkydauvao}}
-            <tbody>
-                <tr>
-                    <th>
-                        <div class="checkbox">
-                            <label><input type="checkbox" id="checkboxId" name="workIds"
-                                    value="{{this.nhatkydauvao_id }}"></label>
-                        </div>
-                    </th>
-                    <td>{{this.vumua}}</td>
-                    <td>{{this.giongcay}}</td>
-                    <td>{{this.thoigian}} </td>
-                    <td>{{this.name}}</td>
-                    <td>{{this.soluong}}</td>
-                    <td>{{this.tenvadiachi}}</td>
-                    <td>{{this.hansudung}}</td>
-                    <td>{{this.nguyenlieusanxuat}}</td>
-                    <td>{{this.phuongphapxuly}}</td>
-                    <td>{{this.hoachatxuly}}</td>
-
-                    <td> <a href="/nhatkydauvao/{{this.nhatkydauvao_id }}/edit"><i class="bi bi-pencil"
-                                style="color: rgb(7, 255, 56);"></i></a></td>
-                    <td><a> <i class="bi bi-trash3" data-bs-toggle="modal" data-bs-target="#delete-work-modal"
-                                data-id="{{this.nhatkydauvao_id }}" style="color: red;"></i></a>
-                    </td>
-                </tr>
-                {{else}}
-                <tr>
-                    <td colspan="15" class="text-center">
-                        Không có bản ghi nào !
-                    </td>
-                </tr>
-            </tbody>
-            {{/each}}
-        </table>
-
-        <div class="col-md-12 center">
-            <div class="">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        {{#if pagination.prev}}
-                        <li class="page-item">
-                            <a class="page-link" onclick="changePage({{pagination.prev}})" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        {{/if}}
-                        {{#each pagination.pages as |page|}}
-                        {{#if page.active}}
-                        <li class="page-item active">
-                            <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
-                        </li>
-                        {{else if page.isDots }}
-
-                        {{else}}
-                        <li class="page-item ">
-                            <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
-                        </li>
-                        {{/if}}
+                                <td> <a href="/input-material-tracking-log/{{this.nhatkydauvao_id }}/edit"><i
+                                            class="bi bi-pencil" style="color: rgb(7, 255, 56);"></i></a></td>
+                                <td><a> <i class="bi bi-trash3" data-bs-toggle="modal"
+                                            data-bs-target="#delete-work-modal" data-id="{{this.nhatkydauvao_id }}"
+                                            style="color: red;"></i></a>
+                                </td>
+                            </tr>
+                            {{else}}
+                            <tr>
+                                <td colspan="15" class="text-center">
+                                    Không có bản ghi nào !
+                                </td>
+                            </tr>
+                        </tbody>
                         {{/each}}
+                    </table>
 
-                        {{#if pagination.next}}
-                        <li class="page-item">
-                            <a class="page-link" onclick="changePage({{pagination.next}})" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                        {{/if}}
-                    </ul>
-                </nav>
-            </div>
+                    <div class="col-md-12 center">
+                        <div class="">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    {{#if pagination.prev}}
+                                    <li class="page-item">
+                                        <a class="page-link" onclick="changePage({{pagination.prev}})"
+                                            aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    {{/if}}
+                                    {{#each pagination.pages as |page|}}
+                                    {{#if page.active}}
+                                    <li class="page-item active">
+                                        <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
+                                    </li>
+                                    {{else if page.isDots }}
+
+                                    {{else}}
+                                    <li class="page-item ">
+                                        <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
+                                    </li>
+                                    {{/if}}
+                                    {{/each}}
+
+                                    {{#if pagination.next}}
+                                    <li class="page-item">
+                                        <a class="page-link" onclick="changePage({{pagination.next}})"
+                                            aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                    {{/if}}
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </form>
+            </section>
         </div>
-    </section>
-    </form>
+    </div>
     {{!-- form thêm --}}
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog  modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm nhật ký theo dõi nguyên liệu đầu vào </h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm nhật ký theo dõi nguyên liệu đầu
+                        vào </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="add-event-form">
-                        <form id="event-form" method="POST" action="/nhatkydauvao/creat">
+                        <form id="event-form" method="POST" action="/input-material-tracking-log/creat">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="row">
+                                    <div class="row mb-4">
                                         <div class="col-md-6">
-                                            <label class="event-title">Vụ Mùa</label>
-                                            <select class="js-example-disabled-results form-select"
-                                                aria-label="Default select example" name="vumua_id">
-                                                {{#each vumua}}
-                                                <option value="{{this._id}}">{{this.vumua}}</option>
+                                            <label class="event-title">Giống cây</label>
+                                            <select id="selectedTree" class="js-example-disabled-results form-select"
+                                                aria-label="Default select example" name="tree_id" required>
+                                                <option value="">Chọn giống cây</option>
+                                                {{#each DataTree}}
+                                                <option value="{{this._id}}">{{this.nameTree}}</option>
                                                 {{/each}}
                                             </select>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="event-title">Giống cây</label>
-                                            <select id="selectedGiongCay"
-                                                class="js-example-disabled-results form-select"
-                                                aria-label="Default select example" name="giongcay_id">
-                                                {{#each giongcay}}
-                                                <option value="{{this._id}}">{{this.giongcay}}</option>
-                                                {{/each}}
-                                            </select><br>
+                                            <label class="event-title">Vụ Mùa</label>
+                                            <select id="selectedSeason" class="js-example-disabled-results form-select"
+                                                aria-label="Default select example" name="season_id" required>
+                                                {{!-- {{#each DataSeason}}
+                                                <option value="{{this._id}}">{{this.nameSeason}}</option>
+                                                {{/each}} --}}
+                                            </select>
                                         </div>
                                     </div>
-                                    <br>
-                                    <div class="row">
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <label class="event-title">Năm</label>
+                                            <select id="selectedYear" class="js-example-disabled-results form-select"
+                                                aria-label="Default select example" name="year_id" required>
+                                                {{#each DataYear}}
+                                                <option value="{{this._id}}">{{this.year}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
                                         <div class="col-md-6">
                                             <label class="event-title">Tên nguyên vật liệu</label>
                                             <select id="selectedNguyenLieu"
                                                 class="js-example-disabled-results form-select"
-                                                aria-label="Default select example" name="nguyenvatlieu_id">
-                                                {{#each nguyenvatlieu}}
+                                                aria-label="Default select example" name="nguyenvatlieu_id" required>
+                                                {{!-- {{#each DataNguyenVatLieu}}
                                                 <option value="{{this._id}}">{{this.name}}</option>
-                                                {{/each}}
+                                                {{/each}} --}}
                                             </select>
                                         </div>
+
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="event-title">Vùng trồng</label>
+                                        <select class="js-example-disabled-results form-select"
+                                            aria-label="Default select example" name="vungtrong_id" required>
+                                            {{#each DataMap}}
+                                            <option value="{{this._id}}">{{this.namearea}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                    <div class="form-group  mb-4">
+                                        <label class="event-title" style="color: red;">* Điền nguyên vật liệu nếu không
+                                            có trong danh sách *</label>
+                                        <input type="text" class="form-control" id="event-start" name="newNguyenLieu">
+                                    </div>
+                                    <div class="row  mb-4">
                                         <div class="col-md-6">
                                             <label class="event-title">Thời gian mua/ sản xuất </label>
                                             <input type="date" class="form-control" id="event-start" name="thoigian"
                                                 required>
                                         </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="event-title">Số lượng </label>
+                                            <input type="text" class="form-control" id="event-start" name="soluong"
+                                                required>
+                                        </div>
                                     </div>
-                                    <br>
-                                    <div class="form-group">
-                                        <label class="event-title">Số lượng </label>
-                                        <input type="text" class="form-control" id="event-start" name="soluong"
-                                            required>
-                                    </div><br>
-                                    <div class="form-group">
+
+                                    <div class="form-group  mb-4">
                                         <label class="event-title">Tên và địa chỉ mua vật tư </label>
                                         <input type="text" class="form-control" id="event-start" name="tenvadiachi"
                                             required>
-                                    </div><br>
-                                    <div class="form-group">
+                                    </div>
+                                    <div class="form-group mb-4">
                                         <label class="event-title">Hạn sử dụng </label>
                                         <input type="date" class="form-control" id="event-start" name="hansudung"
                                             required>
                                     </div>
 
                                 </div>
-                                <div class="col-md-6">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: red;">Đối với vật
+                                <div class="col-md-6 ">
+                                    <h1 class="modal-title fs-5 mb-4" id="exampleModalLabel" style="color: red;">Đối
+                                        với vật
                                         tư tự sản xuất, ghi
-                                        thêm thông tin sau</h1>
-                                    <br>
-                                    <div class="form-group">
+                                        thêm thông tin sau
+                                    </h1>
+
+                                    <div class="form-group mb-4">
                                         <label class="event-title">Nguyên liệu sản xuất</label>
                                         <input type="text" class="form-control" id="nguyenlieusanxuat"
                                             name="nguyenlieusanxuat">
                                     </div>
-                                    <br>
-                                    <div class="form-group">
+
+                                    <div class="form-group mb-4">
                                         <label for="exampleFormControlTextarea1">Phương pháp xử lý</label>
                                         <input type="text" class="form-control" id="phuongphapxuly"
                                             name="phuongphapxuly">
                                     </div>
-                                    <br>
-                                    <div class="form-group">
+
+                                    <div class="form-group mb-4">
                                         <label class="event-title">Hóa chất xử lý</label>
                                         <input type="text" class="form-control" id="hoachatxuly" name="hoachatxuly">
+                                    </div>
+                                     <div class="form-group mb-4">
+                                        <label class="event-title">Người xử lý</label>
+                                        <input type="text" class="form-control" id="nguoixuly" name="nguoixuly">
                                     </div>
 
                                 </div>
                             </div>
-                            <br>
+
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary"
                                     style="width:250px;float:right;margin-left:20px">Thêm Mới
@@ -292,7 +350,7 @@
     </div>
 
     {{!-- delete form --}}
-    {{!-- Confirm Delete Works --}}
+    {{!-- Confirm Delete nhatkysanxuat --}}
     <div id="delete-work-modal" class="modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -314,7 +372,7 @@
             </div>
         </div>
     </div>
-    {{!-- Confirm edit works --}}
+    {{!-- Confirm edit nhatkysanxuat --}}
 </main>
 {{> footer}}
 {{!-- form delete --}}
@@ -325,74 +383,23 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
 <!-- Select2 JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+<script src="/js/selectSearch.js"></script>
+<script src="/js/inputSelectNhatKy.js"></script>
 <script>
     $('#exampleModal').on('shown.bs.modal', function () {
         $(".js-example-disabled-results").select2({
             dropdownParent: $('#exampleModal') // Xác định modal là cha của dropdown
         });
     });
-    const showGiongcay = document.getElementById('giongcay')
-    const getAttrGiongcay = showGiongcay.getAttribute('show-value')
+    $(document).ready(function () {
+        $('.js-example-disabled-results').select2();
+    });
 
-    const showVumua = document.getElementById('vumua')
-    const getAttrVumua = showVumua.getAttribute('show-value')
-
-    function showSelected(showElement, value) {
-        valueFromDatabase = value
-        // Lấy tham chiếu đến element select
-        var selectElement = showElement
-
-        // Duyệt qua từng option trong select
-        for (var i = 0; i < selectElement.options.length; i++) {
-            // So sánh giá trị của option với giá trị từ database
-            if (selectElement.options[i].value === valueFromDatabase) {
-                // Đặt thuộc tính selected cho option tương ứng
-                selectElement.options[i].selected = true;
-                break; // Dừng vòng lặp nếu đã tìm thấy giá trị
-            }
-        }
-    }
-    showSelected(showGiongcay, getAttrGiongcay)
-    showSelected(showVumua, getAttrVumua)
     function changePage(page) {
-        window.location.href = `/nhatkydauvao?giongcay=${getAttrGiongcay}&vumua=${getAttrVumua}&page=${page}`;
-    }
-    const selectedGiongCayElement = $('#selectedGiongCay');
-    const selectedNguyenLieuElement = $('#selectedNguyenLieu');
-    let selectedGiongCay = selectedGiongCayElement.val();
-    let selectedNguyenLieu = selectedNguyenLieuElement.val();
-    fetchGiongCay(selectedGiongCay, function (nguyenLieu) {
-        selectedNguyenLieu = nguyenLieu;
-
-    });
-    selectedGiongCayElement.on('change', function () {
-        selectedGiongCay = selectedGiongCayElement.val();
-        selectedNguyenLieu = selectedGiongCayElement.val();
-
-        // Khi select thay đổi, gọi lại fetchData với giá trị mới
-        fetchGiongCay(selectedGiongCay, function (nguyenLieu) {
-            selectedNguyenLieu = nguyenLieu;
-
-        });
-    });
-    function fetchGiongCay(option, callback) {
-        fetch(`/nguyenvatlieu/getGiongCay/${option}`)
-            .then(response => response.json())
-            .then(data => {
-                selectedNguyenLieuElement.empty();
-
-                // Lặp qua mảng dữ liệu và thêm mỗi phần tử vào phần tử select
-                $.each(data, function (index, nguyenvatlieu) {
-                    var optionElement = $('<option>'); // Tạo một phần tử option mới
-                    optionElement.val(nguyenvatlieu._id); // Thiết lập giá trị của option
-                    optionElement.text(nguyenvatlieu.name); // Thiết lập nội dung văn bản của option
-                    selectedNguyenLieuElement.append(optionElement); // Thêm option vào phần tử select
-                });
-                callback(selectedNguyenLieuElement.val());
-            })
-
+        window.location.href = `/input-material-tracking-log?map=${getAttrMap}&tree=${getAttrtree}&season=${getAttrSeason}&year=${getAttrYear}&page=${page}`;
     }
 </script>
+
 <script>
     // method delete 
     const exampleModal = document.getElementById('delete-work-modal')
@@ -404,47 +411,9 @@
         const recipient = button.getAttribute('data-id')
 
         btnDeleteitem.onclick = function () {
-            deleteForm.action = '/nhatkydauvao/' + recipient + '/delete'
+            deleteForm.action = '/input-material-tracking-log/' + recipient + '/delete'
             deleteForm.submit()
         }
     })
 </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('generatePdfButton').addEventListener('click', async function () {
-            // Lấy tất cả các ô checkbox đã chọn (trừ ô có ID là "checkbox-all")
-            var checkedIds = Array.from(document.querySelectorAll('input[type="checkbox"]:not(#checkbox-all):checked')).map(function (checkbox) {
-                return checkbox.value;
-            });
-            var idsString = checkedIds.join(',');
-
-            try {
-                // Gửi danh sách các ID đã chọn qua Fetch
-                const response = await fetch('/nhatkydauvao/generatePdf', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ ids: idsString })
-                });
-                const blob = await response.blob();
-                // Create a link element to trigger the download
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = 'NhatKy_DauVao.pdf';
-
-                // Append the link to the document and trigger the click event
-                document.body.appendChild(link);
-                link.click();
-
-                // Remove the link from the document
-                document.body.removeChild(link);
-            } catch (error) {
-                // Xử lý lỗi nếu có
-                console.error('Đã xảy ra lỗi:', error);
-            }
-        });
-    });
-
-
-</script>
+<script src="/js/generateNLDV.js"></script>

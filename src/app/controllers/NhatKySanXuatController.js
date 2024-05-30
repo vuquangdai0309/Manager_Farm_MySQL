@@ -1,31 +1,30 @@
-const Works = require('../models/NhatKySanXuat')
+const NhatKySanXuat = require('../models/NhatKySanXuat')
 var jwt = require('jsonwebtoken');
-const QRCode = require('qrcode');
-const VuMua = require('../models/VuMua');
+const Season = require('../models/Season');
 const NguyenVatLieu = require('../models/NguyenVatLieu');
-const GiongCay = require('../models/GiongCay');
+const Tree = require('../models/Tree');
 const Map = require('../models/Map')
+const Year = require('../models/Year')
 const { formatDate } = require('../middlewares/format')
 class NhatKySanXuatController {
     async index(req, res) {
         try {
             let token = req.cookies.tkvungtrong
-            let par = jwt.verify(token, 'mk')
-
-            const works = await new Promise((resolve, reject) => {
-                Works.getAllWorksWithId(par._id, (err, works) => {
+            let par = jwt.verify(token, process.env.SECRET)
+            
+            const search = ''
+            const nhatkysanxuat = await new Promise((resolve, reject) => {
+                NhatKySanXuat.getAllNhatKySanXuatWithId(par._id, (err, nhatkysanxuat) => {
                     if (err) {
-                        console.log('lỗi truy vấn', err)
                         reject(err);
                         return;
                     }
-                    resolve(works);
+                    resolve(nhatkysanxuat);
                 });
             });
             const map = await new Promise((resolve, reject) => {
                 Map.getAllMapsTypePolygon(par._id, (err, map) => {
                     if (err) {
-                        console.log('lỗi truy vấn', err)
                         reject(err);
                         return;
                     }
@@ -33,38 +32,48 @@ class NhatKySanXuatController {
                 });
             });
 
-            const vumua = await new Promise((resolve, reject) => {
-                VuMua.getAllVumua((err, vumua) => {
+            const season = await new Promise((resolve, reject) => {
+                Season.getAllSeason(search, (err, season) => {
                     if (err) {
-                        console.log('lỗi truy vấn', err)
+
                         reject(err);
                         return;
                     }
-                    resolve(vumua);
+                    resolve(season);
                 });
             });
 
-            const giongcay = await new Promise((resolve, reject) => {
-                GiongCay.getAllGiongCay((err, giongcay) => {
+            const tree = await new Promise((resolve, reject) => {
+                Tree.getAllTree((err, tree) => {
                     if (err) {
-                        console.log('lỗi truy vấn', err)
+
                         reject(err);
                         return;
                     }
-                    resolve(giongcay);
+                    resolve(tree);
                 });
             });
             const nguyenvatlieu = await new Promise((resolve, reject) => {
                 NguyenVatLieu.getAllNguyenLieu((err, nguyenvatlieu) => {
                     if (err) {
-                        console.log('lỗi truy vấn', err)
+
                         reject(err);
                         return;
                     }
                     resolve(nguyenvatlieu);
                 });
             });
-            res.render('nhatkysanxuat/nhatkysanxuat', { works, map, vumua, giongcay, nguyenvatlieu });
+            const year = await new Promise((resolve, reject) => {
+                Year.getAllYears((err, year) => {
+                    if (err) {
+
+                        reject(err);
+                        return;
+                    }
+                    resolve(year);
+                });
+            });
+            res.render('nhatkysanxuat/nhatkysanxuat', { nhatkysanxuat, map, season, tree, nguyenvatlieu, year });
         } catch (error) {
             console.error('Error:', error);
             // Handle error appropriately, send an error response, etc.
@@ -72,80 +81,134 @@ class NhatKySanXuatController {
     }
     list(req, res, next) {
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
         const page = parseInt(req.query.page) || 1; // Trang hiện tại
-        const pageSize = 10; // Kích thước trang
+        const pageSize = 12; // Kích thước trang
         const startIndex = (page - 1) * pageSize;
         const endIndex = page * pageSize;
-        const vumua = req.query.vumua || '';
-        const giongcay = req.query.giongcay || '';
-        GiongCay.getAllGiongCay((err, Datagiongcay) => {
-            if (err) {
-                console.log('Lỗi truy vấn', err)
-            }
-            else {
-                VuMua.getAllVumua((err, Datavumua) => {
+        const season = req.query.season || '';
+        const tree = req.query.tree || '';
+        const map = req.query.map || '';
+        const year = req.query.year || '';
+        const search = ''
+        const GetAllTree = () => {
+            return new Promise((resolve, reject) => {
+                Tree.getAllTree((err, results) => {
                     if (err) {
-                        console.log('Lỗi truy vấn', err)
+                        reject(err)
                     }
                     else {
-                        Works.searchAllBy_GiongCay_And_Vumua(giongcay, vumua, par._id, (err, data) => {
-                            if (err) {
-                                console.log('lỗi truy vấn', err)
-                                return
-                            }
-                            else {
-                                const totalPages = Math.ceil(data.length / pageSize);
-                                const pages = Array.from({ length: totalPages }, (_, index) => {
-                                    return {
-                                        number: index + 1,
-                                        active: index + 1 === page,
-                                        isDots: index + 1 > 5
-                                    };
-                                });
-                                const paginatedData = data.slice(startIndex, endIndex);
-                                // Chuẩn bị dữ liệu để truyền vào template
-                                const viewData = {
-                                    works: paginatedData,
-                                    Datagiongcay: Datagiongcay,
-                                    Datavumua: Datavumua,
-                                    vumua,
-                                    giongcay,
-                                    pagination: {
-                                        prev: page > 1 ? page - 1 : null,
-                                        next: endIndex < data.length ? page + 1 : null,
-                                        pages: pages,
-                                    },
-                                };
-                                // console.log(viewData.works)
-                                res.render('nhatkysanxuat/store', viewData)
-                            }
-                        })
+                        resolve(results)
                     }
                 })
-            }
-        })
+            })
+        }
+        const GetAllSeason = (search) => {
+            return new Promise((resolve, reject) => {
+                Season.getAllSeason(search, (err, results) => {
+                    if (err) {
+                        reject(err)
+                    }
+                    else {
+                        //  console.log(results)
+                        resolve(results)
+                    }
+                })
+            })
+        }
+        const GetAllYears = () => {
+            return new Promise((resolve, reject) => {
+                Year.getAllYears((err, results) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(results);
+                    }
+                });
+            });
+        };
+        const GetAllMaps = (Id) => {
+            return new Promise((resolve, reject) => {
+                Map.getAllMapsTypePolygon(Id, (err, results) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(results);
+                    }
+                });
+            });
+        };
+        const SearchbyInput = (tree, season, map, year, Id) => {
+            return new Promise((resolve, reject) => {
+                NhatKySanXuat.searchAllBy_tree_And_Season(tree, season, map, year, Id, (err, results) => {
+                    if (err) {
+                        reject(err)
+                    }
+                    else {
+                        // console.log(results)
+                        resolve(results)
+                    }
+                })
+            })
+        }
+        Promise.all([
+            GetAllTree(),
+            GetAllSeason(search),
+            GetAllYears(),
+            GetAllMaps(par._id),
+            SearchbyInput(tree, season, map, year, par._id)
+        ])
+            .then(([DataTree, DataSeason, DataYear, DataMap, data]) => {
+                const totalPages = Math.ceil(data.length / pageSize);
+                const pages = Array.from({ length: totalPages }, (_, index) => {
+                    return {
+                        number: index + 1,
+                        active: index + 1 === page,
+                        isDots: index + 1 > 5
+                    };
+                });
+                const paginatedData = data.slice(startIndex, endIndex);
+                // Chuẩn bị dữ liệu để truyền vào template
+                const viewData = {
+                    nhatkysanxuat: paginatedData,
+                    DataTree,
+                    DataSeason,
+                    DataYear,
+                    DataMap,
+                    season,
+                    tree,
+                    map,
+                    year,
+                    pagination: {
+                        prev: page > 1 ? page - 1 : null,
+                        next: endIndex < data.length ? page + 1 : null,
+                        pages: pages,
+                    },
+                };
+                // console.log(viewData.nhatkysanxuat)
+                res.render('nhatkysanxuat/store', viewData)
+            })
     }
     store(req, res) {
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
 
-        Works.getAllWorksWithId(par._id, (err, works) => {
+        NhatKySanXuat.getAllNhatKySanXuatWithId(par._id, (err, nhatkysanxuat) => {
             if (err) {
                 console.log('lỗi truy vấn', err)
                 return
             }
             else {
-                res.json({ works })
+                res.json({ nhatkysanxuat })
             }
         })
 
     }
     // [PO] nhatkysanxuat 
-    addWork(req, res, next) {
+    addNhatKySanXuat(req, res, next) {
 
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
         const forms = {
             title: req.body.title,
             start: formatDate(req.body.start),
@@ -153,17 +216,18 @@ class NhatKySanXuatController {
             id_user: par._id,
             map_id: req.body.map_id,
             nguyenvatlieu_id: req.body.nguyenvatlieu_id,
-            giongcay_id: req.body.giongcay_id,
+            tree_id: req.body.tree_id,
             nongdo: req.body.nongdo,
             luongsudung: req.body.luongsudung,
             thoigiancachly: req.body.thoigiancachly,
             mucdich: req.body.mucdich,
             thietbi: req.body.thietbi,
-            vesinhdungcu: req.body.vesinhdungcu,
-            vumua_id: req.body.vumua_id
+            vesinhdungcu: req.body.vesinhdungcu ? req.body.vesinhdungcu : 'Không',
+            season_id: req.body.season_id,
+            year_id: req.body.year_id
         }
 
-        Works.addWork(forms, (err) => {
+        NhatKySanXuat.addNhatKySanXuat(forms, (err) => {
             if (err) {
                 console.log('lỗi truy vấn', err)
             }
@@ -175,8 +239,8 @@ class NhatKySanXuatController {
     }
     //Delete nhatkysanxuat/:id
     delete(req, res, next) {
-        const Id_work = req.params.id
-        Works.deleteAllWorksWithId(Id_work, (err, results) => {
+        const Id_NhatKySanXuat = req.params.id
+        NhatKySanXuat.deleteAllNhatKySanXuatWithId(Id_NhatKySanXuat, (err, results) => {
             if (err) {
                 console.log('lỗi truy vấn', err)
             }
@@ -189,17 +253,17 @@ class NhatKySanXuatController {
     async edit(req, res, next) {
         try {
             let token = req.cookies.tkvungtrong
-            let par = jwt.verify(token, 'mk')
-            const Id_work = req.params.id
+            let par = jwt.verify(token, process.env.SECRET)
+            const Id_NhatKySanXuat = req.params.id
 
-            const works = await new Promise((resolve, reject) => {
-                Works.getWorkById(par._id, Id_work, (err, works) => {
+            const nhatkysanxuat = await new Promise((resolve, reject) => {
+                NhatKySanXuat.getNhatKySanXuatById(par._id, Id_NhatKySanXuat, (err, nhatkysanxuat) => {
                     if (err) {
                         console.log('lỗi truy vấn', err)
                         reject(err);
                         return;
                     }
-                    resolve(works);
+                    resolve(nhatkysanxuat);
                 })
             })
 
@@ -214,25 +278,25 @@ class NhatKySanXuatController {
                 });
             });
 
-            const vumua = await new Promise((resolve, reject) => {
-                VuMua.getAllVumua((err, vumua) => {
+            const season = await new Promise((resolve, reject) => {
+                Season.getAllSeason('', (err, season) => {
                     if (err) {
                         console.log('lỗi truy vấn', err)
                         reject(err);
                         return;
                     }
-                    resolve(vumua);
+                    resolve(season);
                 });
             });
 
-            const giongcay = await new Promise((resolve, reject) => {
-                GiongCay.getAllGiongCay((err, giongcay) => {
+            const tree = await new Promise((resolve, reject) => {
+                Tree.getAllTree((err, tree) => {
                     if (err) {
                         console.log('lỗi truy vấn', err)
                         reject(err);
                         return;
                     }
-                    resolve(giongcay);
+                    resolve(tree);
                 });
             });
             const nguyenvatlieu = await new Promise((resolve, reject) => {
@@ -245,8 +309,18 @@ class NhatKySanXuatController {
                     resolve(nguyenvatlieu);
                 });
             });
+            const year = await new Promise((resolve, reject) => {
+                Year.getAllYears((err, year) => {
+                    if (err) {
+                        console.log('lỗi truy vấn', err)
+                        reject(err);
+                        return;
+                    }
+                    resolve(year);
+                });
+            });
 
-            res.render('nhatkysanxuat/edit', { data: works[0], map, vumua, giongcay, nguyenvatlieu });
+            res.render('nhatkysanxuat/edit', { data: nhatkysanxuat[0], map, season, tree, nguyenvatlieu, year });
 
         }
         catch {
@@ -256,9 +330,9 @@ class NhatKySanXuatController {
     }
     //[PUT] UPDATE nhatkysanxuat/:id
     update(req, res, next) {
-        const Id_work = req.params.id
+        const Id_NhatKySanXuat = req.params.id
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
         const forms = {
             title: req.body.title,
             start: formatDate(req.body.start),
@@ -266,22 +340,23 @@ class NhatKySanXuatController {
             id_user: par._id,
             map_id: req.body.map_id,
             nguyenvatlieu_id: req.body.nguyenvatlieu_id,
-            giongcay_id: req.body.giongcay_id,
+            tree_id: req.body.tree_id,
             nongdo: req.body.nongdo,
             luongsudung: req.body.luongsudung,
             thoigiancachly: req.body.thoigiancachly,
             mucdich: req.body.mucdich,
             thietbi: req.body.thietbi,
-            vesinhdungcu: req.body.vesinhdungcu,
-            vumua_id: req.body.vumua_id
+            vesinhdungcu: req.body.vesinhdungcu ? req.body.vesinhdungcu : 'Không',
+            season_id: req.body.season_id,
+            year_id: req.body.year_id
         }
 
-        Works.updateWork(Id_work, forms, (err, results) => {
+        NhatKySanXuat.updateNhatKySanXuat(Id_NhatKySanXuat, forms, (err, results) => {
             if (err) {
                 console.log('lỗi truy vấn', err)
             }
             else {
-                res.redirect('/nhatkysanxuat/storeList')
+                res.redirect('/production-process-log/storeList')
             }
         })
 
@@ -289,12 +364,12 @@ class NhatKySanXuatController {
     //[GET] search 
     search(req, res, next) {
         var title = req.query.q
-        Works.searchWorkByName(title, (err, works) => {
+        NhatKySanXuat.searchNhatKySanXuatByName(title, (err, nhatkysanxuat) => {
             if (err) {
                 console.log('lỗi truy vấn', err)
             }
             else {
-                res.render('nhatkysanxuat/store', { works })
+                res.render('nhatkysanxuat/store', { nhatkysanxuat })
             }
         })
 
@@ -302,9 +377,10 @@ class NhatKySanXuatController {
     // [POST] lấy các bản ghi được checkbox
     handleFormAction(req, res, next) {
         const ids = req.body.workIds
+        console.log(ids)
         switch (req.body.action) {
             case 'delete':
-                Works.deleteAllWorksWithId(ids, (err, results) => {
+                NhatKySanXuat.deleteAllNhatKySanXuatWithId(ids, (err, results) => {
                     if (err) {
                         console.error('Lỗi khi xóa bản ghi:', err);
                     } else {
@@ -321,12 +397,12 @@ class NhatKySanXuatController {
     // [GET] trash
     trash(req, res) {
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
         const page = parseInt(req.query.page) || 1; // Trang hiện tại
         const pageSize = 10; // Kích thước trang
         const startIndex = (page - 1) * pageSize;
         const endIndex = page * pageSize;
-        Works.getAllWorksWithId_Trash(par._id, (err, data) => {
+        NhatKySanXuat.getAllNhatKySanXuatWithId_Trash(par._id, (err, data) => {
             if (err) {
                 console.log('Lỗi truy vấn', err)
             }
@@ -342,7 +418,7 @@ class NhatKySanXuatController {
                 const paginatedData = data.slice(startIndex, endIndex);
                 // Chuẩn bị dữ liệu để truyền vào template
                 const viewData = {
-                    works: paginatedData,
+                    nhatkysanxuat: paginatedData,
                     pagination: {
                         prev: page > 1 ? page - 1 : null,
                         next: endIndex < data.length ? page + 1 : null,
@@ -360,10 +436,10 @@ class NhatKySanXuatController {
     // [POST ] lấy các bản ghi được checkbox trong thùng rác
     handleFormActionTrash(req, res) {
         const ids = req.body.workIds
-
+       
         switch (req.body.action) {
             case 'delete':
-                Works.forceDestroyAllSelected_Work(ids, (err, results) => {
+                NhatKySanXuat.forceDestroyAllSelected_NhatKySanXuat(ids, (err, results) => {
                     if (err) {
                         console.error('Lỗi khi xóa bản ghi:', err);
                     } else {
@@ -373,7 +449,7 @@ class NhatKySanXuatController {
                 })
                 break;
             case 'restore':
-                Works.restoreAllSelected_Work(ids, (err, results) => {
+                NhatKySanXuat.restoreAllSelected_NhatKySanXuat(ids, (err, results) => {
                     if (err) {
                         console.error('Lỗi khi xóa bản ghi:', err);
                     } else {
@@ -389,7 +465,7 @@ class NhatKySanXuatController {
     // [DELETE] xóa vĩnh viễn
     trashDelete(req, res) {
         const id = req.params.id
-        Works.forceDestroyAllSelected_Work(id, (err, results) => {
+        NhatKySanXuat.forceDestroyAllSelected_NhatKySanXuat(id, (err, results) => {
             if (err) {
                 console.error('Lỗi khi xóa bản ghi:', err);
             } else {
@@ -400,7 +476,7 @@ class NhatKySanXuatController {
     } //[POST] khôi phục
     restore(req, res) {
         const id = req.params.id
-        Works.restoreAllSelected_Work(id, (err, results) => {
+        NhatKySanXuat.restoreAllSelected_NhatKySanXuat(id, (err, results) => {
             if (err) {
                 console.error('Lỗi khi xóa bản ghi:', err);
             } else {
@@ -411,10 +487,10 @@ class NhatKySanXuatController {
     }
     generatePdf(req, res) {
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
         const idsString = req.body.ids
         const Ids = idsString.split(',');
-        Works.getWorkById(par._id, Ids, async (err, results) => {
+        NhatKySanXuat.getNhatKySanXuatById(par._id, Ids, async (err, results) => {
             if (err) {
                 console.error('Lỗi khi xóa bản ghi:', err);
             } else {

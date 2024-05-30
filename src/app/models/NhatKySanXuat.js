@@ -1,87 +1,107 @@
 const connection = require('../../config/db/index')
 const NhatKySanXuatModel = {
     // lấy những công việc cùng ID_USER
-    getAllWorksWithId: (IdUser, callback) => {
+    getAllNhatKySanXuatWithId: (IdUser, callback) => {
         const query = `
-        SELECT maps.*,works.*,vumua.*,nguyenvatlieu.*,giongcay.*,giongcay._id AS giongcay_id
-        FROM works
-        JOIN maps ON works.map_id = maps._id
-        JOIN vumua ON works.vumua_id = vumua._id
-        JOIN giongcay ON works.giongcay_id = giongcay._id
-        JOIN nguyenvatlieu ON works.nguyenvatlieu_id = nguyenvatlieu._id
-        WHERE works.id_user = ? AND works.is_deleted = 0 `;
+        SELECT maps.*,nhatkysanxuat.*,season.*,nguyenvatlieu.*,tree.*,tree._id AS tree_id,year.*
+        FROM nhatkysanxuat
+        JOIN maps ON nhatkysanxuat.map_id = maps._id
+        JOIN season ON nhatkysanxuat.season_id = season._id
+        JOIN tree ON nhatkysanxuat.tree_id = tree._id
+        JOIN year ON nhatkysanxuat.year_id = year._id
+        JOIN nguyenvatlieu ON nhatkysanxuat.nguyenvatlieu_id = nguyenvatlieu._id
+        WHERE nhatkysanxuat.id_user = ? AND nhatkysanxuat.is_deleted = 0 ORDER BY STR_TO_DATE(nhatkysanxuat.start, "%d-%m-%Y")`;
         connection.query(query, IdUser, callback);
     },
-    getAllWorksWithId_Trash: (IdUser, callback) => {
+    getAllNhatKySanXuatByCodeOfShipment: (tree_id, season_id, map_id, year_id, IdUser, callback) => {
         const query = `
-        SELECT maps.*,works.*,vumua.*,nguyenvatlieu.*,giongcay.*,giongcay._id AS giongcay_id,works._id AS works_id  
-        FROM works
-        JOIN maps ON works.map_id = maps._id
-        JOIN vumua ON works.vumua_id = vumua._id
-        JOIN giongcay ON works.giongcay_id = giongcay._id
-        JOIN nguyenvatlieu ON works.nguyenvatlieu_id = nguyenvatlieu._id
-        WHERE works.id_user = ? AND works.is_deleted = 1`;
+        SELECT maps.*, nhatkysanxuat.*, season.*, nguyenvatlieu.*, tree.*, tree._id AS tree_id, year.*
+        FROM nhatkysanxuat
+        JOIN maps ON nhatkysanxuat.map_id = maps._id
+        JOIN season ON nhatkysanxuat.season_id = season._id
+        JOIN tree ON nhatkysanxuat.tree_id = tree._id
+        JOIN year ON nhatkysanxuat.year_id = year._id
+        JOIN nguyenvatlieu ON nhatkysanxuat.nguyenvatlieu_id = nguyenvatlieu._id
+        WHERE nhatkysanxuat.tree_id = ? AND nhatkysanxuat.season_id = ? AND nhatkysanxuat.map_id = ? AND nhatkysanxuat.year_id = ? AND nhatkysanxuat.id_user = ? AND nhatkysanxuat.is_deleted = 0
+        ORDER BY STR_TO_DATE(nhatkysanxuat.start, "%d-%m-%Y")`;
+
+        connection.query(query, [tree_id, season_id, map_id, year_id, IdUser], callback);
+    },
+
+    getAllNhatKySanXuatWithId_Trash: (IdUser, callback) => {
+        const query = `
+        SELECT maps.*,nhatkysanxuat.*,season.*,nguyenvatlieu.*,tree.*,tree._id AS tree_id,nhatkysanxuat._id AS nhatkysanxuat_id,year.* 
+        FROM nhatkysanxuat
+        JOIN maps ON nhatkysanxuat.map_id = maps._id
+        JOIN season ON nhatkysanxuat.season_id = season._id
+        JOIN tree ON nhatkysanxuat.tree_id = tree._id
+        JOIN year ON nhatkysanxuat.year_id = year._id
+        JOIN nguyenvatlieu ON nhatkysanxuat.nguyenvatlieu_id = nguyenvatlieu._id
+        WHERE nhatkysanxuat.id_user = ? AND nhatkysanxuat.is_deleted = 1 ORDER BY STR_TO_DATE(nhatkysanxuat.start, "%d-%m-%Y")`;
         connection.query(query, IdUser, callback);
     },
-    searchAllBy_GiongCay_And_Vumua: (giongcay_id, vumua_id, IdUser, callback) => {
+    searchAllBy_tree_And_Season: (tree_id, season_id, map_id, year_id, IdUser, callback) => {
         const query = `
-        SELECT maps.*,works.*,vumua.*,nguyenvatlieu.*,giongcay.*,giongcay._id AS giongcay_id,works._id AS works_id  
-        FROM works
-        JOIN maps ON works.map_id = maps._id
-        JOIN vumua ON works.vumua_id = vumua._id
-        JOIN giongcay ON works.giongcay_id = giongcay._id
-        JOIN nguyenvatlieu ON works.nguyenvatlieu_id = nguyenvatlieu._id
-        WHERE  works.giongcay_id LIKE ? AND works.vumua_id LIKE ? AND works.id_user = ? AND works.is_deleted = 0 ORDER BY STR_TO_DATE(works.start, "%d-%m-%Y")`;
-        const SearchGiongCay = '%' + giongcay_id + '%';
-        const SearchVumua = '%' + vumua_id + '%';
-        connection.query(query, [SearchGiongCay, SearchVumua, IdUser], callback);
+        SELECT maps.*,nhatkysanxuat.*,season.*,nguyenvatlieu.*,tree.*,year.*,tree._id AS tree_id,nhatkysanxuat._id AS nhatkysanxuat_id  
+        FROM nhatkysanxuat
+        JOIN maps ON nhatkysanxuat.map_id = maps._id
+        JOIN season ON nhatkysanxuat.season_id = season._id
+        JOIN tree ON nhatkysanxuat.tree_id = tree._id
+        JOIN year ON nhatkysanxuat.year_id = year._id
+        JOIN nguyenvatlieu ON nhatkysanxuat.nguyenvatlieu_id = nguyenvatlieu._id
+        WHERE  nhatkysanxuat.tree_id LIKE ? AND nhatkysanxuat.season_id LIKE ? AND  nhatkysanxuat.map_id LIKE ? AND nhatkysanxuat.year_id LIKE ? AND nhatkysanxuat.id_user = ? AND nhatkysanxuat.is_deleted = 0 ORDER BY STR_TO_DATE(nhatkysanxuat.start, "%d-%m-%Y")`;
+        const Searchtree = '%' + tree_id + '%';
+        const SearchSeason = '%' + season_id + '%';
+        const SearchMap = '%' + map_id + '%';
+        const SearchYear = '%' + year_id + '%';
+        connection.query(query, [Searchtree, SearchSeason, SearchMap, SearchYear, IdUser], callback);
     },
 
     // lấy sản phẩm theo id 
-    getWorkById: (ID_USER, Id, callback) => {
+    getNhatKySanXuatById: (ID_USER, Id, callback) => {
         const query = `
-        SELECT maps.*,works.*,vumua.*,nguyenvatlieu.*,giongcay.*,giongcay._id AS giongcay_id,works._id AS works_id  
-        FROM works
-        JOIN maps ON works.map_id = maps._id
-        JOIN vumua ON works.vumua_id = vumua._id
-        JOIN giongcay ON works.giongcay_id = giongcay._id
-        JOIN nguyenvatlieu ON works.nguyenvatlieu_id = nguyenvatlieu._id
-        WHERE works.id_user = ? AND works._id IN (?) AND works.is_deleted = 0 ORDER BY works.start
+        SELECT maps.*,nhatkysanxuat.*,season.*,nguyenvatlieu.*,tree.*,tree._id AS tree_id,nhatkysanxuat._id AS nhatkysanxuat_id  
+        FROM nhatkysanxuat
+        JOIN maps ON nhatkysanxuat.map_id = maps._id
+        JOIN season ON nhatkysanxuat.season_id = season._id
+        JOIN tree ON nhatkysanxuat.tree_id = tree._id
+        JOIN nguyenvatlieu ON nhatkysanxuat.nguyenvatlieu_id = nguyenvatlieu._id
+        WHERE nhatkysanxuat.id_user = ? AND nhatkysanxuat._id IN (?) AND nhatkysanxuat.is_deleted = 0 ORDER BY nhatkysanxuat.start
         `;
         connection.query(query, [ID_USER, Id], callback);
     },
 
-    updateWork: (WorkId, Work, callback) => {
-        const query = 'UPDATE works SET title =?, start =?,end =?,id_user =?,map_id =?,nguyenvatlieu_id =?,giongcay_id =?,nongdo =?,luongsudung =?,thoigiancachly =?,mucdich =?,thietbi =?,vesinhdungcu =?,vumua_id =? WHERE _id = ?';
-        const values = [Work.title, Work.start, Work.end, Work.id_user, Work.map_id, Work.nguyenvatlieu_id, Work.giongcay_id, Work.nongdo, Work.luongsudung, Work.thoigiancachly, Work.mucdich, Work.thietbi, Work.vesinhdungcu, Work.vumua_id, WorkId];
+    updateNhatKySanXuat: (NhatKySanXuatId, NhatKySanXuat, callback) => {
+        const query = 'UPDATE nhatkysanxuat SET title =?, start =?,end =?,id_user =?,map_id =?,nguyenvatlieu_id =?,tree_id =?,nongdo =?,luongsudung =?,thoigiancachly =?,mucdich =?,thietbi =?,vesinhdungcu =?,season_id =?,year_id = ? WHERE _id = ?';
+        const values = [NhatKySanXuat.title, NhatKySanXuat.start, NhatKySanXuat.end, NhatKySanXuat.id_user, NhatKySanXuat.map_id, NhatKySanXuat.nguyenvatlieu_id, NhatKySanXuat.tree_id, NhatKySanXuat.nongdo, NhatKySanXuat.luongsudung, NhatKySanXuat.thoigiancachly, NhatKySanXuat.mucdich, NhatKySanXuat.thietbi, NhatKySanXuat.vesinhdungcu, NhatKySanXuat.season_id, NhatKySanXuat.year_id, NhatKySanXuatId];
         connection.query(query, values, callback);
     },
-    addWork: (Work, callback) => {
-        const query = 'INSERT INTO works (title, start,end,id_user,map_id,nguyenvatlieu_id,giongcay_id,nongdo,luongsudung,thoigiancachly,mucdich,thietbi,vesinhdungcu,vumua_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-        const values = [Work.title, Work.start, Work.end, Work.id_user, Work.map_id, Work.nguyenvatlieu_id, Work.giongcay_id, Work.nongdo, Work.luongsudung, Work.thoigiancachly, Work.mucdich, Work.thietbi, Work.vesinhdungcu, Work.vumua_id];
+    addNhatKySanXuat: (NhatKySanXuat, callback) => {
+        const query = 'INSERT INTO nhatkysanxuat (title, start,end,id_user,map_id,nguyenvatlieu_id,tree_id,nongdo,luongsudung,thoigiancachly,mucdich,thietbi,vesinhdungcu,season_id,year_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+        const values = [NhatKySanXuat.title, NhatKySanXuat.start, NhatKySanXuat.end, NhatKySanXuat.id_user, NhatKySanXuat.map_id, NhatKySanXuat.nguyenvatlieu_id, NhatKySanXuat.tree_id, NhatKySanXuat.nongdo, NhatKySanXuat.luongsudung, NhatKySanXuat.thoigiancachly, NhatKySanXuat.mucdich, NhatKySanXuat.thietbi, NhatKySanXuat.vesinhdungcu, NhatKySanXuat.season_id, NhatKySanXuat.year_id];
         connection.query(query, values, callback);
     },
     // xóa bản ghi 
-    deleteAllWorksWithId: (idsToDelete, callback) => {
-        const query = 'UPDATE works SET is_deleted = 1 WHERE _id IN (?)';
+    deleteAllNhatKySanXuatWithId: (idsToDelete, callback) => {
+        const query = 'UPDATE nhatkysanxuat SET is_deleted = 1 WHERE _id IN (?)';
         connection.query(query, [idsToDelete], callback);
     },
-    deleteWork_With_Map: (idsToDelete, callback) => {
-        const query = 'UPDATE works SET is_deleted = 2 WHERE map_id IN (?) ';
+    deleteNhatKySanXuat_With_Map: (idsToDelete, callback) => {
+        const query = 'UPDATE nhatkysanxuat SET is_deleted = 2 WHERE map_id IN (?) ';
         connection.query(query, [idsToDelete], callback);
     },
     // xóa vĩnh viễn 
-    forceDestroyAllSelected_Work: (idsToDelete, callback) => {
-        const query = 'DELETE FROM works WHERE _id IN (?)';
+    forceDestroyAllSelected_NhatKySanXuat: (idsToDelete, callback) => {
+        const query = 'DELETE FROM nhatkysanxuat WHERE _id IN (?)';
         connection.query(query, [idsToDelete], callback);
     },
     // khôi phục 
-    restoreAllSelected_Work: (Ids, callback) => {
-        const query = 'UPDATE works SET is_deleted = 0 WHERE _id IN (?)';
+    restoreAllSelected_NhatKySanXuat: (Ids, callback) => {
+        const query = 'UPDATE nhatkysanxuat SET is_deleted = 0 WHERE _id IN (?)';
         connection.query(query, [Ids], callback);
     },
     countNguyenLieusSanXuat: (User, callback) => {
-        const query = `SELECT COUNT(*) AS CountNLSX FROM works WHERE is_deleted = 0 AND id_user = ?`
+        const query = `SELECT COUNT(*) AS CountNLSX FROM nhatkysanxuat WHERE is_deleted = 0 AND id_user = ?`
         connection.query(query, User, callback)
     }
 }

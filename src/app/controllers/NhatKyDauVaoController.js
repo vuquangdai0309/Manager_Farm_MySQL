@@ -1,163 +1,257 @@
 
 var jwt = require('jsonwebtoken');
-const VuMua = require('../models/VuMua');
+const Season = require('../models/Season');
 const NguyenVatLieu = require('../models/NguyenVatLieu');
-const GiongCay = require('../models/GiongCay');
+const Tree = require('../models/Tree');
 const NhatKyDauVao = require('../models/NhatKyDauVao')
-const QRCode = require('qrcode');
-const { formatDate } = require('../middlewares/format')
+const Map = require('../models/Map')
+const Year = require('../models/Year')
+const { formatDate } = require('../middlewares/format');
+const GetAllTree = () => {
+    return new Promise((resolve, reject) => {
+        Tree.getAllTree((err, results) => {
+            if (err) {
+                reject(err)
+            }
+            else {
+                resolve(results)
+            }
+        })
+    })
+}
+const GetAllSeason = (search) => {
+    return new Promise((resolve, reject) => {
+        Season.getAllSeason(search, (err, results) => {
+            if (err) {
+                reject(err)
+            }
+            else {
+                //  console.log(results)
+                resolve(results)
+            }
+        })
+    })
+}
+const GetAllYears = () => {
+    return new Promise((resolve, reject) => {
+        Year.getAllYears((err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+};
+const GetAllMaps = (Id) => {
+    return new Promise((resolve, reject) => {
+        Map.getAllMapsTypePolygon(Id, (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+};
+const SearchbyInput = (tree, season, map, year, Id) => {
+    return new Promise((resolve, reject) => {
+        NhatKyDauVao.searchAllBy_Tree_And_Season(tree, season, map, year, Id, (err, results) => {
+            if (err) {
+                reject(err)
+            }
+            else {
+                // console.log(results)
+                resolve(results)
+            }
+        })
+    })
+};
+const GetAllNguyenVatLieu = () => {
+    return new Promise((resolve, reject) => {
+        NguyenVatLieu.getAllNguyenLieu((err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+};
+const GetNguyenLieuDauVao = (Id, IdUser) => {
+    return new Promise((resolve, reject) => {
+        NhatKyDauVao.getNguyenLieuDauVao_Id(Id, IdUser, (err, result) => {
+            if (err) {
+                reject(err)
+            }
+            else {
+                resolve(result)
+            }
+        })
+    })
+}
 class NhatKyDauVaoController {
     index(req, res) {
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
         const page = parseInt(req.query.page) || 1; // Trang hiện tại
-        const pageSize = 10; // Kích thước trang
+        const pageSize = 12; // Kích thước trang
         const startIndex = (page - 1) * pageSize;
         const endIndex = page * pageSize;
-        const searchvumua = req.query.vumua || '';
-        const searchgiongcay = req.query.giongcay || '';
-        VuMua.getAllVumua((err, vumua) => {
-            if (err) {
-                console.log('lỗi truy vấn', err)
-            }
-            else {
-                NguyenVatLieu.getAllNguyenLieu((err, nguyenvatlieu) => {
-                    if (err) {
-                        console.log('lỗi truy vấn', err)
-                    }
-                    else {
-                        GiongCay.getAllGiongCay((err, giongcay) => {
-                            if (err) {
-                                console.log('lỗi truy vấn', err)
-                            }
-                            else {
-                                NhatKyDauVao.searchAllBy_GiongCay_And_Vumua(searchgiongcay, searchvumua, par._id, (err, data) => {
-                                    if (err) {
-                                        console.log('lỗi truy vấn', err)
-                                        return
-                                    }
-                                    else {
-                                        const totalPages = Math.ceil(data.length / pageSize);
-                                        const pages = Array.from({ length: totalPages }, (_, index) => {
-                                            return {
-                                                number: index + 1,
-                                                active: index + 1 === page,
-                                                isDots: index + 1 > 5
-                                            };
-                                        });
-                                        const paginatedData = data.slice(startIndex, endIndex);
-                                        // Chuẩn bị dữ liệu để truyền vào template
-                                        const viewData = {
-                                            nhatkydauvao: paginatedData,
-                                            searchvumua: searchvumua,
-                                            searchgiongcay: searchgiongcay,
-                                            giongcay: giongcay,
-                                            vumua: vumua,
-                                            nguyenvatlieu: nguyenvatlieu,
-                                            pagination: {
-                                                prev: page > 1 ? page - 1 : null,
-                                                next: endIndex < data.length ? page + 1 : null,
-                                                pages: pages,
-                                            },
-                                        };
-console.log(viewData.nhatkydauvao)
-                                        res.render('nhatkydauvao/store', viewData)
+        const season = req.query.season || '';
+        const tree = req.query.tree || '';
+        const map = req.query.map || '';
+        const year = req.query.year || '';
+        const search = ''
 
-                                    }
-                                })
-                            }
-                        })
-                    }
-                })
-            }
-
-        })
+        Promise.all([
+            GetAllTree(),
+            GetAllSeason(search),
+            GetAllYears(),
+            GetAllMaps(par._id),
+            SearchbyInput(tree, season, map, year, par._id),
+            GetAllNguyenVatLieu()
+        ])
+            .then(([DataTree, DataSeason, DataYear, DataMap, data, DataNguyenVatLieu]) => {
+                const totalPages = Math.ceil(data.length / pageSize);
+                const pages = Array.from({ length: totalPages }, (_, index) => {
+                    return {
+                        number: index + 1,
+                        active: index + 1 === page,
+                        isDots: index + 1 > 5
+                    };
+                });
+                const paginatedData = data.slice(startIndex, endIndex);
+                // Chuẩn bị dữ liệu để truyền vào template
+                const viewData = {
+                    nhatkydauvao: paginatedData,
+                    DataTree,
+                    DataSeason,
+                    DataYear,
+                    DataMap,
+                    DataNguyenVatLieu,
+                    season,
+                    tree,
+                    map,
+                    year,
+                    pagination: {
+                        prev: page > 1 ? page - 1 : null,
+                        next: endIndex < data.length ? page + 1 : null,
+                        pages: pages,
+                    },
+                };
+                // console.log(viewData.nhatkysanxuat)
+                res.render('nhatkydauvao/store', viewData)
+            })
     }
     creat(req, res) {
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
         const forms = {
             thoigian: formatDate(req.body.thoigian),
             id_user: par._id,
             nguyenvatlieu_id: req.body.nguyenvatlieu_id,
-            giongcay_id: req.body.giongcay_id,
+            tree_id: req.body.tree_id,
+            map_id: req.body.vungtrong_id,
             soluong: req.body.soluong,
             tenvadiachi: req.body.tenvadiachi,
             hansudung: formatDate(req.body.hansudung),
             phuongphapxuly: req.body.phuongphapxuly,
             nguyenlieusanxuat: req.body.nguyenlieusanxuat,
             hoachatxuly: req.body.hoachatxuly,
-            vumua_id: req.body.vumua_id
+            season_id: req.body.season_id,
+            year_id: req.body.year_id,
+            nguoixuly: req.body.nguoixuly
         }
-        NhatKyDauVao.addNguyenLieuDauVao(forms, (err, results) => {
-            if (err) {
-                console.log('lỗi truy vấn', err)
-            }
-            else {
-                res.redirect('back')
-            }
-        })
+        if (req.body.newNguyenLieu) {
+            NguyenVatLieu.creatNguyenLieu({ name: req.body.newNguyenLieu }, (err, data) => {
+                if (err) {
+                    console.log('Lỗi truy vấn', err)
+                }
+                else {
+                    NhatKyDauVao.addNguyenLieuDauVao({
+                        thoigian: formatDate(req.body.thoigian),
+                        id_user: par._id,
+                        nguyenvatlieu_id: data.insertId,
+                        tree_id: req.body.tree_id,
+                        map_id: req.body.vungtrong_id,
+                        soluong: req.body.soluong,
+                        tenvadiachi: req.body.tenvadiachi,
+                        hansudung: formatDate(req.body.hansudung),
+                        phuongphapxuly: req.body.phuongphapxuly,
+                        nguyenlieusanxuat: req.body.nguyenlieusanxuat,
+                        hoachatxuly: req.body.hoachatxuly,
+                        season_id: req.body.season_id,
+                        year_id: req.body.year_id,
+                        nguoixuly: req.body.nguoixuly
+                    }, (err, results) => {
+                        if (err) {
+                            console.log('lỗi truy vấn', err)
+                        }
+                        else {
+                            res.redirect('back')
+                        }
+                    })
+                }
+            })
+        }
+        else {
+            NhatKyDauVao.addNguyenLieuDauVao(forms, (err, results) => {
+                if (err) {
+                    console.log('lỗi truy vấn', err)
+                }
+                else {
+                    res.redirect('back')
+                }
+            })
+        }
     }
     edit(req, res) {
-
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
         const id = req.params.id
-        NhatKyDauVao.getNguyenLieuDauVao_Id(id, par._id, (err, results) => {
-            if (err) {
-                console.log('lỗi truy vấn', err)
-            }
-            else {
-                VuMua.getAllVumua((err, vumua) => {
-                    if (err) {
-                        console.log('lỗi truy vấn', err)
-                    }
-                    else {
-                        NguyenVatLieu.getAllNguyenLieu((err, nguyenvatlieu) => {
-                            if (err) {
-                                console.log('lỗi truy vấn', err)
-                            }
-                            else {
-                                GiongCay.getAllGiongCay((err, giongcay) => {
-                                    if (err) {
-                                        console.log('lỗi truy vấn', err)
-                                    }
-                                    else {
-                                      
-                                        res.render('nhatkydauvao/edit', { data: results[0], vumua, nguyenvatlieu, giongcay })
-                                    }
-                                })
-                            }
-                        })
-                    }
-                })
-            }
-        })
+        console.log(id)
+        const search = ''
+        Promise.all([
+            GetAllTree(),
+            GetAllSeason(search),
+            GetAllYears(),
+            GetAllMaps(par._id),
+            GetNguyenLieuDauVao(id, par._id),
+            GetAllNguyenVatLieu()
+        ])
+            .then(([tree, season, year, map, data, nguyenvatlieu]) => {
+                console.log(data)
+                res.render('nhatkydauvao/edit', { tree, season, year, map, data: data[0], nguyenvatlieu })
+            })
     }
     update(req, res) {
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
         const Id = req.params.id
-     
+
         const forms = {
             thoigian: formatDate(req.body.thoigian),
             id_user: par._id,
             nguyenvatlieu_id: req.body.nguyenvatlieu_id,
-            giongcay_id: req.body.giongcay_id,
+            tree_id: req.body.tree_id,
+            map_id: req.body.map_id,
             soluong: req.body.soluong,
             tenvadiachi: req.body.tenvadiachi,
             hansudung: formatDate(req.body.hansudung),
             phuongphapxuly: req.body.phuongphapxuly,
             nguyenlieusanxuat: req.body.nguyenlieusanxuat,
             hoachatxuly: req.body.hoachatxuly,
-            vumua_id: req.body.vumua_id
+            season_id: req.body.season_id,
+            year_id: req.body.year_id,
+            nguoixuly: req.body.nguoixuly
         }
         NhatKyDauVao.updateNguyenLieuDauVao(forms, Id, (err, result) => {
             if (err) {
                 console.log('Lỗi truy vấn', err)
             }
             else {
-                res.redirect('/nhatkydauvao')
+                res.redirect('/input-material-tracking-log')
             }
         })
     }
@@ -185,7 +279,7 @@ console.log(viewData.nhatkydauvao)
     }
     trash(req, res) {
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
         const page = parseInt(req.query.page) || 1; // Trang hiện tại
         const pageSize = 10; // Kích thước trang
         const startIndex = (page - 1) * pageSize;
@@ -267,7 +361,7 @@ console.log(viewData.nhatkydauvao)
     }
     generatePdf(req, res) {
         let token = req.cookies.tkvungtrong
-        let par = jwt.verify(token, 'mk')
+        let par = jwt.verify(token, process.env.SECRET)
         const idsString = req.body.ids
         const Ids = idsString.split(',');
         NhatKyDauVao.getNguyenLieuDauVao_Id(Ids, par._id, async (err, results) => {
@@ -278,7 +372,7 @@ console.log(viewData.nhatkydauvao)
                 const timestamp = new Date().getTime();
                 const filename = `nguyenlieu_dauvao_${timestamp}.pdf`;
                 // thay đổi ở đây
-            
+
                 const htmlContent = `
      
                 <!DOCTYPE html>
@@ -328,7 +422,7 @@ console.log(viewData.nhatkydauvao)
                               <td>${item.nguyenlieusanxuat}</td>
                               <td>${item.phuongphapxuly}</td>
                               <td>${item.hoachatxuly}</td>
-                              <td></td>
+                              <td>${item.nguoixuly}</td>
                            
                               <!-- Add more columns here as needed -->
                             </tr>

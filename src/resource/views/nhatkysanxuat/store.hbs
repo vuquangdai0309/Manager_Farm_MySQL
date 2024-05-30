@@ -1,231 +1,242 @@
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet">
 {{> header}}
 {{>navbar}}
 <main id="main" class="main">
-    <div class="pagetitle">
-        <div class="row ">
-            <div class="col-md-5 mt-3">
+    <div class="card">
+        <div class="card-body" style=" overflow-x: auto;">
+            <div class="pagetitle">
                 <h1>Nhật ký quá trình sản xuất</h1>
-                <a href="/nhatkysanxuat"> <i class="bi bi-arrow-left-circle-fill" style="font-size:24px"> </i></a>
+                <a href="/production-process-log"> <i class="bi bi-arrow-left-circle-fill" style="font-size:24px">
+                    </i></a>
             </div>
-            <div class="col-md-1 mt-3"></div>
-            <div class="col-md-2 mt-3">
-                <form id="searchForm" method="GET" action="/nhatkysanxuat/storeList">
-                    <div class="form-group">
-                        <select class="form-select " id="giongcay" name="giongcay" aria-label="Default select example"
-                            show-value="{{giongcay}}">
-                            <option value="">Chọn giống cây</option>
-                            {{#each Datagiongcay}}
-                            <option value="{{this._id}}">{{this.giongcay}} </option>
-                            {{/each}}
-                        </select>
-                    </div>
-            </div>
-            <div class="col-md-4 mt-3">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
+            <form id="searchForm" method="GET" action="/production-process-log/storeList">
+                <div class="row justify-content-center">
+                    <div class="col-md-2 ">
                         <div class="form-group">
-                            <select class="form-select " id="vumua" name="vumua" aria-label="Default select example"
-                                show-value="{{vumua}}">
-                                <option value="">Vụ mùa</option>
-                                {{#each Datavumua}}
-                                <option value="{{this._id}}">{{this.vumua}}</option>
+                            <select class="form-select js-example-disabled-results" id="map_id" name="map"
+                                aria-label="Default select example" show-value="{{map}}">
+                                <option value="">Lô/thửa</option>
+                                {{#each DataMap}}
+                                <option value="{{this._id}}">{{this.namearea}} </option>
                                 {{/each}}
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3 ">
-                        <button type="submit" id="btn" class="btn btn-primary">Tìm kiếm</button>
-                    </div>
-                </div>
-            </div>
-            </form>
-        </div>
-    </div><!-- End Page Title -->
-
-    <section class="section dashboard">
-        <div class="card-body ">
-            <h5>Danh sách</h5>
-            <form action="/nhatkysanxuat/handle-form-actions" method="POST">
-                <div class="row">
-
-                    <div class="col-md-6 mb-3">
-                        <div class="row">
-                            <div class="col-6">
-                                <select class="form-control" style="text-align: center;" name="action" required>
-                                    <option value="">-----Hành động-----</option>
-                                    <option value="delete">Xóa bản ghi</option>
-                                </select>
-                            </div>
-                            <div class="col-4"><button type="submit" class="btn btn-success mr-5 btn-check-all-submit "
-                                    disabled>Thực
-                                    hiện</button>
-                            </div>
-                            <div class="col-2">
-                                <span><a href="/nhatkysanxuat/trash"
-                                        style="color:red ;font-size:24px; margin-left:20px"><strong>
-                                            <i class="bi bi-trash3"></i> </strong></a></span>
-                            </div>
+                    <div class="col-md-2 ">
+                        <div class="form-group">
+                            <select class="form-select js-example-disabled-results" id="tree_id" name="tree"
+                                aria-label="Default select example" show-value="{{tree}}">
+                                <option value="">Chọn giống cây</option>
+                                {{#each DataTree}}
+                                <option value="{{this._id}}">{{this.nameTree}} </option>
+                                {{/each}}
+                            </select>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3"> <button id="generatePdfButton"
-                            class="btn btn-success btn-check-all-submit " style="width: 200px; " disabled>Xuất file PDF
-                            <i class="bi bi-box-arrow-in-down"></i></button></div>
-                </div>
-                <table class="table table-bordered mt-3">
-                    <thead>
-                        <tr>
-                            <th> <label><input type="checkbox" value="" id="checkbox-all"> </label></th>
-                            <th>Vụ mùa</th>
-                            <th>Tên công việc</th>
-                            <th>Giống cây</th>
-                            <th>Thời gian thực hiện</th>
-                            <th>Tên nguyên vật liệu</th>
-                            <th>Nồng độ pha/bón</th>
-                            <th>Tổng lượng sử dụng</th>
-                            <th>Thời gian cách ly</th>
-                            <th>Mục đích sử dụng</th>
-                            <th>Lô/Thửa</th>
-                            <th>Thiết bị sử dụng</th>
-                            <th>VS dụng cụ (Đ/K)</th>
-                            <th>Chỉnh sửa</th>
-                            <th>Xóa bỏ</th>
-                        </tr>
-                    </thead>
-                    {{#each works}}
-                    <tbody>
-                        <tr>
-                            <th>
-                                <div class="checkbox">
-                                    <label><input type="checkbox" id="checkboxId" name="workIds"
-                                            value="{{this.works_id}}"></label>
-                                </div>
-                            </th>
-                            <td>{{this.vumua}}</td>
-                            <td>{{this.title}}</td>
-                            <td>{{this.giongcay}}</td>
-                            <td>{{this.start}} đến {{this.end}}</td>
-                            <td>{{this.name}}</td>
-                            <td>{{this.nongdo}}</td>
-                            <td>{{this.luongsudung}}</td>
-                            <td>{{this.thoigiancachly}}</td>
-                            <td>{{this.mucdich}}</td>
-                            <td>{{this.namearea}}</td>
-                            <td>{{this.thietbi}}</td>
-                            <td>{{this.vesinhdungcu}}</td>
-
-                            <td> <a href="/nhatkysanxuat/{{this.works_id}}/edit"><i class="bi bi-pencil"
-                                        style="color: rgb(7, 255, 56);"></i></a></td>
-                            <td><a> <i class="bi bi-trash3" data-bs-toggle="modal" data-bs-target="#delete-work-modal"
-                                        data-id="{{this.works_id}}" style="color: red;"></i></a></td>
-                        </tr>
-                        {{else}}
-                        <tr>
-                            <td colspan="15" class="text-center">
-                                Không có bản ghi nào !
-                            </td>
-                        </tr>
-                    </tbody>
-                    {{/each}}
-                </table>
-
-                <div class="col-md-12 center">
-                    <div class="">
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                {{#if pagination.prev}}
-                                <li class="page-item">
-                                    <a class="page-link" onclick="changePage({{pagination.prev}})"
-                                        aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                {{/if}}
-                                {{#each pagination.pages as |page|}}
-                                {{#if page.active}}
-                                <li class="page-item active">
-                                    <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
-                                </li>
-                                {{else if page.isDots }}
-
-                                {{else}}
-                                <li class="page-item ">
-                                    <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
-                                </li>
-                                {{/if}}
+                    <div class="col-md-2 ">
+                        <div class="form-group">
+                            <select class="form-select js-example-disabled-results" id="season_id" name="season"
+                                aria-label="Default select example" show-value="{{season}}">
+                                <option value="">Chọn mùa</option>
+                                {{#each DataSeason}}
+                                <option value="{{this._id}}">{{this.nameSeason}} </option>
                                 {{/each}}
-
-                                {{#if pagination.next}}
-                                <li class="page-item">
-                                    <a class="page-link" onclick="changePage({{pagination.next}})" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                                {{/if}}
-                            </ul>
-                        </nav>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 ">
+                        <div class="form-group">
+                            <select class="form-select js-example-disabled-results" id="year_id" name="year"
+                                aria-label="Default select example" show-value="{{year}}">
+                                <option value="">Năm</option>
+                                {{#each DataYear}}
+                                <option value="{{this._id}}">{{this.year}} </option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-1  ">
+                        <button type="submit" class="search"><i class="bi bi-search"></i></button>
                     </div>
                 </div>
 
-        </div>
-    </section>
-    </form>
-    {{!-- delete form --}}
-    {{!-- Confirm Delete Works --}}
-    <div id="delete-work-modal" class="modal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Xóa nhật ký</h5>
-                    {{!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    --}}
-                </div>
-                <div class="modal-body">
-                    <p>Bạn có chắc chắn muốn xóa nhật ký này không ?</p>
-                </div>
-                <div class="modal-footer ">
-                    <button id="btn-delete-item" type="button" class="btn btn-danger"
-                        style="float: right; width:100px">Đồng ý
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        style="float: right; width:100px">Thoát</button>
-                </div>
+            </form>
+        </div><!-- End Page Title -->
+        <section class="section dashboard">
+            <div class="card-body ">
+                <h5>Danh sách</h5>
+                <form action="/production-process-log/handle-form-actions" method="POST">
+                    <div class="row justify-content-between">
+                        <div class="col-md-4 mb-3">
+                            <div class="row">
+                                <div class="col-6">
+                                    <select class="form-control" style="text-align: center;" name="action" required>
+                                        <option value="">-----Hành động-----</option>
+                                        <option value="delete">Xóa bản ghi</option>
+                                    </select>
+                                </div>
+                                <div class="col-4"><button type="submit"
+                                        class="btn btn-success mr-5 btn-check-all-submit " disabled>Thực
+                                        hiện</button>
+                                </div>
+                                <div class="col-2">
+                                    <span><a href="/production-process-log/trash"
+                                            style="color:red ;font-size:24px; margin-left:20px"><strong>
+                                                <i class="bi bi-trash3"></i> </strong></a></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3"> <button id="generatePdfButton"
+                                class="btn btn-success btn-check-all-submit " style="width: 200px; float:right"
+                                disabled>Xuất
+                                file PDF
+                                <i class="bi bi-box-arrow-in-down"></i></button></div>
+                    </div>
+                    <table class="table table-bordered mt-3" style="font-size: 12px;">
+                        <thead>
+                            <tr>
+                                <th> <label><input type="checkbox" value="" id="checkbox-all"> </label></th>
+                                <th>Vụ mùa</th>
+                                <th>Năm</th>
+                                <th>Tên công việc</th>
+                                <th>Giống cây</th>
+                                <th>Thời gian thực hiện</th>
+                                <th>Tên nguyên vật liệu</th>
+                                <th>Nồng độ pha/bón</th>
+                                <th>Tổng lượng sử dụng</th>
+                                <th>Thời gian cách ly</th>
+                                <th>Mục đích sử dụng</th>
+                                <th>Lô/Thửa</th>
+                                <th>Thiết bị sử dụng</th>
+                                <th>VS dụng cụ (Đ/K)</th>
+                                <th>Chỉnh sửa</th>
+                                <th>Xóa bỏ</th>
+                            </tr>
+                        </thead>
+                        {{#each nhatkysanxuat}}
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" id="checkboxId" name="workIds"
+                                                value="{{this.nhatkysanxuat_id}}"></label>
+                                    </div>
+                                </th>
+                                <td>{{this.nameSeason}}</td>
+                                <td>{{this.year}}</td>
+                                <td>{{this.title}}</td>
+                                <td>{{this.nameTree}}</td>
+                                <td>{{this.start}} đến {{this.end}}</td>
+                                <td>{{this.name}}</td>
+                                <td>{{this.nongdo}}</td>
+                                <td>{{this.luongsudung}}</td>
+                                <td>{{this.thoigiancachly}}</td>
+                                <td>{{this.mucdich}}</td>
+                                <td>{{this.namearea}}</td>
+                                <td>{{this.thietbi}}</td>
+                                <td>{{this.vesinhdungcu}}</td>
+
+                                <td> <a href="/production-process-log/{{this.nhatkysanxuat_id}}/edit"><i
+                                            class="bi bi-pencil" style="color: rgb(7, 255, 56);"></i></a></td>
+                                <td><a> <i class="bi bi-trash3" data-bs-toggle="modal"
+                                            data-bs-target="#delete-work-modal" data-id="{{this.nhatkysanxuat_id}}"
+                                            style="color: red;"></i></a></td>
+                            </tr>
+                            {{else}}
+                            <tr>
+                                <td colspan="16" class="text-center">
+                                    Không có bản ghi nào !
+                                </td>
+                            </tr>
+                        </tbody>
+                        {{/each}}
+                    </table>
+
+                    <div class="col-md-12 center">
+                        <div class="">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    {{#if pagination.prev}}
+                                    <li class="page-item">
+                                        <a class="page-link" onclick="changePage({{pagination.prev}})"
+                                            aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    {{/if}}
+                                    {{#each pagination.pages as |page|}}
+                                    {{#if page.active}}
+                                    <li class="page-item active">
+                                        <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
+                                    </li>
+                                    {{else if page.isDots }}
+
+                                    {{else}}
+                                    <li class="page-item ">
+                                        <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
+                                    </li>
+                                    {{/if}}
+                                    {{/each}}
+
+                                    {{#if pagination.next}}
+                                    <li class="page-item">
+                                        <a class="page-link" onclick="changePage({{pagination.next}})"
+                                            aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                    {{/if}}
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                </form>
+        </section>
+    </div>
+
+</main>
+{{!-- delete form --}}
+<div id="delete-work-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xóa nhật ký</h5>
+
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa nhật ký này không ?</p>
+            </div>
+            <div class="modal-footer ">
+                <button id="btn-delete-item" type="button" class="btn btn-danger" style="float: right; width:100px">Đồng
+                    ý
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    style="float: right; width:100px">Thoát</button>
             </div>
         </div>
     </div>
-    {{!-- Confirm edit works --}}
-</main>
-{{> footer}}
+</div>
 {{!-- form delete --}}
 <form name="delete-item-form" method="POST"></form>
+
+{{> footer}}
+
 <script src="/js/checkbox.js"></script>
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+<script src="/js/selectSearch.js"></script>
 <script>
-    const showGiongcay = document.getElementById('giongcay')
-    const getAttrGiongcay = showGiongcay.getAttribute('show-value')
+    $(document).ready(function () {
+        $('.js-example-disabled-results').select2();
+    });
 
-    const showVumua = document.getElementById('vumua')
-    const getAttrVumua = showVumua.getAttribute('show-value')
-
-    function showSelected(showElement, value) {
-        valueFromDatabase = value
-        // Lấy tham chiếu đến element select
-        var selectElement = showElement
-
-        // Duyệt qua từng option trong select
-        for (var i = 0; i < selectElement.options.length; i++) {
-            // So sánh giá trị của option với giá trị từ database
-            if (selectElement.options[i].value === valueFromDatabase) {
-                // Đặt thuộc tính selected cho option tương ứng
-                selectElement.options[i].selected = true;
-                break; // Dừng vòng lặp nếu đã tìm thấy giá trị
-            }
-        }
-    }
-    showSelected(showGiongcay, getAttrGiongcay)
-    showSelected(showVumua, getAttrVumua)
     function changePage(page) {
-        window.location.href = `/nhatkysanxuat/storeList?giongcay=${getAttrGiongcay}&vumua=${getAttrVumua}&page=${page}`;
+        window.location.href = `/production-process-log/storeList?map=${getAttrMap}&tree=${getAttrtree}&season=${getAttrSeason}&year=${getAttrYear}&page=${page}`;
     }
 </script>
 <script>
@@ -239,47 +250,9 @@
         const recipient = button.getAttribute('data-id')
 
         btnDeleteitem.onclick = function () {
-            deleteForm.action = '/nhatkysanxuat/' + recipient + '/delete'
+            deleteForm.action = '/production-process-log/' + recipient + '/delete'
             deleteForm.submit()
         }
     })
 </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('generatePdfButton').addEventListener('click', async function () {
-            // Lấy tất cả các ô checkbox đã chọn (trừ ô có ID là "checkbox-all")
-            var checkedIds = Array.from(document.querySelectorAll('input[type="checkbox"]:not(#checkbox-all):checked')).map(function (checkbox) {
-                return checkbox.value;
-            });
-            var idsString = checkedIds.join(',');
-
-            try {
-                // Gửi danh sách các ID đã chọn qua Fetch
-                const response = await fetch('/nhatkysanxuat/generatePdf', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ ids: idsString })
-                });
-                const blob = await response.blob();
-                // Create a link element to trigger the download
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = 'NhatKy_SanXuat.pdf';
-
-                // Append the link to the document and trigger the click event
-                document.body.appendChild(link);
-                link.click();
-
-                // Remove the link from the document
-                document.body.removeChild(link);
-            } catch (error) {
-                // Xử lý lỗi nếu có
-                console.error('Đã xảy ra lỗi:', error);
-            }
-        });
-    });
-
-
-</script>
+<script src="/js/generateNKSX.js"></script>

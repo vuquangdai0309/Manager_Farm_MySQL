@@ -6,10 +6,10 @@ const CheckController = require('../app/middlewares/checkout')
 router.get('/login', UserController.index)
 
 //render register
-router.get('/register', CheckController.checkoutManager, UserController.renderRegister)
+router.get('/register', CheckController.checkoutAdmin, UserController.renderRegister)
 
 // post register
-router.post('/register', CheckController.checkoutManager, UserController.register)
+router.post('/register', CheckController.checkoutAdmin, UserController.register)
 
 //post login
 router.post('/', UserController.login, (req, res) => {
@@ -24,6 +24,7 @@ router.post('/changepass', CheckController.checkout, UserController.changepass)
 // render form forgetpass
 router.get('/forgot', UserController.showforgot)
 
+router.get('/manage-account', CheckController.checkoutManager, UserController.getAllAccountChild)
 
 // check email 
 router.post('/forgot', UserController.forgot)
@@ -41,8 +42,8 @@ router.get('/logout', (req, res) => {
     res.redirect('/user/login')
 })
 //delete
-router.post('/:id/delete', CheckController.checkoutManager, UserController.delete)
+router.post('/:id/delete', CheckController.checkoutAdmin, UserController.delete)
 
 //get all user 
-router.get('/', CheckController.checkoutManager, UserController.getAllUser)
+router.get('/', CheckController.checkoutAdmin, UserController.getAllUser)
 module.exports = router

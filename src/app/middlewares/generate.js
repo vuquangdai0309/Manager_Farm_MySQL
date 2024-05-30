@@ -6,7 +6,9 @@ let browserInstance;
 async function createAndSendPdf(htmlContent, filename, res) {
     try {
         if (!browserInstance) {
-            browserInstance = await puppeteer.launch({ headless: true });
+            browserInstance = await puppeteer.launch(
+                { args: ['--no-sandbox'] }
+            );
         }
 
         const page = await browserInstance.newPage();
@@ -24,10 +26,10 @@ async function createAndSendPdf(htmlContent, filename, res) {
         // Gửi PDF như một phản hồi
         res.contentType('application/pdf');
         res.send(pdfBuffer);
-        
+
     } catch (error) {
         console.error('Error during PDF creation and sending:', error);
-        res.status(500).send('Internal Server Error',error);
+        res.status(500).send('Internal Server Error');
     }
 }
 
@@ -38,7 +40,7 @@ process.on('exit', () => {
     }
 });
 function generateRandomString(length) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
     for (let i = 0; i < length; i++) {
         result += characters.charAt(Math.floor(Math.random() * characters.length));
