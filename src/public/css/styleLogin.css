@@ -11976,15 +11976,15 @@ textarea.form-control {
 }
 
 .btn.btn-primary {
-  background: #fbceb5 !important;
-  border: 1px solid #fbceb5 !important;
-  color: brown !important;
+  background: #dbffe1 !important;
+  border: 1px solid #036100 !important;
+  color: #066900 !important;
 }
 
 .btn.btn-primary:hover {
-  border: 1px solid  #936666 !important;
+  border: 1px solid #936666 !important;
   background: transparent;
-  background-color: #936666 !important;
+  background-color: #abffbe !important;
   color: #5a4343 !important;
 }
 

@@ -317,6 +317,7 @@ class NhatKyDauVaoController {
     }
     handleformactions(req, res) {
         const ids = req.body.workIds
+        console.log(ids)
         switch (req.body.action) {
             case 'delete':
                 NhatKyDauVao.deleteNguyenLieuDauVao(ids, (err, results) => {

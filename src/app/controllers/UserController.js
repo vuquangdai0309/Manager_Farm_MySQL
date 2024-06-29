@@ -169,6 +169,7 @@ class UserController {
     // [post ] email when forget password
     forgot(req, res, next) {
         let email = req.body.email
+
         Account.getAccountByEmail(email, (err, results) => {
             if (err) {
                 res.status(500).json({ error: 'Internal Server Error' });
